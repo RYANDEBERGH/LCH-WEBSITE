@@ -25,7 +25,13 @@ const LINE2 = ['Castle Frank', 'Broadview', 'Chester', 'Pape', 'Donlands', 'Gree
 const subway = uniq(geo.stations.filter((st) => st.subclass === 'subway' && LINE2.includes(st.name))).sort((a, b) => a.x - b.x);
 const GO = ['Danforth', 'Scarborough', 'Eglinton', 'Guildwood', 'Rouge Hill'];
 const goStations = uniq(geo.stations.filter((st) => st.subclass === 'station' && GO.includes(st.name)));
-const line2Path = subway.map((st, i) => `${i ? 'L' : 'M'}${st.x} ${st.y}`).join('');
+// Line badges: Line 2 at Main Street station, Line 5 at Golden Mile stop, Line 3 near Gerrard & Carlaw
+const at = (name: string, sub?: string) => geo.stations.find((st) => st.name === name && (!sub || st.subclass === sub));
+const lineBadges = [
+  { n: '2', name: 'Line 2 Bloor-Danforth', cls: 'l2', p: at('Main Street', 'subway'), dx: 0, dy: -26 },
+  { n: '5', name: 'Line 5 Eglinton', cls: 'l5', p: at('Golden Mile'), dx: 0, dy: -24 },
+  { n: '3', name: 'Line 3 Ontario Line (future)', cls: 'l3', p: { x: geo.ontarioLineLabel[0], y: geo.ontarioLineLabel[1] }, dx: 16, dy: 0 },
+].filter((b) => b.p);
 
 const wantedLabels = new Set(mapData.roadLabels ?? []);
 const roadLabels = geo.roadLabels.filter((l) => wantedLabels.has(l.name)).map((l) => ({ ...l, name: l.name.replace(' Express', '') }));
@@ -34,7 +40,7 @@ const all = (await getProjects()).filter((p) => p.data.lat != null && p.data.lng
 const kingston = all.filter(isKingstonRoad);
 const elsewhere = all.filter((p) => !isKingstonRoad(p));
 const ordered = [...kingston.sort((a, b) => (a.data.lng ?? 0) - (b.data.lng ?? 0)), ...elsewhere];
-const pins = ordered.map((p, i) => ({ p, num: i + 1, x: X(p.data.lng!), y: Y(p.data.lat!), dx: 0, dy: 0, color: brandInk(p) }));
+const pins = ordered.map((p, i) => ({ p, num: i + 1, x: X(p.data.lng!), y: Y(p.data.lat!), dx: 0, dy: 0, tight: false, color: brandInk(p) }));
 
 // Pins within 80 map units of each other (they overlap at the full view on phones) (e.g. Merge Condos, Merge Spaces, Cliffside) fan out on short leader lines.
 // Offsets are in screen pixels, so the fan stays the same size when zoomed.
@@ -45,7 +51,9 @@ for (let i = 0; i < pins.length; i++) {
   const group = pins.map((_, j) => j).filter((j) => !used.has(j) && Math.hypot(pins[j].x - pins[i].x, pins[j].y - pins[i].y) < 80);
   group.forEach((j) => used.add(j));
   if (group.length < 2) continue;
+  // Buildings practically next door (under ~150 m apart) keep their fan at every zoom level
   group.forEach((j, k) => {
+    pins[j].tight = group.some((b) => b !== j && Math.hypot(pins[j].x - pins[b].x, pins[j].y - pins[b].y) < 6);
     const ang = ((-130 + (100 / (group.length - 1)) * k) * Math.PI) / 180;
     pins[j].dx = +(40 * Math.cos(ang)).toFixed(1);
     pins[j].dy = +(40 * Math.sin(ang)).toFixed(1);
@@ -89,9 +97,10 @@ const L = geo.layers as Record<string, string>;
             <path d={L.primary} class="m-primary" />
             <path d={L.motorway} class="m-motorway" />
             <path d={L.rail} class="m-rail" />
-            {L.lrt && <path d={L.lrt} class="m-lrt" />}
-            {L.lrtTunnel && <path d={L.lrtTunnel} class="m-lrt m-lrt--tunnel" />}
-            <path d={line2Path} class="m-subway" />
+            {geo.ontarioLine.map((d) => <path d={d} class="m-line3" />)}
+            {L.lrt && <path d={L.lrt} class="m-line5" />}
+            {L.lrtTunnel && <path d={L.lrtTunnel} class="m-line5" />}
+            {geo.subwayLines.map((d) => <path d={d} class="m-line2" />)}
             {geo.kingston.map((k) => <path d={k} class="m-kingston-casing" />)}
             {geo.kingston.map((k) => <path d={k} class="m-kingston" />)}
 
@@ -125,6 +134,15 @@ const L = geo.layers as Record<string, string>;
                 <text y="-9" text-anchor="middle" class="m-zoom-only">{st.name}</text>
               </g>
             ))}
+            {lineBadges.map((b) => (
+              <g class={`m-fixed m-linebadge m-linebadge--${b.cls}`} style={`transform: translate(${b.p!.x}px, ${b.p!.y}px) scale(calc(var(--k) * var(--ps, 1)))`}>
+                <g transform={`translate(${b.dx} ${b.dy})`}>
+                  <circle r="9" />
+                  <text class="m-linebadge__n" y="3.8" text-anchor="middle">{b.n}</text>
+                  <text class="m-linebadge__name" x="14" y="4">{b.name}</text>
+                </g>
+              </g>
+            ))}
             {goStations.map((st) => (
               <g class="m-fixed m-station m-station--go" style={`transform: translate(${st.x}px, ${st.y}px) scale(calc(var(--k) * var(--ps, 1)))`}>
                 <title>{st.name} GO</title>
@@ -134,7 +152,7 @@ const L = geo.layers as Record<string, string>;
             ))}
 
             {pins.map((pin) => (
-              <g class="m-fixed m-pin" style={`transform: translate(${pin.x}px, ${pin.y}px) scale(calc(var(--k) * var(--ps, 1)))`} data-pin={pin.p.id} data-x={pin.x} data-y={pin.y} tabindex="0" role="button" aria-label={`${pin.num}. ${pin.p.data.title}, ${pin.p.data.stage}`}>
+              <g class:list={["m-fixed m-pin", { "m-pin--tight": pin.tight }]} style={`transform: translate(${pin.x}px, ${pin.y}px) scale(calc(var(--k) * var(--ps, 1)))`} data-pin={pin.p.id} data-x={pin.x} data-y={pin.y} tabindex="0" role="button" aria-label={`${pin.num}. ${pin.p.data.title}, ${pin.p.data.stage}`}>
                 {(pin.dx || pin.dy) ? (
                   <>
                     <line x1="0" y1="0" x2={pin.dx} y2={pin.dy} class="m-leader" />
@@ -160,7 +178,9 @@ const L = geo.layers as Record<string, string>;
         <figcaption class="cmap__legend">
           <span><i class="lg lg--pin"></i>LCH project, in its brand colour</span>
           <span><i class="lg lg--road"></i>Kingston Road</span>
-          <span><i class="lg lg--subway"></i>Line 2 subway</span>
+          <span><i class="lg lg--l2"></i>Line 2 Bloor-Danforth</span>
+          <span><i class="lg lg--l5"></i>Line 5 Eglinton</span>
+          <span><i class="lg lg--l3"></i>Line 3 Ontario Line (future)</span>
           <span><i class="lg lg--rail"></i>GO rail and station</span>
           <span><i class="lg lg--park"></i>Park, ravine or woodland</span>
           <span class="cmap__attr">Map data © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> contributors · © OpenMapTiles · OpenFreeMap</span>
@@ -349,9 +369,21 @@ const L = geo.layers as Record<string, string>;
   .is-zoomed .m-primary { stroke-width: 4.2; }
   .is-zoomed .m-motorway { stroke-width: 5; }
   .m-rail { fill: none; stroke: #8f897e; stroke-width: 1.4; stroke-dasharray: 5 3; }
-  .m-lrt { fill: none; stroke: #e58f2a; stroke-width: 2; opacity: 0.75; }
-  .m-lrt--tunnel { stroke-dasharray: 3 3; }
-  .m-subway { fill: none; stroke: #2f8f4e; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 7 4; }
+  /* TTC lines: 2 and 5 bold solid; 3 (Ontario Line, under construction) dashed */
+  .m-line2 { fill: none; stroke: #00923f; stroke-width: 4; stroke-linecap: round; stroke-linejoin: round; }
+  .m-line5 { fill: none; stroke: #f8991d; stroke-width: 4; stroke-linecap: round; stroke-linejoin: round; }
+  .m-line3 { fill: none; stroke: #1c6fb7; stroke-width: 3.5; stroke-linecap: butt; stroke-dasharray: 9 6; }
+  .is-zoomed .m-line2, .is-zoomed .m-line5 { stroke-width: 5.5; }
+  .is-zoomed .m-line3 { stroke-width: 4.5; }
+  .m-linebadge circle { stroke: #fff; stroke-width: 2; }
+  .m-linebadge--l2 circle { fill: #00923f; }
+  .m-linebadge--l5 circle { fill: #f8991d; }
+  .m-linebadge--l3 circle { fill: #1c6fb7; }
+  .m-linebadge__n { fill: #fff; font-size: 11px; font-weight: 800; }
+  .m-linebadge__name { font-size: 11.5px; font-weight: 700; paint-order: stroke; stroke: #f1eee7; stroke-width: 3px; stroke-linejoin: round; }
+  .m-linebadge--l2 .m-linebadge__name { fill: #006b2e; }
+  .m-linebadge--l5 .m-linebadge__name { fill: #a15c00; }
+  .m-linebadge--l3 .m-linebadge__name { fill: #155a96; }
   .m-kingston-casing { fill: none; stroke: #fff; stroke-width: 8; stroke-linecap: round; stroke-linejoin: round; }
   .m-kingston { fill: none; stroke: var(--accent); stroke-width: 4.5; stroke-linecap: round; stroke-linejoin: round; }
   .is-zoomed .m-kingston-casing { stroke-width: 11; }
@@ -366,7 +398,7 @@ const L = geo.layers as Record<string, string>;
   .m-poi--nature path { fill: #6f9a63; }
   .m-poi--nature text { fill: #4d6b44; }
   .m-poi--landmark rect { fill: #3b3934; }
-  .m-station--subway circle { fill: #fff; stroke: #2f8f4e; stroke-width: 2.2; }
+  .m-station--subway circle { fill: #fff; stroke: #00923f; stroke-width: 2.4; }
   .m-station--go rect { fill: #2f7d5a; }
   .m-station--go text { font-weight: 600; fill: #2f5e47; }
   .m-zoom-only { display: none; }
@@ -377,8 +409,8 @@ const L = geo.layers as Record<string, string>;
   .m-dot { fill: var(--ink); }
   .m-pin__circle { stroke: #fff; stroke-width: 2.5; vector-effect: none; transition: transform 0.2s var(--ease); transform-box: fill-box; transform-origin: center; }
   .m-pin__num { fill: #fff; font-size: 12.5px; font-weight: 700; pointer-events: none; }
-  .is-close .m-leader, .is-close .m-dot { display: none; }
-  .is-close .m-pin__offset { transform: none; }
+  .is-close .m-pin:not(.m-pin--tight) .m-leader, .is-close .m-pin:not(.m-pin--tight) .m-dot { display: none; }
+  .is-close .m-pin:not(.m-pin--tight) .m-pin__offset { transform: none; }
   .m-pin:hover .m-pin__circle, .m-pin.is-hover .m-pin__circle { transform: scale(1.18); }
   .m-pin.is-active .m-pin__circle { stroke: var(--ink); stroke-width: 3.5; transform: scale(1.25); }
   .m-pin:focus-visible .m-pin__circle { stroke: var(--accent); stroke-width: 4; }
@@ -397,7 +429,9 @@ const L = geo.layers as Record<string, string>;
   .lg { display: inline-block; flex: none; }
   .lg--pin { width: 14px; height: 14px; border-radius: 50%; background: conic-gradient(#0f3a2e 0 25%, #c7423f 0 50%, #6b1219 0 75%, #704078 0); }
   .lg--road { width: 22px; height: 4px; background: var(--accent); border-radius: 2px; }
-  .lg--subway { width: 22px; height: 0; border-top: 3px dashed #2f8f4e; }
+  .lg--l2 { width: 22px; height: 4px; background: #00923f; border-radius: 2px; }
+  .lg--l5 { width: 22px; height: 4px; background: #f8991d; border-radius: 2px; }
+  .lg--l3 { width: 24px; height: 0; border-top: 3.5px dashed #1c6fb7; }
   .lg--rail { width: 22px; height: 0; border-top: 2px dashed #8f897e; position: relative; }
   .lg--rail::after { content: ''; position: absolute; right: -4px; top: -6px; width: 9px; height: 9px; background: #2f7d5a; border-radius: 2px; }
   .lg--park { width: 14px; height: 10px; background: #c8d9b8; border-radius: 2px; }
@@ -430,8 +464,8 @@ const L = geo.layers as Record<string, string>;
     .cmap__svg { --ps: 0.7; }
     .cmap__svg.is-zoomed { --ps: 0.85; }
     .cmap__list { grid-template-columns: 1fr; }
-    .m-poi text, .m-hood, .m-station--go text, .m-roadlabel { display: none; }
-    .is-zoomed .m-poi text, .is-zoomed .m-hood, .is-zoomed .m-station--go text, .is-zoomed .m-roadlabel { display: block; }
+    .m-poi text, .m-hood, .m-station--go text, .m-roadlabel, .m-linebadge__name { display: none; }
+    .is-zoomed .m-poi text, .is-zoomed .m-hood, .is-zoomed .m-station--go text, .is-zoomed .m-roadlabel, .is-zoomed .m-linebadge__name { display: block; }
     .cmap__hint { display: none; }
   }
 </style>

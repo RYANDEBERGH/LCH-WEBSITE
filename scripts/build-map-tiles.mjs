@@ -113,6 +113,48 @@ for (let tx = xs[0]; tx <= xs[1]; tx++) for (let ty = ys[0]; ty <= ys[1]; ty++) 
   });
 }
 
+// ── Line 2: real track geometry from the z14 tiles (subway isn't included at z13) ──
+const Z14 = 14;
+const lon2x14 = (lon) => ((lon + 180) / 360) * 2 ** Z14;
+const lat2y14 = (lat) => ((1 - Math.log(Math.tan((lat * Math.PI) / 180) + 1 / Math.cos((lat * Math.PI) / 180)) / Math.PI) / 2) * 2 ** Z14;
+const subwayLines = [];
+for (let tx = Math.floor(lon2x14(BBOX.w)); tx <= Math.floor(lon2x14(-79.255)); tx++)
+  for (let ty = Math.floor(lat2y14(43.74)); ty <= Math.floor(lat2y14(43.665)); ty++) {
+    const f = path.join(CACHE, `${Z14}-${tx}-${ty}.pbf`);
+    if (!fs.existsSync(f)) {
+      const r = await fetch(tileUrl.replace('{z}', Z14).replace('{x}', tx).replace('{y}', ty), { headers: { 'User-Agent': UA } });
+      fs.writeFileSync(f, Buffer.from(await r.arrayBuffer()));
+    }
+    const t = new VectorTile(new Pbf(fs.readFileSync(f)));
+    const L = t.layers.transportation; if (!L) continue;
+    for (let i = 0; i < L.length; i++) {
+      const ft = L.feature(i);
+      if (ft.properties.class !== 'transit' || ft.properties.subclass !== 'subway') continue;
+      if (['yard', 'siding', 'spur', 'crossover'].includes(ft.properties.service)) continue; // keep the running line only
+      for (const l of ft.loadGeometry()) {
+        const pts = l.map((p) => [((tx + p.x / L.extent) / 2 - X0) * S, ((ty + p.y / L.extent) / 2 - Y0) * S]);
+        if (inView(pts, 0)) subwayLines.push(d(simplify(pts, 0.35)));
+      }
+    }
+  }
+
+// ── Line 3 Ontario Line (under construction): OpenStreetMap railway=construction ways, via Nominatim ──
+const OL_CACHE = 'scripts/.ontario-line-cache.json';
+let olSegs;
+if (fs.existsSync(OL_CACHE)) olSegs = JSON.parse(fs.readFileSync(OL_CACHE, 'utf8'));
+else {
+  const url = 'https://nominatim.openstreetmap.org/search?' + new URLSearchParams({ q: 'Ontario Line', format: 'jsonv2', limit: '50', dedupe: '0', polygon_geojson: '1', viewbox: `${BBOX.w},${BBOX.n},${BBOX.e},${BBOX.s}`, bounded: '1' });
+  const j = await (await fetch(url, { headers: { 'User-Agent': UA } })).json();
+  olSegs = j.filter((h) => h.type === 'construction' && h.geojson.type === 'LineString').map((h) => h.geojson.coordinates);
+  fs.writeFileSync(OL_CACHE, JSON.stringify(olSegs));
+}
+const ll = ([lon, lat]) => [(lon2x(lon) - X0) * S, (lat2y(lat) - Y0) * S];
+const ontarioLine = olSegs.map((seg) => seg.map(ll)).filter((pts) => inView(pts, 0)).map((pts) => d(simplify(pts, 0.3)));
+// label anchor: the point of the line closest to Pape Avenue & Cosburn Avenue (clear of the Leslieville pins)
+const gc = ll([-79.3465, 43.6905]);
+const olPts = olSegs.flat().map(ll);
+const olLabel = olPts.reduce((best, p) => (Math.hypot(p[0] - gc[0], p[1] - gc[1]) < Math.hypot(best[0] - gc[0], best[1] - gc[1]) ? p : best), olPts[0]);
+
 // Kingston Road, highlighted from the named-road geometry
 const krPieces = (names['Kingston Road'] ?? []).map((n) => n.pts);
 // Join small gaps where the named-road data splits Kingston Road into pieces (ends within 10 units)
@@ -142,6 +184,9 @@ const out = {
   proj: { z: Z, x0: X0, y0: Y0, s: S, w: W, h: H },
   layers: Object.fromEntries(Object.entries(layers).map(([k, v]) => [k, v.join('')])),
   kingston,
+  subwayLines,
+  ontarioLine,
+  ontarioLineLabel: olLabel.map((n) => +fmt(n)),
   roadLabels,
   places: places.filter((p) => ['suburb', 'neighbourhood', 'quarter'].includes(p.class)),
   stations,
@@ -149,6 +194,7 @@ const out = {
 fs.writeFileSync('src/data/map-geo.json', JSON.stringify(out));
 console.log('size', (fs.statSync('src/data/map-geo.json').size / 1024).toFixed(0) + 'KB', 'frame', W, 'x', H);
 console.log(Object.fromEntries(Object.entries(out.layers).map(([k, v]) => [k, (v.length / 1024).toFixed(0) + 'KB'])));
+console.log('line 2 pieces', subwayLines.length, '| line 3 pieces', ontarioLine.length);
 console.log('kingston pieces', kingston.length, '| labels', roadLabels.map((l) => l.name).join(', '));
 console.log('places', out.places.map((p) => `${p.name}(${p.class})`).join(', '));
 console.log('stations', stations.map((s) => `${s.name}/${s.subclass}`).join(', '));
