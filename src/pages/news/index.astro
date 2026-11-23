@@ -64,7 +64,7 @@ const topics = [...new Set(news.map((n) => n.data.topic))];
   .lead__meta { font-size: 14px; color: var(--muted); }
   .lead__meta span { color: var(--accent); font-weight: 600; }
   .filters { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 48px; }
-  .chip { min-height: 42px; padding: 0 18px; border-radius: 999px; border: 1px solid var(--line); background: transparent; color: var(--ink); font-size: 15px; font-weight: 500; cursor: pointer; }
+  .chip { min-height: 42px; padding: 0 18px; border-radius: 3px; border: 1px solid var(--line); background: transparent; color: var(--ink); font-size: 15px; font-weight: 500; cursor: pointer; }
   .chip:hover { border-color: var(--ink); }
   .chip[aria-pressed='true'] { background: var(--ink); color: var(--paper); border-color: var(--ink); }
   .ngrid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 56px clamp(24px, 3vw, 44px); }

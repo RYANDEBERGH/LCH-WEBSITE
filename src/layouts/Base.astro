@@ -11,7 +11,7 @@ interface Props {
   overlay?: boolean;
 }
 const { title, description = settings.metaDescription, image = '/uploads/everston-evening-2.png', overlay = false } = Astro.props;
-const fullTitle = title ? `${title} — ${settings.siteName}` : `${settings.siteName} — Toronto Real Estate Developer`;
+const fullTitle = title ? `${title} | ${settings.siteName}` : `${settings.siteName} | Toronto Real Estate Developer`;
 const canonical = new URL(Astro.url.pathname, Astro.site);
 const ogImage = new URL(image.replace(/^\/uploads\//, '/_img/').replace(/\.[^.]+$/, '-1600.webp'), Astro.site);
 
@@ -58,7 +58,7 @@ const orgLd = {
     <meta name="theme-color" content="#161614" />
     <link rel="sitemap" href="/sitemap-index.xml" />
     <script is:inline>document.documentElement.classList.remove('no-js');</script>
-    <style set:html={`:root{--accent:${settings.accentColor || '#b5532e'}}`}></style>
+    <style set:html={`:root{--accent:${settings.accentColor || '#2b3a44'}}`}></style>
     <script type="application/ld+json" set:html={JSON.stringify(orgLd)} />
   </head>
   <body class:list={{ 'has-overlay': overlay }}>
@@ -79,7 +79,7 @@ const orgLd = {
 
     <header class="header" data-header>
       <div class="container header__inner">
-        <a href="/" class="header__logo" aria-label={`${settings.siteName} — home`}>
+        <a href="/" class="header__logo" aria-label={`${settings.siteName} home`}>
           <img class="logo-dark" src={settings.logo} alt="" width="160" height="72" />
           <img class="logo-light" src={settings.logoLight} alt="" width="160" height="72" />
         </a>
@@ -112,6 +112,12 @@ const orgLd = {
     <Footer />
 
     <script>
+      // Expose the announcement banner's height so full-screen heroes fit the viewport exactly
+      const announce = document.querySelector<HTMLElement>('.announce');
+      const setAnnounce = () => document.documentElement.style.setProperty('--announce-h', `${announce?.offsetHeight ?? 0}px`);
+      setAnnounce();
+      addEventListener('resize', setAnnounce);
+
       // Header: solid background once scrolled
       const header = document.querySelector<HTMLElement>('[data-header]')!;
       const onScroll = () => header.classList.toggle('is-scrolled', window.scrollY > 24);

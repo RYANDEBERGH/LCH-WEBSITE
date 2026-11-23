@@ -8,7 +8,7 @@
   --white: #ffffff;
   --muted: #5f5b54;
   --line: rgba(22, 22, 20, 0.13);
-  --accent: #b5532e; /* overridden from Site Settings → Brand accent colour */
+  --accent: #2b3a44; /* overridden from Site Settings → Brand accent colour */
 
   --font-sans: 'Manrope Variable', 'Manrope', system-ui, -apple-system, 'Segoe UI', sans-serif;
   --font-display: 'Manrope Variable', 'Manrope', system-ui, -apple-system, 'Segoe UI', sans-serif;
@@ -17,6 +17,7 @@
   --max: 1360px;
   --radius: 4px;
   --header-h: 76px;
+  --announce-h: 40px; /* updated from the real banner height by script */
   --ease: cubic-bezier(0.2, 0.7, 0.2, 1);
 }
 
@@ -62,7 +63,6 @@ p { margin: 0 0 1em; text-wrap: pretty; }
   font-size: 12.5px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase;
   color: var(--muted); margin-bottom: 22px;
 }
-.eyebrow::before { content: ''; width: 28px; height: 1px; background: var(--accent); }
 .section--dark .eyebrow, .on-image .eyebrow { color: rgba(246, 244, 239, 0.75); }
 
 .lede { font-size: clamp(18px, 1.6vw, 21px); line-height: 1.55; color: var(--muted); max-width: 62ch; }
@@ -84,7 +84,7 @@ p { margin: 0 0 1em; text-wrap: pretty; }
   display: inline-flex; align-items: center; justify-content: center; gap: 10px;
   min-height: 50px; padding: 0 26px;
   background: var(--bg); color: var(--fg);
-  border: 1px solid var(--bg); border-radius: 999px;
+  border: 1px solid var(--bg); border-radius: 3px;
   font-size: 15px; font-weight: 500; letter-spacing: 0.01em; text-decoration: none;
   cursor: pointer; transition: background 0.25s var(--ease), color 0.25s var(--ease), border-color 0.25s var(--ease), transform 0.25s var(--ease);
 }
@@ -105,7 +105,7 @@ p { margin: 0 0 1em; text-wrap: pretty; }
 /* Status pill */
 .pill {
   display: inline-flex; align-items: center; gap: 8px;
-  padding: 6px 12px; border-radius: 999px;
+  padding: 6px 10px; border-radius: 2px;
   font-size: 12px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase;
   background: rgba(255, 255, 255, 0.92); color: var(--ink);
   backdrop-filter: blur(6px);
@@ -113,7 +113,7 @@ p { margin: 0 0 1em; text-wrap: pretty; }
 .pill::before { content: ''; width: 7px; height: 7px; border-radius: 50%; background: var(--dot, #8a8680); }
 .pill--leasing { background: var(--accent); color: #fff; }
 .pill--leasing::before { background: #fff; }
-.pill[data-tone='build'] { --dot: #e09a1d; }
+.pill[data-tone='build'] { --dot: #4f7cac; }
 .pill[data-tone='soon'] { --dot: var(--accent); }
 .pill[data-tone='done'] { --dot: #8a8680; }
 

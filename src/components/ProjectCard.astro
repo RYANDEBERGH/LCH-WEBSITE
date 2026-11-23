@@ -9,7 +9,7 @@ const p = project.data;
 
 <a class="pcard reveal" href={`/projects/${project.id}/`} data-stage={p.stage} style={`--accent: ${brandInk(project)}`}>
   <div class="pcard__media">
-    <Img src={p.heroImage} alt={`${p.title} — ${p.neighbourhood}`} sizes={sizes} />
+    <Img src={p.heroImage} alt={`${p.title}, ${p.neighbourhood}`} sizes={sizes} />
     <span class="pcard__pills">
       <span class="pill" data-tone={stageTone(p.stage)}>{p.stage}</span>
       {p.leasing?.status && <span class="pill pill--leasing">{p.leasing.status}</span>}

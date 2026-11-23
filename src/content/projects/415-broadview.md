@@ -7,6 +7,7 @@ type: "Purpose-Built Rental & Heritage Restoration"
 address: "415 Broadview Avenue"
 neighbourhood: "Riverdale, Toronto"
 intersection: ""
+units: 50
 partners:
   - "deCartier Developments"
 architect: ""

@@ -196,12 +196,11 @@ const projects = await getProjects();
 
   .split { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(40px, 6vw, 96px); }
   .criteria { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--line); }
-  .criteria li { padding: 16px 0 16px 30px; border-bottom: 1px solid var(--line); position: relative; font-size: 17px; }
-  .criteria li::before { content: ''; position: absolute; left: 4px; top: 24px; width: 12px; height: 2px; background: var(--accent); }
+  .criteria li { padding: 16px 0; border-bottom: 1px solid var(--line); font-size: 17px; }
   .steps { list-style: none; margin: 0; padding: 0; display: grid; gap: 0; }
   .steps li { display: grid; grid-template-columns: 44px 1fr; gap: 16px; padding: 16px 0; border-top: 1px solid var(--line); }
   .steps li:last-child { border-bottom: 1px solid var(--line); }
-  .steps__num { width: 34px; height: 34px; border-radius: 50%; border: 1px solid var(--ink); display: grid; place-items: center; font-weight: 600; font-size: 14px; }
+  .steps__num { width: 34px; height: 34px; border-radius: 3px; border: 1px solid var(--ink); display: grid; place-items: center; font-weight: 600; font-size: 14px; }
   .steps h3 { font-size: 18px; margin-bottom: 4px; }
   .steps p { margin: 0; color: var(--muted); font-size: 15px; }
 

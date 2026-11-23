@@ -193,7 +193,7 @@ const facts = [
 </script>
 
 <style>
-  .phead { position: relative; min-height: 88svh; display: flex; align-items: flex-end; color: var(--paper); isolation: isolate; padding-block: calc(var(--header-h) + 64px) clamp(48px, 7vw, 88px); }
+  .phead { position: relative; overflow: hidden; height: calc(82svh - var(--announce-h)); min-height: 480px; display: flex; align-items: flex-end; color: var(--paper); isolation: isolate; padding-block: calc(var(--header-h) + 64px) clamp(48px, 7vw, 88px); }
   .phead::after { content: ''; position: absolute; inset: 0; z-index: -1; background: linear-gradient(180deg, rgba(10, 10, 9, 0.45), rgba(10, 10, 9, 0.05) 35%, rgba(10, 10, 9, 0.75)); }
   :global(.phead__bg) { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: -2; }
   .phead__content { display: flex; flex-direction: column; align-items: flex-start; gap: 18px; }
@@ -275,7 +275,7 @@ const facts = [
   .timeline__item a, .timeline__src { font-size: 13px; color: var(--muted); }
   .timeline__item a:hover { color: var(--accent); }
   .timeline__item.is-latest p { font-weight: 600; }
-  .timeline__latest { display: inline-block; font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #fff; background: var(--accent); padding: 2px 8px; border-radius: 999px; margin-bottom: 6px; }
+  .timeline__latest { display: inline-block; font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #fff; background: var(--accent); padding: 2px 8px; border-radius: 3px; margin-bottom: 6px; }
   .timeline__empty { color: var(--muted); }
   @media (max-width: 900px) { .progress__grid { grid-template-columns: 1fr; } }
   @media (max-width: 520px) { .timeline__item { grid-template-columns: 1fr; gap: 4px; } }

@@ -4,7 +4,7 @@
   "siteUrl": "https://lchdevelopments.com",
   "logo": "/uploads/brand/lch-logo-dark.png",
   "logoLight": "/uploads/brand/lch-logo-light.png",
-  "accentColor": "#b5532e",
+  "accentColor": "#2b3a44",
   "email": "info@lch.to",
   "phone": "647 478 7987",
   "address": "2229 Kingston Road, Scarborough, Ontario M1N 1T8",
@@ -16,7 +16,7 @@
   },
   "announcement": {
     "enabled": true,
-    "text": "Everston is now pre-leasing — apartments by the Campus Valley",
+    "text": "Everston is now pre-leasing. Apartments by the Campus Valley.",
     "linkLabel": "Explore Everston",
     "url": "https://everston.ca",
     "color": "#0f3a2e"
