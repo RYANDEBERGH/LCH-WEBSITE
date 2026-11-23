@@ -72,6 +72,8 @@ const team = defineCollection({
     role: z.string(),
     photo: z.string().nullish(),
     linkedin: z.string().nullish(),
+    // Which team page tabs this person appears under
+    companies: z.array(z.enum(['lch', 'elevate'])).default(['lch']),
     order: z.number().default(99),
     hidden: z.boolean().default(false),
   }),

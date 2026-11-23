@@ -4,6 +4,7 @@ credentials: ""
 role: "Senior Development Manager"
 photo: "/uploads/ryan.jpg"
 linkedin: "https://ca.linkedin.com/in/ryandebergh"
+companies: ["lch", "elevate"]
 order: 6
 ---
 

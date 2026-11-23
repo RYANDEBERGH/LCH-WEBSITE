@@ -4,6 +4,7 @@ credentials: "CPA"
 role: "Controller"
 photo: "/uploads/mitch.jpg"
 linkedin: ""
+companies: ["lch", "elevate"]
 order: 4
 ---
 

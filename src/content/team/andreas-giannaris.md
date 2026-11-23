@@ -4,6 +4,7 @@ credentials: "B.Eng."
 role: "Project Manager"
 photo: "/uploads/andreas-landscape.png"
 linkedin: ""
+companies: ["lch", "elevate"]
 order: 9
 ---
 

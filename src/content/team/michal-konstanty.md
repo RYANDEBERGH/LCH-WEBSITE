@@ -4,6 +4,7 @@ credentials: ""
 role: "Project Manager & CPO"
 photo: "/uploads/mikek.jpg"
 linkedin: ""
+companies: ["lch", "elevate"]
 order: 5
 ---
 

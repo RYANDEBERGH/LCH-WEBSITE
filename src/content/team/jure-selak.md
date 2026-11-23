@@ -4,6 +4,7 @@ credentials: "B.A.Sc., PMP"
 role: "President, Elevate Construction Management"
 photo: "/uploads/jure.jpg"
 linkedin: "https://ca.linkedin.com/in/jure-selak-9a720b4a"
+companies: ["lch", "elevate"]
 order: 3
 ---
 

@@ -6,7 +6,7 @@ import ProjectCard from '../components/ProjectCard.astro';
 import CorridorMap from '../components/CorridorMap.astro';
 import PressStrip from '../components/PressStrip.astro';
 import SocialFeed from '../components/SocialFeed.astro';
-import { home, getProjects, getNews, stageTone, latestMilestone, formatMilestoneDate, brandInk, md } from '../lib/site';
+import { settings, home, getProjects, getNews, stageTone, latestMilestone, formatMilestoneDate, brandInk, md } from '../lib/site';
 
 const projects = await getProjects();
 const featured = projects.filter((p) => p.data.featured);
@@ -157,6 +157,7 @@ const ext = (url: string) => url?.startsWith('http');
       <div class="container">
         <div class="elevate__top">
           <div class="reveal">
+            <a class="elevate__logo" href={settings.elevate.url} target="_blank" rel="noopener" aria-label="Elevate Construction Management website"><img src={settings.elevate.logoLight} alt="Elevate Construction Management" width="200" height="98" loading="lazy" /></a>
             <p class="eyebrow">{home.elevate.eyebrow}</p>
             <h2>{home.elevate.heading}</h2>
             <div class="elevate__body" set:html={md(home.elevate.body)} />
@@ -355,6 +356,8 @@ const ext = (url: string) => url?.startsWith('http');
 
   .elevate__top { display: grid; grid-template-columns: minmax(0, 6fr) minmax(0, 5fr); gap: clamp(32px, 5vw, 80px); align-items: center; }
   .elevate h2 { margin-bottom: 20px; }
+  .elevate__logo { display: block; width: fit-content; margin-bottom: 28px; }
+  .elevate__logo img { height: 64px; width: auto; display: block; }
   .elevate__body :global(p) { color: rgba(246, 244, 239, 0.78); font-size: 17px; }
   .elevate__ctas { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 24px; }
   .elevate__media :global(img) { width: 100%; height: auto; border-radius: var(--radius); }

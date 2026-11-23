@@ -103,7 +103,18 @@
       "label": "Expanding client work",
       "title": "Jefferson Heights and Eaglebay Towns",
       "text": "The team’s experience also supports owners, lenders and receivers. Jefferson Heights and Eaglebay Towns demonstrate coordinated development and construction work on partially completed residential projects.",
-      "images": [],
+      "images": [
+        {
+          "image": "/uploads/jefferson-heights.jpg",
+          "alt": "Townhomes at Jefferson Heights in Richmond Hill",
+          "caption": ""
+        },
+        {
+          "image": "/uploads/eaglebay-towns.jpg",
+          "alt": "Townhomes at Eaglebay in Newcastle",
+          "caption": ""
+        }
+      ],
       "projects": [
         "jefferson-heights",
         "eaglebay-towns"
@@ -201,14 +212,18 @@
         "title": "Jefferson Heights",
         "role": "Development and construction management",
         "heading": "Bringing an incomplete project toward delivery.",
-        "body": "At Jefferson Heights in Richmond Hill, LCH and Elevate worked on a partially completed residential development for receiver Albert Gelman, with Cameron Stephens. The assignment brought together development management and construction delivery: re-establishing budget and schedule control, coordinating consultants and trades, and advancing occupancy, registration, sales and closing requirements."
+        "body": "At Jefferson Heights in Richmond Hill, LCH and Elevate worked on a partially completed residential development for receiver Albert Gelman, with Cameron Stephens. The assignment brought together development management and construction delivery: re-establishing budget and schedule control, coordinating consultants and trades, and advancing occupancy, registration, sales and closing requirements.",
+        "image": "/uploads/jefferson-heights.jpg",
+        "imageAlt": "Townhomes at Jefferson Heights in Richmond Hill"
       },
       {
         "project": "eaglebay-towns",
         "title": "Eaglebay Towns",
         "role": "Project recovery and construction completion",
         "heading": "Coordinating construction and closeout.",
-        "body": "For KPMG and RBC, LCH and Elevate were engaged on a 29-home townhouse receivership in Newcastle, Clarington. The mandate combined construction stabilization and completion with coordination of purchaser, warranty and closeout requirements."
+        "body": "For KPMG and RBC, LCH and Elevate were engaged on a 29-home townhouse receivership in Newcastle, Clarington. The mandate combined construction stabilization and completion with coordination of purchaser, warranty and closeout requirements.",
+        "image": "/uploads/eaglebay-towns.jpg",
+        "imageAlt": "Townhomes at Eaglebay in Newcastle"
       },
       {
         "project": "",

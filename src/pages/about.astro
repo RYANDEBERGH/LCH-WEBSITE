@@ -2,7 +2,7 @@
 import Base from '../layouts/Base.astro';
 import Img from '../components/Img.astro';
 import { render } from 'astro:content';
-import { story, home, getTeam, getProjects, md, brandInk } from '../lib/site';
+import { settings, story, home, getTeam, getProjects, md, brandInk } from '../lib/site';
 
 const team = await Promise.all((await getTeam()).map(async (t) => ({ ...t, Content: (await render(t)).Content })));
 const projectsById = Object.fromEntries((await getProjects()).map((p) => [p.id, p]));
@@ -91,6 +91,7 @@ const e = home.elevate;
     <div class="container">
       <div class="le__top">
         <div>
+          <a class="le__logo" href={settings.elevate.url} target="_blank" rel="noopener" aria-label="Elevate Construction Management website"><img src={settings.elevate.logoLight} alt="Elevate Construction Management" width="200" height="98" loading="lazy" /></a>
           <p class="eyebrow">{e.eyebrow}</p>
           <h2>{e.heading}</h2>
           <div class="le__body" set:html={md(e.body)} />
@@ -112,6 +113,7 @@ const e = home.elevate;
       <div class="cases">
         {story.experience.items.map((c) => (
           <article class="case reveal">
+            {c.image && <div class="case__img"><Img src={c.image} alt={c.imageAlt ?? ''} sizes="(max-width: 680px) 100vw, 33vw" /></div>}
             <p class="case__role">Selected client work · {c.role}</p>
             <h3>{c.title}</h3>
             <p class="case__lead">{c.heading}</p>
@@ -127,15 +129,21 @@ const e = home.elevate;
     <div class="container">
       <p class="eyebrow">{story.team.eyebrow}</p>
       <h2 class="sec-h">{story.team.heading}</h2>
+      <div class="team-filters" role="group" aria-label="Filter the team">
+        <button type="button" class="tchip" aria-pressed="true" data-team-filter="all">All <span>{team.length}</span></button>
+        <button type="button" class="tchip" aria-pressed="false" data-team-filter="lch">LCH Developments <span>{team.filter((t) => t.data.companies.includes('lch')).length}</span></button>
+        <button type="button" class="tchip" aria-pressed="false" data-team-filter="elevate">Elevate <span>{team.filter((t) => t.data.companies.includes('elevate')).length}</span></button>
+      </div>
       <div class="team">
         {team.map((t) => (
-          <article class="member reveal">
+          <article class="member reveal" data-companies={t.data.companies.join(" ")}>
             <button class="member__btn" data-member={t.id} aria-haspopup="dialog">
               <div class="member__photo">
                 {t.data.photo && <Img src={t.data.photo} alt={t.data.name} sizes="(max-width: 600px) 50vw, 25vw" />}
               </div>
               <h3>{t.data.name}{t.data.credentials && <span class="member__cred">, {t.data.credentials}</span>}</h3>
               <p class="member__role">{t.data.role}</p>
+              <p class="member__cos">{t.data.companies.map((c) => <span class={`member__co member__co--${c}`}>{c === 'lch' ? 'LCH' : 'Elevate'}</span>)}</p>
               <span class="member__more">Read bio +</span>
             </button>
             <dialog class="bio" id={`bio-${t.id}`} aria-label={`${t.data.name} biography`}>
@@ -172,6 +180,16 @@ const e = home.elevate;
 </Base>
 
 <script>
+  // Team filter: All / LCH Developments / Elevate
+  const tchips = document.querySelectorAll<HTMLButtonElement>('[data-team-filter]');
+  tchips.forEach((chip) => chip.addEventListener('click', () => {
+    const f = chip.dataset.teamFilter!;
+    tchips.forEach((c) => c.setAttribute('aria-pressed', String(c === chip)));
+    document.querySelectorAll<HTMLElement>('.member[data-companies]').forEach((m) => {
+      m.hidden = f !== 'all' && !(m.dataset.companies ?? '').split(' ').includes(f);
+    });
+  }));
+
   document.querySelectorAll<HTMLElement>('[data-tl]').forEach((tl) => {
     const track = tl.querySelector<HTMLElement>('[data-tl-track]')!;
     const prev = tl.querySelector<HTMLButtonElement>('[data-tl-prev]')!;
@@ -270,6 +288,8 @@ const e = home.elevate;
 
   .le__top { display: grid; grid-template-columns: minmax(0, 6fr) minmax(0, 5fr); gap: clamp(32px, 5vw, 80px); align-items: center; }
   .le__top h2 { margin-bottom: 20px; }
+  .le__logo { display: block; width: fit-content; margin-bottom: 28px; }
+  .le__logo img { height: 64px; width: auto; display: block; }
   .le__body :global(p) { color: rgba(246, 244, 239, 0.78); font-size: 17px; }
   .le__top .btn { margin-top: 12px; }
   .le__photo { margin: 0; }
@@ -283,6 +303,8 @@ const e = home.elevate;
 
   .cases { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(20px, 2.5vw, 32px); }
   .case { background: var(--white); border: 1px solid var(--line); border-radius: var(--radius); padding: 28px 26px; display: flex; flex-direction: column; gap: 10px; }
+  .case__img { margin: -28px -26px 8px; overflow: hidden; border-radius: var(--radius) var(--radius) 0 0; }
+  .case__img :global(img) { width: 100%; aspect-ratio: 16 / 10; object-fit: cover; display: block; }
   .case__role { font-size: 11.5px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin: 0; }
   .case h3 { font-size: 24px; }
   .case__lead { font-weight: 600; margin: 0; }
@@ -296,6 +318,16 @@ const e = home.elevate;
   .acta__btns { display: flex; flex-wrap: wrap; gap: 10px; }
 
   .team-h { margin-bottom: 48px; }
+  .team-filters { display: flex; flex-wrap: wrap; gap: 8px; margin: -16px 0 36px; }
+  .tchip { min-height: 42px; padding: 0 16px; border-radius: 3px; border: 1px solid var(--line); background: transparent; color: var(--ink); font: inherit; font-size: 14px; font-weight: 600; cursor: pointer; display: inline-flex; gap: 8px; align-items: center; }
+  .tchip span { font-size: 12px; font-weight: 500; color: var(--muted); }
+  .tchip:hover { border-color: var(--ink); }
+  .tchip[aria-pressed='true'] { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+  .tchip[aria-pressed='true'] span { color: rgba(246, 244, 239, 0.6); }
+  .member[hidden] { display: none; }
+  .member__cos { display: flex; gap: 6px; margin: 0 0 10px; }
+  .member__co { font-size: 10.5px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; padding: 3px 7px; border-radius: 2px; border: 1px solid var(--line); color: var(--muted); }
+  .member__co--elevate { color: #1f5c3c; border-color: rgba(31, 92, 60, 0.35); }
   .team { display: grid; grid-template-columns: repeat(3, 1fr); gap: 56px clamp(24px, 3vw, 40px); }
   .member__btn { all: unset; cursor: pointer; display: block; width: 100%; }
   .member__btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 6px; }

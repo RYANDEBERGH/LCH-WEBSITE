@@ -4,6 +4,7 @@ credentials: "CPA"
 role: "Accounting Manager"
 photo: "/uploads/cody-final.jpg"
 linkedin: ""
+companies: ["lch"]
 order: 8
 ---
 

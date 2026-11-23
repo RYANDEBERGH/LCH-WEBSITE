@@ -49,6 +49,10 @@ const socials = [
   <div class="container footer__main">
     <div class="footer__brand">
       <img src={settings.logoLight} alt={settings.siteName} width="140" height="63" loading="lazy" />
+      <a class="footer__elevate" href={settings.elevate.url} target="_blank" rel="noopener">
+        <span>Construction management by</span>
+        <img src={settings.elevate.logoLight} alt="Elevate Construction Management" width="120" height="59" loading="lazy" />
+      </a>
       <address>
         <a href={settings.mapsUrl} target="_blank" rel="noopener">{settings.address}</a>
       </address>
@@ -96,6 +100,9 @@ const socials = [
 
   .footer__main { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 40px; padding-block: 56px; }
   .footer__brand img { height: 48px; width: auto; margin-bottom: 20px; }
+  .footer__elevate { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; color: rgba(246, 244, 239, 0.6); font-size: 12px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; text-decoration: none; }
+  .footer__elevate img { height: 34px; width: auto; opacity: 0.9; transition: opacity 0.2s; }
+  .footer__elevate:hover img { opacity: 1; }
   .footer__brand address { font-style: normal; color: rgba(246, 244, 239, 0.7); max-width: 26ch; }
   .footer a { text-decoration: none; }
   .footer a:hover { color: var(--accent); }

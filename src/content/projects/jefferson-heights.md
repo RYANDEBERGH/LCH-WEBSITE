@@ -12,7 +12,12 @@ intersection: ""
 partners: []
 summary: "Bringing a partially completed residential development toward delivery for a court-appointed receiver."
 approach: "LCH provided development management and Elevate provided construction management. Together they re-established budget and schedule control, coordinated consultants and trades, and advanced occupancy, registration, sales and closing requirements."
-gallery: []
+heroImage: "/uploads/jefferson-heights.jpg"
+gallery:
+  - image: "/uploads/jefferson-heights-street.jpg"
+    caption: "Townhomes at Jefferson Heights"
+  - image: "/uploads/jefferson-heights-interior.jpg"
+    caption: "Kitchen and living space at Jefferson Heights"
 milestones: []
 website:
   url: ""

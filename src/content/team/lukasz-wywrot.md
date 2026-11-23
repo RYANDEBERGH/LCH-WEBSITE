@@ -4,6 +4,7 @@ credentials: "P.Eng, PMP"
 role: "CEO & COO"
 photo: "/uploads/luke.jpg"
 linkedin: "https://ca.linkedin.com/in/lukewywrot"
+companies: ["lch", "elevate"]
 order: 1
 ---
 

@@ -145,6 +145,7 @@ collections:
       - { label: Role, name: role, widget: string }
       - { label: Photo, name: photo, widget: image, required: false, hint: 'Portrait orientation, plain background.' }
       - { label: LinkedIn profile, name: linkedin, widget: string, required: false }
+      - { label: Company, name: companies, widget: select, multiple: true, default: [lch], options: [{ label: LCH Developments, value: lch }, { label: Elevate, value: elevate }], hint: 'Controls which team tab this person appears under.' }
       - { label: Order (1 = first), name: order, widget: number, value_type: int, default: 20 }
       - { label: Hide from website, name: hidden, widget: boolean, default: false, required: false }
       - { label: Bio, name: body, widget: markdown }
@@ -208,6 +209,14 @@ collections:
               - { label: Instagram, name: instagram, widget: string, required: false }
               - { label: Facebook, name: facebook, widget: string, required: false }
               - { label: LinkedIn, name: linkedin, widget: string, required: false }
+          - label: Elevate (affiliated construction manager)
+            name: elevate
+            widget: object
+            fields:
+              - { label: Name, name: name, widget: string }
+              - { label: Website, name: url, widget: string }
+              - { label: Logo (light backgrounds), name: logo, widget: image }
+              - { label: Logo (dark backgrounds), name: logoLight, widget: image }
           - label: Social accounts (follow buttons)
             name: socialAccounts
             widget: list
@@ -394,6 +403,8 @@ collections:
                 widget: list
                 summary: '{{fields.title}}'
                 fields:
+                  - { label: Photo, name: image, widget: image, required: false }
+                  - { label: Photo description (alt text), name: imageAlt, widget: string, required: false }
                   - { label: Linked project page, name: project, widget: string, required: false, hint: 'Project page slug, e.g. jefferson-heights. Leave blank if there is no project page.' }
                   - { label: Title, name: title, widget: string }
                   - { label: Role, name: role, widget: string }

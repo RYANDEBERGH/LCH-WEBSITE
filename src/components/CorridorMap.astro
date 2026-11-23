@@ -36,11 +36,12 @@ const lineBadges = [
 const wantedLabels = new Set(mapData.roadLabels ?? []);
 const roadLabels = geo.roadLabels.filter((l) => wantedLabels.has(l.name)).map((l) => ({ ...l, name: l.name.replace(' Express', '') }));
 
-const everything = await getProjects();
+// LCH's own developments only (client work is shown on the Projects page and About Us)
+const everything = (await getProjects()).filter((p) => !isClientWork(p));
 const all = everything.filter((p) => p.data.lat != null && p.data.lng != null);
-// Number pins west to east along the map so the list reads in map order
-const ordered = all.slice().sort((a, b) => (a.data.lng ?? 0) - (b.data.lng ?? 0));
-// Client work without a verified address is listed but not pinned
+// Numbering: under construction first, then in development, then completed; then by the project's own order
+const STAGE_RANK: Record<string, number> = { 'Under Construction': 0, 'In Development': 1, Complete: 2 };
+const ordered = all.slice().sort((a, b) => (STAGE_RANK[a.data.stage ?? ''] ?? 3) - (STAGE_RANK[b.data.stage ?? ''] ?? 3) || a.data.order - b.data.order);
 const unpinned = everything.filter((p) => p.data.lat == null || p.data.lng == null);
 const pins = ordered.map((p, i) => ({ p, num: i + 1, x: X(p.data.lng!), y: Y(p.data.lat!), dx: 0, dy: 0, tight: false, color: brandInk(p) }));
 
@@ -190,11 +191,6 @@ const L = geo.layers as Record<string, string>;
       </figure>
 
       <div class="cmap__list">
-        <div class="cmap__filters" role="group" aria-label="Filter projects">
-          <button type="button" class="cmap__chip" aria-pressed="true" data-filter="all">All projects</button>
-          <button type="button" class="cmap__chip" aria-pressed="false" data-filter="development">LCH developments</button>
-          <button type="button" class="cmap__chip" aria-pressed="false" data-filter="client">Selected client work</button>
-        </div>
         <ol class="cmap__items">
           {pins.map(({ p, num, color }) => {
             const m = latestMilestone(p);

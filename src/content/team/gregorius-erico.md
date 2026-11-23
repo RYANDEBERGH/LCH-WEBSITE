@@ -4,6 +4,7 @@ credentials: ""
 role: "Development Manager"
 photo: "/uploads/greg.png"
 linkedin: ""
+companies: ["lch"]
 order: 7
 ---
 

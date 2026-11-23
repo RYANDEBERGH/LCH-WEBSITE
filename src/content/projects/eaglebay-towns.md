@@ -13,6 +13,7 @@ intersection: ""
 partners: []
 summary: "A 29-home townhouse receivership, combining construction completion with purchaser, warranty and closeout coordination."
 approach: "Engaged for KPMG and RBC, LCH and Elevate combined construction stabilization and completion with coordination of purchaser, warranty and closeout requirements."
+heroImage: "/uploads/eaglebay-towns.jpg"
 gallery: []
 milestones: []
 website:

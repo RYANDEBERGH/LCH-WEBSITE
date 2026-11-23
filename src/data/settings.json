@@ -95,5 +95,11 @@
     "eyebrow": "Follow along",
     "heading": "From the field and the feed.",
     "count": 6
+  },
+  "elevate": {
+    "name": "Elevate Construction Management",
+    "url": "https://elevatecm.com",
+    "logo": "/uploads/brand/elevate-logo.png",
+    "logoLight": "/uploads/brand/elevate-logo-white.png"
   }
 }
