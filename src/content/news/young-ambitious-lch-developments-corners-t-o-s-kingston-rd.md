@@ -6,6 +6,7 @@ topic: "In the Press"
 image: "/uploads/merge-construction.jpg"
 excerpt: "LCH Developments has several multiresidential buildings planned on or near Toronto’s Kingston Road and recently opened a co-working space in the area for local residents. Lukasz Wywrot and his younger brother Michal star"
 sourceUrl: "https://renx.ca/lch-developments-young-ambitious-corner-kingston-rd-toronto"
+publisher: "RENX"
 ---
 
 LCH Developments has several multiresidential buildings planned on or near Toronto’s Kingston Road and recently opened a co-working space in the area for local residents.

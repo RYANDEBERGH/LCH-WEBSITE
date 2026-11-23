@@ -1,29 +1,91 @@
 {
   "hero": {
     "eyebrow": "Toronto real estate development since 2007",
-    "heading": "We see residential spaces differently.",
-    "subheading": "They aren’t just places where people eat and sleep. They’re communities with the power to house dreams, energize neighbourhoods and push boundaries.",
+    "heading": "Making good places happen.",
+    "subheading": "We find the opportunity, work it through approvals, bring the right partners together, adapt as neighbourhoods change, and deliver.",
     "image": "/uploads/everston-evening-2.png",
-    "primaryCta": { "label": "Explore our projects", "url": "/projects/" },
-    "secondaryCta": { "label": "Our story", "url": "/story/" }
+    "primaryCta": {
+      "label": "Explore our projects",
+      "url": "/projects/"
+    },
+    "secondaryCta": {
+      "label": "Our story",
+      "url": "/story/"
+    }
   },
   "stats": [
-    { "value": "2007", "label": "Building in the GTA since" },
-    { "value": "1,000+", "label": "Rental homes in our pipeline" },
-    { "value": "8", "label": "Communities & spaces" },
-    { "value": "Scarborough", "label": "Where we’re rooted" }
+    {
+      "value": "2007",
+      "label": "Building in the GTA since"
+    },
+    {
+      "value": "1,095",
+      "label": "Rental homes at Everston, Cliffside and Retreat"
+    },
+    {
+      "value": "5 of 8",
+      "label": "Communities on Kingston Road"
+    },
+    {
+      "value": "In-house",
+      "label": "Construction through Elevate CM"
+    }
   ],
+  "process": {
+    "eyebrow": "How we make it happen",
+    "heading": "From a site others overlook to homes people move into.",
+    "steps": [
+      {
+        "title": "Identify",
+        "body": "We look for neighbourhoods with high growth and untapped potential, and sites others may overlook."
+      },
+      {
+        "title": "Approve",
+        "body": "We take each site through planning with the City and the community, from application to permit."
+      },
+      {
+        "title": "Partner",
+        "body": "We bring together capital partners, co-developers, designers and trades. Retreat is advancing with Fiera Real Estate."
+      },
+      {
+        "title": "Adapt",
+        "body": "Plans change as markets do. Cliffside launched as condominiums in 2024 and is now being built as 209 rental homes."
+      },
+      {
+        "title": "Deliver",
+        "body": "Through Elevate Construction Management, the team that plans a project is the team that builds it."
+      }
+    ]
+  },
   "featured": {
     "eyebrow": "Current communities",
     "heading": "Purpose-built rentals, shaped by their neighbourhoods."
   },
-  "philosophy": {
-    "eyebrow": "Our approach",
-    "heading": "We start by taking a bird’s-eye view of unique neighbourhoods with high growth and untapped potential.",
-    "body": "This focus on the big picture, the greater purpose, is at the core of our design philosophy. It lets us understand the needs of renters and envision a community where people can put down roots — and we carry that vision through every decision, from functional suite layouts and durable finishes to shared spaces that bring neighbours together.",
-    "image": "/uploads/mike-and-luke-sales-center.png",
-    "ctaLabel": "Discover our story",
-    "ctaUrl": "/story/"
+  "map": {
+    "eyebrow": "Where we build",
+    "heading": "Five of our eight communities are on Kingston Road.",
+    "body": "From Merge Condos at Danforth Avenue to Everston near U of T Scarborough, Kingston Road is where our work is most concentrated, close to the Bluffs, the ravines and GO transit. Our projects also reach Leslieville and Riverdale, and we continue to look for opportunities across the GTA."
+  },
+  "leasingBand": {
+    "enabled": true,
+    "project": "everston",
+    "eyebrow": "Now pre-leasing",
+    "heading": "Everston: 566 rental homes by the Campus Valley.",
+    "body": "Floor plans, pricing, amenities and tours are on everston.ca.",
+    "ctaLabel": "Visit everston.ca",
+    "ctaUrl": "https://everston.ca",
+    "image": "/uploads/int-everston-lobby-cam-001-1.jpg"
+  },
+  "elevate": {
+    "eyebrow": "Elevate Construction Management",
+    "heading": "Development and construction, under one roof.",
+    "body": "Elevate Construction Management is LCH’s affiliated construction manager. Working together from early planning through delivery helps us make informed decisions about design, cost, quality and schedule, and how each community will serve its residents.",
+    "ctaLabel": "Visit elevatecm.com",
+    "ctaUrl": "https://elevatecm.com"
+  },
+  "press": {
+    "eyebrow": "In the press",
+    "heading": "Covered by"
   },
   "news": {
     "eyebrow": "News & media",

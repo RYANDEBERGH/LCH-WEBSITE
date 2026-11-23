@@ -4,7 +4,7 @@ import Base from '../../layouts/Base.astro';
 import Img from '../../components/Img.astro';
 import NewsCard from '../../components/NewsCard.astro';
 import ProjectCard from '../../components/ProjectCard.astro';
-import { getProjects, getNews, statusTone } from '../../lib/site';
+import { getProjects, getNews, stageTone, STAGE_ORDER, formatMilestoneDate, brandInk } from '../../lib/site';
 
 export async function getStaticPaths() {
   const projects = await getCollection('projects', (p) => !p.data.hidden);
@@ -18,9 +18,13 @@ const related = (await getNews()).filter((n) => n.data.project === project.id).s
 const all = await getProjects();
 const idx = all.findIndex((x) => x.id === project.id);
 const next = all[(idx + 1) % all.length];
+const stageIdx = STAGE_ORDER.indexOf(p.stage);
+const brand = brandInk(project);
+const isExternal = (u?: string | null) => !!u && /^https?:/.test(u);
 
 const facts = [
-  ['Status', p.status],
+  ['Construction', p.stage],
+  ['Leasing', p.leasing?.status ?? ''],
   ['Product', p.type],
   ['Address', p.address],
   ['Neighbourhood', p.neighbourhood],
@@ -32,11 +36,12 @@ const facts = [
 ---
 
 <Base overlay title={p.title} description={p.summary} image={p.heroImage}>
+<div class="brand-scope" style={`--accent: ${brand}`}>
   <section class="phead on-image">
     <Img src={p.heroImage} alt={`${p.title} rendering`} loading="eager" fetchpriority="high" class="phead__bg" />
     <div class="container phead__content">
       <a class="back" href="/projects/">← All projects</a>
-      <span class="pill" data-tone={statusTone(p.status)}>{p.status}</span>
+      <span class="phead__pills"><span class="pill" data-tone={stageTone(p.stage)}>{p.stage}</span>{p.leasing?.status && <span class="pill pill--leasing">{p.leasing.status}</span>}</span>
       <h1>{p.title}</h1>
       <p class="phead__loc">{[p.address, p.neighbourhood].filter(Boolean).join(' · ')}</p>
     </div>
@@ -56,8 +61,56 @@ const facts = [
         <dl>
           {facts.map(([k, v]) => <div><dt>{k}</dt><dd>{v}</dd></div>)}
         </dl>
-        <a class="btn btn--ghost" href="/contact/">Enquire about {p.title}</a>
+        {p.leasing?.status && p.leasing?.url ? (
+          <div class="leasebox">
+            <p class="leasebox__status">{p.leasing.status}</p>
+            <p>{p.leasing.label || 'Leasing details'} are on the {p.title} website.</p>
+            <a class="btn btn--lease" href={p.leasing.url} target="_blank" rel="noopener">Visit {p.leasing.url.replace(/^https?:\/\/(www\.)?/, '').replace(/\/$/, '')} <span class="arrow" aria-hidden="true">↗</span></a>
+          </div>
+        ) : (
+          <a class="btn btn--ghost" href="/contact/">Enquire about {p.title}</a>
+        )}
       </aside>
+    </div>
+  </section>
+
+  <section class="section--tight progress" aria-labelledby="progress-h">
+    <div class="container">
+      <div class="progress__grid">
+        <div>
+          <p class="eyebrow">Progress</p>
+          <h2 id="progress-h">Construction status</h2>
+          <ol class="stages" aria-label="Construction stage">
+            {STAGE_ORDER.map((st, i) => (
+              <li class:list={['stages__item', { 'is-done': i < stageIdx, 'is-current': i === stageIdx }]} aria-current={i === stageIdx ? 'step' : undefined}>
+                <span class="stages__dot" aria-hidden="true"></span>
+                <span>{st}</span>
+              </li>
+            ))}
+          </ol>
+          {p.leasing?.status && <p class="progress__note">Leasing is tracked separately: <strong>{p.leasing.status}</strong>.</p>}
+        </div>
+        <div>
+          {p.milestones.length > 0 ? (
+            <ol class="timeline">
+              {p.milestones.slice().reverse().map((m, i) => (
+                <li class:list={['timeline__item', { 'is-latest': i === 0 }]}>
+                  <time datetime={m.date}>{formatMilestoneDate(m.date)}</time>
+                  <div>
+                    {i === 0 && <span class="timeline__latest">Latest</span>}
+                    <p>{m.label}</p>
+                    {m.source && (m.sourceUrl
+                      ? <a href={m.sourceUrl} target={isExternal(m.sourceUrl) ? '_blank' : undefined} rel="noopener">Source: {m.source}{isExternal(m.sourceUrl) ? ' ↗' : ''}</a>
+                      : <span class="timeline__src">Source: {m.source}</span>)}
+                  </div>
+                </li>
+              ))}
+            </ol>
+          ) : (
+            <p class="timeline__empty">Dated updates will appear here as the project moves forward. For the latest, see <a href="/news/">News & Media</a>.</p>
+          )}
+        </div>
+      </div>
     </div>
   </section>
 
@@ -109,6 +162,7 @@ const facts = [
       </div>
     </section>
   )}
+</div>
 </Base>
 
 <script>
@@ -160,10 +214,9 @@ const facts = [
   .pbody__facts dd { margin: 0; font-size: 15px; }
   .pbody__facts .btn { width: 100%; }
 
-  .gallery { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
-  .gallery__item { padding: 0; border: 0; background: var(--paper-2); cursor: zoom-in; overflow: hidden; border-radius: var(--radius); aspect-ratio: 3 / 2; }
-  .gallery__item:first-child { grid-column: 1 / -1; aspect-ratio: 21 / 9; }
-  .gallery__item :global(img) { width: 100%; height: 100%; object-fit: cover; transition: transform 1s var(--ease); }
+  .gallery { columns: 2; column-gap: 16px; }
+  .gallery__item { display: block; width: 100%; padding: 0; margin: 0 0 16px; border: 0; background: var(--paper-2); cursor: zoom-in; overflow: hidden; border-radius: var(--radius); break-inside: avoid; }
+  .gallery__item :global(img) { width: 100%; height: auto; transition: transform 1s var(--ease); }
   .gallery__item:hover :global(img) { transform: scale(1.03); }
 
   .lightbox { width: 100vw; height: 100dvh; max-width: none; max-height: none; margin: 0; padding: 0; border: 0; background: rgba(10, 10, 9, 0.95); color: #fff; }
@@ -189,9 +242,41 @@ const facts = [
     .grid-3 { grid-template-columns: 1fr 1fr; }
   }
   @media (max-width: 600px) {
-    .gallery { grid-template-columns: 1fr; }
-    .gallery__item:first-child { aspect-ratio: 3 / 2; }
+    .gallery { columns: 1; }
     .grid-3 { grid-template-columns: 1fr; }
     .lightbox[open] { grid-template-columns: 44px 1fr 44px; }
   }
+
+  .phead__pills { display: flex; flex-wrap: wrap; gap: 8px; }
+  .leasebox { display: grid; gap: 10px; padding: 18px; border-radius: var(--radius); background: color-mix(in srgb, var(--accent) 8%, #fff); border: 1px solid color-mix(in srgb, var(--accent) 25%, #fff); }
+  .leasebox p { margin: 0; font-size: 15px; color: var(--ink-2); }
+  .leasebox__status { font-size: 12px !important; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent) !important; }
+  .btn--lease { --bg: var(--accent); --fg: #fff; width: 100%; }
+  .btn--lease:hover { filter: brightness(1.15); }
+
+  .progress { border-top: 1px solid var(--line); }
+  .progress__grid { display: grid; grid-template-columns: minmax(0, 4fr) minmax(0, 7fr); gap: clamp(32px, 6vw, 96px); align-items: start; }
+  .progress h2 { margin-bottom: 28px; }
+  .stages { list-style: none; margin: 0; padding: 0; display: grid; gap: 0; }
+  .stages__item { position: relative; display: flex; align-items: center; gap: 14px; padding: 10px 0; color: var(--muted); font-weight: 500; }
+  .stages__item:not(:last-child)::after { content: ''; position: absolute; left: 7px; top: 30px; bottom: -10px; width: 2px; background: var(--line); }
+  .stages__dot { width: 16px; height: 16px; border-radius: 50%; border: 2px solid var(--line); background: var(--paper); flex: none; position: relative; z-index: 1; }
+  .stages__item.is-done { color: var(--ink-2); }
+  .stages__item.is-done .stages__dot { background: var(--ink); border-color: var(--ink); }
+  .stages__item.is-done::after { background: var(--ink) !important; }
+  .stages__item.is-current { color: var(--ink); font-weight: 700; }
+  .stages__item.is-current .stages__dot { background: var(--accent); border-color: var(--accent); box-shadow: 0 0 0 5px color-mix(in srgb, var(--accent) 22%, transparent); }
+  .progress__note { margin-top: 20px; font-size: 15px; color: var(--muted); }
+  .timeline { list-style: none; margin: 0; padding: 0; }
+  .timeline__item { display: grid; grid-template-columns: 120px 1fr; gap: 20px; padding: 18px 0; border-top: 1px solid var(--line); }
+  .timeline__item:last-child { border-bottom: 1px solid var(--line); }
+  .timeline__item time { font-size: 14px; font-weight: 600; font-variant-numeric: tabular-nums; padding-top: 2px; }
+  .timeline__item p { margin: 0 0 4px; font-size: 16px; }
+  .timeline__item a, .timeline__src { font-size: 13px; color: var(--muted); }
+  .timeline__item a:hover { color: var(--accent); }
+  .timeline__item.is-latest p { font-weight: 600; }
+  .timeline__latest { display: inline-block; font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #fff; background: var(--accent); padding: 2px 8px; border-radius: 999px; margin-bottom: 6px; }
+  .timeline__empty { color: var(--muted); }
+  @media (max-width: 900px) { .progress__grid { grid-template-columns: 1fr; } }
+  @media (max-width: 520px) { .timeline__item { grid-template-columns: 1fr; gap: 4px; } }
 </style>

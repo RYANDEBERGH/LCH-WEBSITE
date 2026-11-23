@@ -3,6 +3,7 @@ name: "Ryan Debergh"
 credentials: ""
 role: "Senior Development Manager"
 photo: "/uploads/ryan.jpg"
+linkedin: ""
 order: 6
 ---
 

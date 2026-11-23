@@ -5,6 +5,7 @@ project: "415-broadview"
 topic: "In the Press"
 image: "/uploads/hero-rendering-final.jpg"
 excerpt: "Declining church attendance, rising land value and an insatiable demand for new condos have created perfect conditions to bring new uses to some gorgeous old landmarks, a trend that’s been present throughout Toronto’s cu"
+publisher: "blogTO"
 ---
 
 Declining church attendance, rising land value and an insatiable demand for new condos have created perfect conditions to bring [new uses](https://www.blogto.com/real-estate-toronto/2022/01/1183-dufferin-street-toronto/) to [some gorgeous old landmarks](https://www.blogto.com/real-estate-toronto/2021/07/historic-toronto-church-could-become-part-apartment-building-development/), a trend that’s been present throughout Toronto’s current condo boom.

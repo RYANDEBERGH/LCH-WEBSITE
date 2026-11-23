@@ -38,13 +38,22 @@ collections:
     create: true
     slug: '{{fields.title}}'
     identifier_field: title
-    summary: '{{title}} — {{status}}'
-    sortable_fields: [order, title, status]
+    summary: '{{title}} — {{stage}}'
+    sortable_fields: [order, title, stage]
     view_groups:
-      - { label: Status, field: status }
+      - { label: Construction stage, field: stage }
     fields:
       - { label: Project name, name: title, widget: string }
-      - { label: Status, name: status, widget: select, options: ['Now Pre-Leasing', 'Now Leasing', 'Under Construction', 'Coming Soon', 'In Planning', 'Complete'] }
+      - { label: Construction stage, name: stage, widget: select, options: ['In Development', 'Under Construction', 'Complete'] }
+      - label: Leasing (kept separate from construction)
+        name: leasing
+        widget: object
+        collapsed: true
+        required: false
+        fields:
+          - { label: Leasing status, name: status, widget: select, required: false, options: ['', 'Now Pre-Leasing', 'Now Leasing', 'Join the Waitlist', 'Fully Leased'] }
+          - { label: Leasing website, name: url, widget: string, required: false, hint: 'e.g. https://everston.ca — floor plans and pricing stay there.' }
+          - { label: What visitors will find there, name: label, widget: string, required: false, hint: 'e.g. Floor plans, pricing, amenities and tours' }
       - { label: Order (1 = first), name: order, widget: number, value_type: int, default: 10 }
       - { label: Featured on homepage, name: featured, widget: boolean, default: false }
       - { label: Hide from website, name: hidden, widget: boolean, default: false, required: false }
@@ -57,6 +66,20 @@ collections:
       - { label: Storeys, name: storeys, widget: number, value_type: int, required: false }
       - { label: Partners, name: partners, widget: list, required: false, field: { label: Partner, name: partner, widget: string } }
       - { label: Architect, name: architect, widget: string, required: false }
+      - { label: Map latitude, name: lat, widget: number, value_type: float, required: false, hint: 'Right-click the address in Google Maps; the first number is latitude (e.g. 43.77491).' }
+      - { label: Map longitude, name: lng, widget: number, value_type: float, required: false, hint: 'The second number (e.g. -79.17928). Leave both blank to keep the project off the map.' }
+      - label: Progress milestones
+        name: milestones
+        widget: list
+        required: false
+        summary: '{{fields.date}} — {{fields.label}}'
+        hint: 'Only verified, dated updates. Use the date it was reported; YYYY-MM is fine when only the month is known.'
+        fields:
+          - { label: Date (YYYY-MM-DD or YYYY-MM), name: date, widget: string, pattern: ['^\d{4}-\d{2}(-\d{2})?$', 'Use YYYY-MM-DD or YYYY-MM'] }
+          - { label: What happened, name: label, widget: string, hint: 'Say what was reported, e.g. “Reported nearing top-off”, not a confirmed event you can’t date.' }
+          - { label: Source, name: source, widget: string, required: false, hint: 'e.g. UrbanToronto, LCH Developments' }
+          - { label: Source link, name: sourceUrl, widget: string, required: false }
+      - { label: Brand colour, name: brandColor, widget: color, required: false, hint: 'The development’s own colour (from its logo). Used on its project page and map pin; darkened automatically when needed for readable text.' }
       - { label: Project logo, name: logo, widget: image, required: false, hint: 'Transparent PNG or SVG works best.' }
       - { label: Main image, name: heroImage, widget: image, hint: 'Large landscape image, at least 2000px wide.' }
       - label: Gallery
@@ -95,6 +118,8 @@ collections:
       - { label: Topic, name: topic, widget: select, options: ['Project Update', 'In the Press', 'Company News', 'Community'] }
       - { label: Related project, name: project, widget: relation, collection: projects, search_fields: [title], value_field: '{{slug}}', display_fields: [title], required: false }
       - { label: Image, name: image, widget: image, required: false }
+      - { label: Image fit, name: imageFit, widget: select, required: false, options: [{ label: 'Fill (crop to fit) — photos', value: cover }, { label: 'Show whole image — graphics with text', value: contain }] }
+      - { label: Publisher, name: publisher, widget: string, required: false, hint: 'For press coverage, e.g. UrbanToronto. Shown in the “In the press” strip.' }
       - { label: Short excerpt, name: excerpt, widget: text, required: false }
       - { label: Link to original article (optional), name: sourceUrl, widget: string, required: false, hint: 'For press coverage — adds a “Read the full article” button.' }
       - { label: Save as draft (hidden from site), name: draft, widget: boolean, default: false, required: false }
@@ -115,9 +140,29 @@ collections:
       - { label: Credentials, name: credentials, widget: string, required: false, hint: 'e.g. P.Eng, PMP' }
       - { label: Role, name: role, widget: string }
       - { label: Photo, name: photo, widget: image, required: false, hint: 'Portrait orientation, plain background.' }
+      - { label: LinkedIn profile, name: linkedin, widget: string, required: false }
       - { label: Order (1 = first), name: order, widget: number, value_type: int, default: 20 }
       - { label: Hide from website, name: hidden, widget: boolean, default: false, required: false }
       - { label: Bio, name: body, widget: markdown }
+
+  # ── SOCIAL POSTS ──────────────────────────────────────────────────────────
+  - name: social
+    label: Social Posts
+    label_singular: Social post
+    description: Curated posts from LCH, Elevate, Merge Spaces, Everston and the team. Paste the post's link, pick the account, add the image and a short excerpt.
+    folder: src/content/social
+    create: true
+    slug: '{{year}}-{{month}}-{{day}}-{{fields.account}}'
+    summary: '{{date | date("YYYY-MM-DD")}} — {{account}} ({{network}})'
+    sortable_fields: [date, account]
+    fields:
+      - { label: Account, name: account, widget: string, hint: 'Exactly as named in Site Settings → Social accounts, e.g. LCH Developments' }
+      - { label: Network, name: network, widget: select, options: [linkedin, instagram, facebook] }
+      - { label: Date posted, name: date, widget: datetime, format: 'YYYY-MM-DD', date_format: 'YYYY-MM-DD', time_format: false }
+      - { label: Link to the post, name: url, widget: string, hint: 'On LinkedIn: ••• → Copy link to post. On Instagram: ••• → Copy link.' }
+      - { label: Excerpt, name: text, widget: text, required: false }
+      - { label: Image, name: image, widget: image, required: false, hint: 'Square works best.' }
+      - { label: Hide, name: hidden, widget: boolean, default: false, required: false }
 
   # ── SIMPLE PAGES (legal etc.) ─────────────────────────────────────────────
   - name: pages
@@ -158,6 +203,24 @@ collections:
               - { label: Instagram, name: instagram, widget: string, required: false }
               - { label: Facebook, name: facebook, widget: string, required: false }
               - { label: LinkedIn, name: linkedin, widget: string, required: false }
+          - label: Social accounts (follow buttons)
+            name: socialAccounts
+            widget: list
+            summary: '{{fields.name}} — {{fields.network}}'
+            hint: 'Accounts with a blank link are hidden.'
+            fields:
+              - { label: Name, name: name, widget: string }
+              - { label: Network, name: network, widget: select, options: [linkedin, instagram, facebook] }
+              - { label: Link, name: url, widget: string, required: false }
+              - { label: Type, name: kind, widget: select, options: [company, person] }
+          - label: Social feed section
+            name: socialFeed
+            widget: object
+            fields:
+              - { label: Show section, name: enabled, widget: boolean }
+              - { label: Small text, name: eyebrow, widget: string }
+              - { label: Heading, name: heading, widget: string }
+              - { label: Number of posts, name: count, widget: number, value_type: int, min: 0, max: 12 }
           - label: Announcement banner (top of every page)
             name: announcement
             widget: object
@@ -203,16 +266,47 @@ collections:
             fields:
               - { label: Small text, name: eyebrow, widget: string }
               - { label: Heading, name: heading, widget: string }
-          - label: Our approach section
-            name: philosophy
+          - label: How we make it happen (steps)
+            name: process
             widget: object
             fields:
               - { label: Small text, name: eyebrow, widget: string }
-              - { label: Heading, name: heading, widget: text }
-              - { label: Body, name: body, widget: text }
-              - { label: Image, name: image, widget: image }
+              - { label: Heading, name: heading, widget: string }
+              - { label: Steps, name: steps, widget: list, summary: '{{fields.title}}', fields: [{ label: Title, name: title, widget: string }, { label: Text, name: body, widget: text }] }
+          - label: Map section
+            name: map
+            widget: object
+            fields:
+              - { label: Small text, name: eyebrow, widget: string }
+              - { label: Heading, name: heading, widget: string, hint: 'Keep any counts accurate, e.g. five of eight communities on Kingston Road.' }
+              - { label: Text, name: body, widget: text }
+          - label: Leasing band (e.g. Everston)
+            name: leasingBand
+            widget: object
+            fields:
+              - { label: Show, name: enabled, widget: boolean }
+              - { label: Project, name: project, widget: relation, collection: projects, search_fields: [title], value_field: '{{slug}}', display_fields: [title] }
+              - { label: Small text, name: eyebrow, widget: string }
+              - { label: Heading, name: heading, widget: string }
+              - { label: Text, name: body, widget: string }
               - { label: Button label, name: ctaLabel, widget: string }
               - { label: Button link, name: ctaUrl, widget: string }
+              - { label: Background image, name: image, widget: image }
+          - label: Elevate section
+            name: elevate
+            widget: object
+            fields:
+              - { label: Small text, name: eyebrow, widget: string }
+              - { label: Heading, name: heading, widget: string }
+              - { label: Text, name: body, widget: text }
+              - { label: Button label, name: ctaLabel, widget: string }
+              - { label: Button link, name: ctaUrl, widget: string }
+          - label: Press strip
+            name: press
+            widget: object
+            fields:
+              - { label: Small text, name: eyebrow, widget: string }
+              - { label: Heading (screen readers), name: heading, widget: string }
           - label: Latest news section
             name: news
             widget: object
@@ -249,7 +343,7 @@ collections:
             fields:
               - { label: Year, name: year, widget: string }
               - { label: Text, name: text, widget: text }
-          - { label: Elevate section, name: elevate, widget: object, fields: [{ label: Heading, name: heading, widget: string }, { label: Text, name: body, widget: text }] }
+          - { label: Elevate section, name: elevate, widget: object, fields: [{ label: Heading, name: heading, widget: string }, { label: Text, name: body, widget: text }, { label: Button label, name: ctaLabel, widget: string }, { label: Button link, name: ctaUrl, widget: string }] }
           - { label: Team section, name: team, widget: object, fields: [{ label: Small text, name: eyebrow, widget: string }, { label: Heading, name: heading, widget: string }] }
 
       - name: contact
@@ -262,6 +356,53 @@ collections:
           - { label: Show contact form, name: formEnabled, widget: boolean }
           - { label: Thank-you message, name: formSuccess, widget: text }
           - { label: Inquiry types (dropdown), name: inquiryTypes, widget: list }
+
+      - name: partnerships
+        label: Partnerships page
+        file: src/data/partnerships.json
+        fields:
+          - { label: Small text, name: eyebrow, widget: string }
+          - { label: Heading, name: heading, widget: string }
+          - { label: Intro, name: intro, widget: text }
+          - label: Partners
+            name: partners
+            widget: list
+            summary: '{{fields.name}} — {{fields.role}}'
+            hint: 'Only publicly announced relationships.'
+            fields:
+              - { label: Name, name: name, widget: string }
+              - { label: Role, name: role, widget: string }
+              - { label: Projects, name: projects, widget: relation, collection: projects, search_fields: [title], value_field: '{{slug}}', display_fields: [title], multiple: true }
+              - { label: Description, name: body, widget: text }
+              - { label: Quote, name: quote, widget: text, required: false }
+              - { label: Quote attribution, name: quoteBy, widget: string, required: false }
+              - { label: Link label, name: linkLabel, widget: string, required: false }
+              - { label: Link, name: linkUrl, widget: string, required: false }
+          - label: Work with us
+            name: workWithUs
+            widget: object
+            fields:
+              - { label: Heading, name: heading, widget: string }
+              - { label: Items, name: items, widget: list, summary: '{{fields.title}}', fields: [{ label: Title, name: title, widget: string }, { label: Text, name: body, widget: text }] }
+              - { label: Button label, name: ctaLabel, widget: string }
+              - { label: Button link, name: ctaUrl, widget: string }
+
+      - name: map
+        label: Map landmarks
+        file: src/data/map.json
+        fields:
+          - label: Landmarks
+            name: landmarks
+            widget: list
+            summary: '{{fields.name}} ({{fields.kind}})'
+            hint: 'Transit, parks and neighbourhood labels on the Kingston Road map. Project pins come from each project’s latitude/longitude.'
+            fields:
+              - { label: Name, name: name, widget: string }
+              - { label: Type, name: kind, widget: select, options: [subway, go, nature, landmark, neighbourhood] }
+              - { label: Latitude, name: lat, widget: number, value_type: float }
+              - { label: Longitude, name: lng, widget: number, value_type: float }
+              - { label: Note, name: note, widget: string, required: false }
+              - { label: Label position, name: labelPos, widget: select, required: false, options: [right, left, top, bottom] }
 
       - name: corporate
         label: Corporate page

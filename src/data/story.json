@@ -29,14 +29,28 @@
     "body": "Founded by brothers Michal and Lukasz Wywrot, first-generation Polish immigrants, LCH Developments is a Toronto-based real estate developer creating homes, workspaces and communities across the Greater Toronto Area.\n\nLCH’s story began in 2007, when the brothers built a property investment business from modest beginnings. Their early experience spanned student rentals, rent-to-own housing, multifamily properties and residential conversions. In 2013, they expanded into custom homes and townhouses, before turning their focus to higher-density, mid-rise development in 2017.\n\nThat entrepreneurial spirit continues to shape how LCH approaches development. We look for opportunities others may overlook and remain willing to rethink our plans as neighbourhoods, markets and housing needs evolve. Our growing focus on purpose-built rentals reflects this approach: recognizing the need for quality rental homes and adapting our projects to create communities where residents can put down roots. We bring the curiosity and flexibility of a startup to a business grounded in hands-on development experience.\n\nToday, LCH’s portfolio includes completed condominium communities, purpose-built rental apartments and adaptive reuse projects. The completion of Merge Condos marked a major milestone for the company, establishing a new residential community at the meeting point of Kingston Road and Danforth Avenue. Nearby, Merge Spaces brings private offices, coworking, meeting rooms and event space to Cliffside Village, putting LCH’s vision for live-work-play communities into practice.\n\nBuilding on this foundation, LCH is advancing a new generation of rental housing in Scarborough. Everston is now pre-leasing, offering apartments near the University of Toronto Scarborough and Highland Creek Valley. Cliffside Apartments is under construction, continuing LCH’s investment in Cliffside Village through new rental homes and commercial space. Retreat Apartments, developed in partnership with Fiera Real Estate, will further expand the company’s rental portfolio near the Scarborough Bluffs. At 415 Broadview, heritage restoration and mass-timber design will come together with new rental housing.\n\nAs LCH grows, its focus remains on thoughtful development that responds to the needs of each neighbourhood—creating places where people can live, work and build lasting connections."
   },
   "timeline": [
-    { "year": "2007", "text": "Michal and Lukasz Wywrot start a property investment business — student rentals, rent-to-own and multifamily." },
-    { "year": "2013", "text": "Expansion into custom homes and townhouses." },
-    { "year": "2017", "text": "Focus shifts to higher-density, mid-rise development." },
-    { "year": "Today", "text": "Merge Condos complete; Everston pre-leasing; Cliffside under construction; Retreat and 415 Broadview advancing." }
+    {
+      "year": "2007",
+      "text": "Michal and Lukasz Wywrot start a property investment business — student rentals, rent-to-own and multifamily."
+    },
+    {
+      "year": "2013",
+      "text": "Expansion into custom homes and townhouses."
+    },
+    {
+      "year": "2017",
+      "text": "Focus shifts to higher-density, mid-rise development."
+    },
+    {
+      "year": "Today",
+      "text": "Merge Condos complete; Everston pre-leasing; Cliffside under construction; Retreat and 415 Broadview advancing."
+    }
   ],
   "elevate": {
     "heading": "Development and construction, under one roof.",
-    "body": "Through Elevate Construction Management, LCH combines its development experience with construction expertise, supporting projects from early planning through delivery. This close connection helps the team make informed decisions about design, cost, quality and how each community will serve its residents."
+    "body": "Through Elevate Construction Management, LCH combines its development experience with construction expertise, supporting projects from early planning through delivery. This close connection helps the team make informed decisions about design, cost, quality and how each community will serve its residents.",
+    "ctaLabel": "Visit elevatecm.com",
+    "ctaUrl": "https://elevatecm.com"
   },
   "team": {
     "eyebrow": "Our team",

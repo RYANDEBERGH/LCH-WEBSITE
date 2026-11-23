@@ -3,6 +3,7 @@ name: "Cody Hamley"
 credentials: "CPA"
 role: "Accounting Manager"
 photo: "/uploads/cody-final.jpg"
+linkedin: ""
 order: 8
 ---
 

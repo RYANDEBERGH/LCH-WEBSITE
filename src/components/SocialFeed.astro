@@ -1,0 +1,83 @@
+---
+// Curated social feed: posts added in /admin → Social Posts, plus follow links for every account in Site Settings.
+import { getCollection } from 'astro:content';
+import Img from './Img.astro';
+import { settings, formatDate } from '../lib/site';
+interface Props { count?: number }
+const cfg = settings.socialFeed;
+const { count = cfg?.count ?? 6 } = Astro.props;
+const posts = (await getCollection('social', (p) => !p.data.hidden)).sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf()).slice(0, count);
+const accounts = (settings.socialAccounts ?? []).filter((a) => a.url);
+const NET: Record<string, { label: string; path: string }> = {
+  linkedin: { label: 'LinkedIn', path: 'M20.4 20.5h-3.6v-5.6c0-1.3 0-3-1.8-3s-2.1 1.4-2.1 2.9v5.7H9.4V9h3.4v1.6h.1c.5-.9 1.6-1.8 3.4-1.8 3.6 0 4.3 2.4 4.3 5.5v6.2zM5.3 7.4a2.1 2.1 0 110-4.2 2.1 2.1 0 010 4.2zM7.1 20.5H3.6V9h3.5v11.5zM22.2 0H1.8C.8 0 0 .8 0 1.7v20.6c0 .9.8 1.7 1.8 1.7h20.4c1 0 1.8-.8 1.8-1.7V1.7C24 .8 23.2 0 22.2 0z' },
+  instagram: { label: 'Instagram', path: 'M12 2.2c3.2 0 3.6 0 4.8.1 1.2.1 1.8.2 2.2.4.6.2 1 .5 1.4.9.4.4.7.8.9 1.4.2.4.4 1.1.4 2.2.1 1.3.1 1.6.1 4.8s0 3.6-.1 4.8c-.1 1.2-.2 1.8-.4 2.2-.2.6-.5 1-.9 1.4-.4.4-.8.7-1.4.9-.4.2-1.1.4-2.2.4-1.3.1-1.6.1-4.8.1s-3.6 0-4.8-.1c-1.2-.1-1.8-.2-2.2-.4-.6-.2-1-.5-1.4-.9-.4-.4-.7-.8-.9-1.4-.2-.4-.4-1.1-.4-2.2C2.2 15.6 2.2 15.2 2.2 12s0-3.6.1-4.8c.1-1.2.2-1.8.4-2.2.2-.6.5-1 .9-1.4.4-.4.8-.7 1.4-.9.4-.2 1.1-.4 2.2-.4C8.4 2.2 8.8 2.2 12 2.2zm0 3.1a6.7 6.7 0 100 13.4 6.7 6.7 0 000-13.4zm0 11a4.3 4.3 0 110-8.6 4.3 4.3 0 010 8.6zm6.9-11.3a1.6 1.6 0 11-3.2 0 1.6 1.6 0 013.2 0z' },
+  facebook: { label: 'Facebook', path: 'M22 12a10 10 0 10-11.6 9.9v-7H7.9V12h2.5V9.8c0-2.5 1.5-3.9 3.8-3.9 1.1 0 2.2.2 2.2.2v2.5h-1.3c-1.2 0-1.6.8-1.6 1.6V12h2.8l-.4 2.9h-2.3v7A10 10 0 0022 12z' },
+};
+---
+
+{cfg?.enabled && (accounts.length > 0 || posts.length > 0) && (
+  <section class="social section">
+    <div class="container">
+      <div class="social__head">
+        <div>
+          <p class="eyebrow">{cfg.eyebrow}</p>
+          <h2>{cfg.heading}</h2>
+        </div>
+      </div>
+
+      {posts.length > 0 && (
+        <div class="social__grid">
+          {posts.map((p) => (
+            <a class="spost reveal" href={p.data.url} target="_blank" rel="noopener">
+              {p.data.image && <div class="spost__media"><Img src={p.data.image} alt="" sizes="(max-width: 700px) 100vw, 33vw" /></div>}
+              <div class="spost__body">
+                <p class="spost__who">
+                  <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d={NET[p.data.network].path} /></svg>
+                  <span>{p.data.account}</span>
+                  <time datetime={p.data.date.toISOString()}>{formatDate(p.data.date)}</time>
+                </p>
+                {p.data.text && <p class="spost__text">{p.data.text}</p>}
+                <span class="spost__more">View on {NET[p.data.network].label} ↗</span>
+              </div>
+            </a>
+          ))}
+        </div>
+      )}
+
+      {accounts.length > 0 && (
+        <ul class="follow" aria-label="Follow LCH, Elevate and our team">
+          {accounts.map((a) => (
+            <li>
+              <a href={a.url} target="_blank" rel="noopener" class="follow__item">
+                <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="currentColor" d={NET[a.network]?.path ?? ''} /></svg>
+                <span><strong>{a.name}</strong><em>{NET[a.network]?.label}</em></span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
+  </section>
+)}
+
+<style>
+  .social__head { margin-bottom: 36px; }
+  .social__grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(20px, 2.5vw, 32px); margin-bottom: 40px; }
+  .spost { display: flex; flex-direction: column; text-decoration: none; background: var(--white); border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; transition: border-color 0.2s; }
+  .spost:hover { border-color: var(--ink); }
+  .spost__media { aspect-ratio: 1 / 1; background: var(--paper-2); }
+  .spost__media :global(img) { width: 100%; height: 100%; object-fit: cover; }
+  .spost__body { padding: 18px 20px 20px; display: grid; gap: 10px; }
+  .spost__who { display: flex; align-items: center; gap: 8px; margin: 0; font-size: 13px; font-weight: 600; }
+  .spost__who time { margin-left: auto; font-weight: 400; color: var(--muted); }
+  .spost__text { margin: 0; font-size: 15px; color: var(--ink-2); display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; }
+  .spost__more { font-size: 13px; font-weight: 600; color: var(--accent); }
+  .follow { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 10px; }
+  .follow__item { display: inline-flex; align-items: center; gap: 10px; min-height: 48px; padding: 6px 18px 6px 14px; border: 1px solid var(--line); border-radius: 999px; text-decoration: none; transition: all 0.2s; }
+  .follow__item:hover { border-color: var(--accent); color: var(--accent); }
+  .follow__item span { display: grid; line-height: 1.2; }
+  .follow__item strong { font-size: 14px; font-weight: 600; }
+  .follow__item em { font-style: normal; font-size: 12px; color: var(--muted); }
+  @media (max-width: 900px) { .social__grid { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 560px) { .social__grid { grid-template-columns: 1fr; } }
+</style>

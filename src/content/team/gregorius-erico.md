@@ -3,6 +3,7 @@ name: "Gregorius Erico"
 credentials: ""
 role: "Development Manager"
 photo: "/uploads/greg.png"
+linkedin: ""
 order: 7
 ---
 

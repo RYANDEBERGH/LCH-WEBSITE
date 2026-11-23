@@ -1,0 +1,279 @@
+---
+// "Where we build" map. Base geography: src/data/map-geo.json (OpenStreetMap, built by scripts/build-map-data.mjs).
+// Landmarks: src/data/map.json. Project pins: each project's lat/lng. All editable in /admin except the base geography.
+import Img from './Img.astro';
+import geo from '../data/map-geo.json';
+import { mapData, getProjects, isKingstonRoad, latestMilestone, formatMilestoneDate, brandInk } from '../lib/site';
+
+interface Props { heading?: string; eyebrow?: string; body?: string; id?: string }
+const { heading, eyebrow, body, id = 'map' } = Astro.props;
+
+const { w, e, s, n } = geo.bbox;
+const COS = Math.cos((((n + s) / 2) * Math.PI) / 180);
+const W = 1000;
+const K = W / ((e - w) * COS);
+const H = Math.round((n - s) * K);
+const X = (lng: number) => +((lng - w) * COS * K).toFixed(1);
+const Y = (lat: number) => +((n - lat) * K).toFixed(1);
+const path = (pts: number[][]) => pts.map(([lng, lat], i) => `${i ? 'L' : 'M'}${X(lng)} ${Y(lat)}`).join('');
+const pxPerKm = K / 111.2;
+
+// Lake: shoreline run, closed off along the bottom of the map
+const shore = geo.lake;
+const westToEast = shore[0][0] < shore[shore.length - 1][0];
+const lakePath =
+  path(shore) +
+  (westToEast
+    ? `L${X(e + 0.05)} ${Y(s - 0.05)}L${X(w - 0.05)} ${Y(s - 0.05)}Z`
+    : `L${X(w - 0.05)} ${Y(s - 0.05)}L${X(e + 0.05)} ${Y(s - 0.05)}Z`);
+
+const all = (await getProjects()).filter((p) => p.data.lat != null && p.data.lng != null);
+const kingston = all.filter(isKingstonRoad);
+const elsewhere = all.filter((p) => !isKingstonRoad(p));
+const ordered = [...kingston.sort((a, b) => (a.data.lng ?? 0) - (b.data.lng ?? 0)), ...elsewhere];
+const pins = ordered.map((p, i) => ({ p, num: i + 1, x: X(p.data.lng!), y: Y(p.data.lat!), px: 0, py: 0 }));
+
+// Fan out pins that sit on top of each other (e.g. Merge Condos, Merge Spaces and Cliffside) with leader lines
+const R = 15;
+const used = new Set<number>();
+for (let i = 0; i < pins.length; i++) {
+  if (used.has(i)) continue;
+  const group = pins.map((q, j) => j).filter((j) => !used.has(j) && Math.hypot(pins[j].x - pins[i].x, pins[j].y - pins[i].y) < R * 2.4);
+  group.forEach((j) => used.add(j));
+  if (group.length === 1) { pins[i].px = pins[i].x; pins[i].py = pins[i].y; continue; }
+  const cx = group.reduce((a, j) => a + pins[j].x, 0) / group.length;
+  const cy = group.reduce((a, j) => a + pins[j].y, 0) / group.length;
+  const radius = 44;
+  group.forEach((j, k) => {
+    const ang = (-160 + (100 / Math.max(1, group.length - 1)) * k) * (Math.PI / 180);
+    pins[j].px = +(cx + radius * Math.cos(ang)).toFixed(1);
+    pins[j].py = +(cy + radius * Math.sin(ang)).toFixed(1);
+  });
+}
+
+// Kingston Road label: placed along the road between Victoria Park and Birchmount, rotated to match it
+const [ra, rb] = [geo.kingston[3], geo.kingston[5]];
+const rx = (X(ra[0]) + X(rb[0])) / 2, ry = (Y(ra[1]) + Y(rb[1])) / 2;
+const rAng = (Math.atan2(Y(rb[1]) - Y(ra[1]), X(rb[0]) - X(ra[0])) * 180) / Math.PI;
+const marks = mapData.landmarks.map((l) => ({ ...l, x: X(l.lng), y: Y(l.lat) }));
+const pos = (l: (typeof marks)[number]) => (l as { labelPos?: string }).labelPos ?? 'right';
+---
+
+<section class="cmap section" id={id}>
+  <div class="container">
+    {(eyebrow || heading) && (
+      <div class="cmap__head reveal">
+        {eyebrow && <p class="eyebrow">{eyebrow}</p>}
+        {heading && <h2>{heading}</h2>}
+        {body && <p class="lede">{body}</p>}
+      </div>
+    )}
+
+    <div class="cmap__grid">
+      <figure class="cmap__figure">
+        <svg viewBox={`0 0 ${W} ${H}`} role="img" aria-labelledby={`${id}-title`} class="cmap__svg">
+          <title id={`${id}-title`}>Map of LCH Developments projects in east Toronto, along Kingston Road and in Leslieville and Riverdale</title>
+          <rect width={W} height={H} class="m-land" />
+          <path d={lakePath} class="m-lake" />
+          {geo.water.map((l) => <path d={path(l)} class="m-creek" />)}
+          <path d={path(geo.subway)} class="m-subway" />
+          <path d={path(geo.kingston)} class="m-kingston-casing" />
+          <path d={path(geo.kingston)} class="m-kingston" />
+
+          <text x={X(-79.205)} y={Y(43.708)} class="m-water-label">Lake Ontario</text>
+          <text x={X(-79.2035)} y={Y(43.7175)} class="m-shore-label" text-anchor="middle" transform={`rotate(-47 ${X(-79.2035)} ${Y(43.7175)})`}>Scarborough Bluffs</text>
+          <text x={rx.toFixed(1)} y={(ry + 18).toFixed(1)} class="m-road-label" text-anchor="middle" transform={`rotate(${rAng.toFixed(1)} ${rx.toFixed(1)} ${(ry + 18).toFixed(1)})`}>Kingston Road</text>
+
+          {marks.filter((m) => m.kind === 'neighbourhood').map((m) => (
+            <text
+              x={pos(m) === 'left' ? m.x - 12 : pos(m) === 'right' ? m.x + 12 : m.x}
+              y={pos(m) === 'top' ? m.y - 14 : pos(m) === 'bottom' ? m.y + 18 : m.y + 4}
+              class="m-hood"
+              text-anchor={pos(m) === 'left' ? 'end' : pos(m) === 'right' ? 'start' : 'middle'}
+            >{m.name}</text>
+          ))}
+
+          {marks.filter((m) => m.kind !== 'neighbourhood').map((m) => (
+            <g class={`m-poi m-poi--${m.kind}`}>
+              <title>{m.name}{m.note ? ` — ${m.note}` : ''}</title>
+              {m.kind === 'go' ? <rect x={m.x - 5} y={m.y - 5} width="10" height="10" rx="2" /> :
+               m.kind === 'subway' ? <circle cx={m.x} cy={m.y} r="5" /> :
+               m.kind === 'nature' ? <path d={`M${m.x} ${m.y - 7}L${m.x + 6} ${m.y + 4}H${m.x - 6}Z`} /> :
+               <rect x={m.x - 4.5} y={m.y - 4.5} width="9" height="9" />}
+              <text
+                x={pos(m) === 'left' ? m.x - 10 : pos(m) === 'right' ? m.x + 10 : m.x}
+                y={pos(m) === 'top' ? m.y - 11 : pos(m) === 'bottom' ? m.y + 19 : m.y + 4}
+                text-anchor={pos(m) === 'left' ? 'end' : pos(m) === 'right' ? 'start' : 'middle'}
+              >{m.name}</text>
+            </g>
+          ))}
+
+          {pins.map((pin) => (
+            <g class="m-pin" data-pin={pin.p.id} tabindex="0" role="button" aria-label={`${pin.num}. ${pin.p.data.title}, ${pin.p.data.stage}`}>
+              {(pin.px !== pin.x || pin.py !== pin.y) && (
+                <>
+                  <line x1={pin.x} y1={pin.y} x2={pin.px} y2={pin.py} class="m-leader" />
+                  <circle cx={pin.x} cy={pin.y} r="3" class="m-dot" />
+                </>
+              )}
+              <circle cx={pin.px} cy={pin.py} r={R} class="m-pin__circle" style={`fill: ${brandInk(pin.p)}`} />
+              <text x={pin.px} y={pin.py + 5} text-anchor="middle" class="m-pin__num">{pin.num}</text>
+            </g>
+          ))}
+
+          <g class="m-scale" transform={`translate(${W - 40 - 2 * pxPerKm} ${H - 34})`}>
+            <path d={`M0 0V6H${(2 * pxPerKm).toFixed(1)}V0`} />
+            <text x="0" y="22">0</text>
+            <text x={(2 * pxPerKm).toFixed(1)} y="22" text-anchor="end">2 km</text>
+          </g>
+          <g class="m-north" transform={`translate(${W - 34} 40)`}>
+            <path d="M0 -16L7 8L0 3L-7 8Z" />
+            <text y="24" text-anchor="middle">N</text>
+          </g>
+        </svg>
+        <figcaption class="cmap__legend">
+          <span><i class="lg lg--pin"></i>LCH project (in its brand colour)</span>
+          <span><i class="lg lg--road"></i>Kingston Road</span>
+          <span><i class="lg lg--subway"></i>Line 2 subway</span>
+          <span><i class="lg lg--go"></i>GO station</span>
+          <span><i class="lg lg--nature"></i>Park or ravine</span>
+          <span class="cmap__attr">Map data © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> contributors</span>
+        </figcaption>
+      </figure>
+
+      <div class="cmap__list">
+        {[['On Kingston Road', pins.filter((x) => isKingstonRoad(x.p))], ['Elsewhere in Toronto', pins.filter((x) => !isKingstonRoad(x.p))]].map(([label, list]) => (
+          <div class="cmap__group">
+            <p class="cmap__group-label">{label} <span>{(list as typeof pins).length}</span></p>
+            <ol>
+              {(list as typeof pins).map(({ p, num }) => {
+                const m = latestMilestone(p);
+                return (
+                  <li class="cmap__item" data-item={p.id}>
+                    <button class="cmap__btn" data-select={p.id} aria-expanded="false">
+                      <span class="cmap__num" style={`background: ${brandInk(p)}`}>{num}</span>
+                      <span class="cmap__name">{p.data.title}</span>
+                      <span class="cmap__stage">{p.data.stage}</span>
+                    </button>
+                    <div class="cmap__detail" hidden>
+                      <Img src={p.data.heroImage} alt="" sizes="320px" />
+                      <p class="cmap__addr">{p.data.address}<br />{p.data.neighbourhood}</p>
+                      {p.data.leasing?.status && <p class="cmap__leasing">Leasing: {p.data.leasing.status}</p>}
+                      {m && <p class="cmap__latest"><strong>{formatMilestoneDate(m.date)}</strong> {m.label}</p>}
+                      <a class="link-arrow" href={`/projects/${p.id}/`}>View {p.data.title} →</a>
+                    </div>
+                  </li>
+                );
+              })}
+            </ol>
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  document.querySelectorAll<HTMLElement>('.cmap').forEach((root) => {
+    const select = (id: string, scroll = false) => {
+      root.querySelectorAll<HTMLElement>('[data-item]').forEach((li) => {
+        const on = li.dataset.item === id;
+        li.classList.toggle('is-active', on);
+        li.querySelector('.cmap__detail')!.toggleAttribute('hidden', !on);
+        li.querySelector('.cmap__btn')!.setAttribute('aria-expanded', String(on));
+        if (on && scroll && matchMedia('(max-width: 960px)').matches) li.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+      });
+      root.querySelectorAll<SVGGElement>('[data-pin]').forEach((g) => g.classList.toggle('is-active', g.dataset.pin === id));
+    };
+    root.querySelectorAll<SVGGElement>('[data-pin]').forEach((g) => {
+      g.addEventListener('click', () => select(g.dataset.pin!, true));
+      g.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); select(g.dataset.pin!, true); } });
+      g.addEventListener('mouseenter', () => root.querySelector(`[data-item="${g.dataset.pin}"]`)?.classList.add('is-hover'));
+      g.addEventListener('mouseleave', () => root.querySelector(`[data-item="${g.dataset.pin}"]`)?.classList.remove('is-hover'));
+    });
+    root.querySelectorAll<HTMLButtonElement>('[data-select]').forEach((b) => {
+      b.addEventListener('click', () => select(b.dataset.select!));
+      b.addEventListener('mouseenter', () => root.querySelector(`[data-pin="${b.dataset.select}"]`)?.classList.add('is-hover'));
+      b.addEventListener('mouseleave', () => root.querySelector(`[data-pin="${b.dataset.select}"]`)?.classList.remove('is-hover'));
+    });
+    const first = root.querySelector<HTMLElement>('[data-item]');
+    if (first) select(first.dataset.item!);
+  });
+</script>
+
+<style>
+  .cmap__head { max-width: 760px; margin-bottom: clamp(32px, 4vw, 56px); }
+  .cmap__head h2 { margin-bottom: 20px; }
+  .cmap__grid { display: grid; grid-template-columns: minmax(0, 1fr) 340px; gap: clamp(24px, 3vw, 40px); align-items: start; }
+  .cmap__figure { margin: 0; min-width: 0; }
+  .cmap__svg { display: block; width: 100%; height: auto; border-radius: var(--radius); border: 1px solid var(--line); background: #efece4; font-family: var(--font-sans); }
+
+  .m-land { fill: #efece4; }
+  .m-lake { fill: #cfdde3; stroke: #a9c0c9; stroke-width: 1.2; }
+  .m-creek { fill: none; stroke: #9dbcc8; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+  .m-subway { fill: none; stroke: #2f8f4e; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; opacity: 0.75; }
+  .m-kingston-casing { fill: none; stroke: #fff; stroke-width: 9; stroke-linecap: round; stroke-linejoin: round; }
+  .m-kingston { fill: none; stroke: var(--accent); stroke-width: 4.5; stroke-linecap: round; stroke-linejoin: round; }
+  .m-water-label { fill: #6d8b97; font-family: var(--font-display); font-style: italic; font-size: 30px; }
+  .m-shore-label { fill: #6d8b97; font-family: var(--font-display); font-style: italic; font-size: 15px; }
+  .m-road-label { fill: var(--accent); font-size: 12px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; }
+  .m-hood { fill: #8a857b; font-size: 11px; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; }
+  .m-poi text { font-size: 11.5px; fill: #3b3934; paint-order: stroke; stroke: #efece4; stroke-width: 3px; stroke-linejoin: round; }
+  .m-poi--subway circle { fill: #fff; stroke: #2f8f4e; stroke-width: 2.5; }
+  .m-poi--go rect { fill: #2f7d5a; }
+  .m-poi--nature path { fill: #6f9a63; }
+  .m-poi--nature text { font-style: italic; fill: #4d6b44; }
+  .m-poi--landmark rect { fill: #3b3934; }
+
+  .m-pin { cursor: pointer; outline: none; }
+  .m-leader { stroke: var(--ink); stroke-width: 1.2; }
+  .m-dot { fill: var(--ink); }
+  .m-pin__circle { fill: var(--ink); stroke: #fff; stroke-width: 2.5; transition: transform 0.2s var(--ease), fill 0.2s; transform-box: fill-box; transform-origin: center; }
+  .m-pin__num { fill: #fff; font-size: 13px; font-weight: 700; pointer-events: none; }
+  .m-pin:hover .m-pin__circle, .m-pin.is-hover .m-pin__circle, .m-pin:focus-visible .m-pin__circle { transform: scale(1.18); }
+  .m-pin.is-active .m-pin__circle { stroke: var(--ink); stroke-width: 3.5; transform: scale(1.25); }
+  .m-pin:focus-visible .m-pin__circle { stroke: var(--accent); stroke-width: 4; }
+
+  .m-scale path { fill: none; stroke: #3b3934; stroke-width: 1.5; }
+  .m-scale text, .m-north text { font-size: 11px; fill: #3b3934; font-weight: 600; }
+  .m-north path { fill: #3b3934; }
+
+  .cmap__legend { display: flex; flex-wrap: wrap; gap: 8px 20px; margin-top: 14px; font-size: 13px; color: var(--muted); align-items: center; }
+  .cmap__legend span { display: inline-flex; align-items: center; gap: 8px; }
+  .lg { display: inline-block; flex: none; }
+  .lg--pin { width: 14px; height: 14px; border-radius: 50%; background: var(--ink); }
+  .lg--road { width: 22px; height: 4px; background: var(--accent); border-radius: 2px; }
+  .lg--subway { width: 22px; height: 3px; background: #2f8f4e; border-radius: 2px; }
+  .lg--go { width: 10px; height: 10px; background: #2f7d5a; border-radius: 2px; }
+  .lg--nature { width: 0; height: 0; border-left: 6px solid transparent; border-right: 6px solid transparent; border-bottom: 10px solid #6f9a63; }
+  .cmap__attr { margin-left: auto; font-size: 12px; }
+
+  .cmap__list { display: grid; gap: 28px; }
+  .cmap__group-label { font-size: 12px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); margin: 0 0 8px; display: flex; justify-content: space-between; }
+  .cmap__group ol { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--line); }
+  .cmap__item { border-bottom: 1px solid var(--line); }
+  .cmap__btn { all: unset; box-sizing: border-box; cursor: pointer; display: grid; grid-template-columns: 28px 1fr auto; gap: 12px; align-items: center; width: 100%; padding: 12px 4px; }
+  .cmap__btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .cmap__num { width: 26px; height: 26px; border-radius: 50%; background: var(--ink); color: #fff; font-size: 12px; font-weight: 700; display: grid; place-items: center; transition: background 0.2s; }
+  .cmap__item.is-active .cmap__num, .cmap__item.is-hover .cmap__num { box-shadow: 0 0 0 3px var(--paper), 0 0 0 5px var(--ink); }
+  .cmap__item.is-active .cmap__name { font-weight: 700; }
+  .cmap__name { font-weight: 500; }
+  .cmap__stage { font-size: 12.5px; color: var(--muted); text-align: right; }
+  .cmap__detail[hidden] { display: none; }
+  .cmap__detail { padding: 0 4px 18px 44px; display: grid; gap: 10px; font-size: 14px; }
+  .cmap__detail :global(img) { width: 100%; aspect-ratio: 16 / 10; object-fit: cover; border-radius: var(--radius); }
+  .cmap__detail p { margin: 0; color: var(--muted); line-height: 1.5; }
+  .cmap__leasing { color: #2f7d5a !important; font-weight: 600; }
+  .cmap__latest strong { color: var(--ink); font-weight: 600; margin-right: 4px; }
+  .cmap__detail .link-arrow { justify-self: start; font-size: 14px; }
+
+  @media (max-width: 960px) {
+    .cmap__grid { grid-template-columns: 1fr; }
+    .cmap__list { grid-template-columns: 1fr 1fr; gap: 24px; }
+  }
+  @media (max-width: 640px) {
+    .cmap__list { grid-template-columns: 1fr; }
+    .m-poi text, .m-hood { display: none; }
+    .cmap__attr { margin-left: 0; }
+  }
+</style>

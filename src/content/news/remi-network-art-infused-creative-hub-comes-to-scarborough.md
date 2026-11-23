@@ -5,6 +5,7 @@ project: "merge-spaces"
 topic: "In the Press"
 image: "/uploads/am2-2155.jpg"
 excerpt: "A community hub offering a modern work experience for creatives and entrepreneurs is launching in the growing Scarborough community of Cliffside Village. Merge Spaces will bring together communal areas, private offices, "
+publisher: "REMI Network"
 ---
 
 A community hub offering a modern work experience for creatives and entrepreneurs is launching in the growing Scarborough community of Cliffside Village.

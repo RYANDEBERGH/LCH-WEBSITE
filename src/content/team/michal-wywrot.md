@@ -3,6 +3,7 @@ name: "Michal Wywrot"
 credentials: "B.Comm"
 role: "President & CFO"
 photo: "/uploads/mike-w.jpg"
+linkedin: ""
 order: 2
 ---
 

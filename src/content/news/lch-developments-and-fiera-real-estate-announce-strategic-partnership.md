@@ -4,8 +4,10 @@ date: 2026-06-29
 project: "retreat"
 topic: "Company News"
 image: "/uploads/limkedin-fiera.jpg"
+imageFit: "contain"
 excerpt: "Toronto, ON – June 29, 2026 — LCH Developments (“LCH”) and Fiera Real Estate’s Canadian Built Opportunities Fund (“Fiera Real Estate”) are pleased to announce a strategic partnership for the development of Retreat Rental"
 sourceUrl: "https://www.fierarealestate.ca/press-releases/lch-developments-and-fiera-real-estate-announce-strategic-partnership-to-build-retreat-a-purpose-built-rental-community-in-scarboroughs-cliffcrest-neighbourhood/"
+publisher: "Fiera Real Estate"
 ---
 
 **Toronto, ON – June 29, 2026** — LCH Developments (“LCH”) and Fiera Real Estate’s Canadian Built Opportunities Fund (“Fiera Real Estate”) are pleased to announce a strategic partnership for the development of Retreat Rentals, a 320-unit purpose-built rental community located at 2-4 Windy Ridge Drive in Toronto’s east end.

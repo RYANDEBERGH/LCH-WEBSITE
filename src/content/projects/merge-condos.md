@@ -2,7 +2,7 @@
 title: "Merge Condos"
 order: 5
 featured: false
-status: "Complete"
+stage: "Complete"
 type: "Condominium"
 address: "2201 Kingston Road"
 neighbourhood: "Cliffside, Scarborough"
@@ -11,6 +11,7 @@ storeys: 11
 partners: []
 architect: ""
 summary: "An 11-storey gateway into Cliffside Village with ground-floor retail and a rooftop overlooking the waterfront."
+brandColor: "#ff5551"
 logo: "/uploads/merge-logo.png"
 heroImage: "/uploads/merge-1-fall.png"
 gallery:
@@ -27,6 +28,25 @@ gallery:
 website:
   url: ""
   label: ""
+lat: 43.70317
+lng: -79.25292
+leasing:
+  status: ""
+  url: ""
+  label: ""
+milestones:
+  - date: "2019-09-06"
+    label: "Final planning approval (minor variance) reported"
+    source: "UrbanToronto"
+    sourceUrl: "https://urbantoronto.ca/news/2019/09/approved-merge-condos-mid-rise-coming-kingston-and-danforth.38752"
+  - date: "2021-01-19"
+    label: "Construction progress reported"
+    source: "UrbanToronto"
+    sourceUrl: "https://urbantoronto.ca/news/2021/01/merge-condos-construction-progressing-kingston-road.43958"
+  - date: "2022-06-01"
+    label: "Exterior cladding reported"
+    source: "UrbanToronto"
+    sourceUrl: "https://urbantoronto.ca/news/2022/06/merge-condos-boasts-multi-tonal-cladding-articulate-exterior.48151"
 ---
 
 A stunning new gateway into Scarborough’s Cliffside Village. A place that draws people in, suited to all lifestyles. A coming together of all walks of life at one point. An 11-storey development boasting over 3,000 square feet of retail, and an outdoor rooftop to take in views of Toronto's waterfront. Live where Kingston Rd & Danforth meet, Merge Condos.

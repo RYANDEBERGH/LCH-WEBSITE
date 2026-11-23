@@ -2,7 +2,7 @@
 title: "St. Leslieville Church Lofts"
 order: 8
 featured: false
-status: "Complete"
+stage: "Complete"
 type: "Heritage Lofts"
 address: "175 Jones Avenue"
 neighbourhood: "Leslieville, Toronto"
@@ -12,12 +12,20 @@ partners:
   - "deCartier Developments"
 architect: ""
 summary: "A gothic-revival church from 1913, reimagined as 14 townhome-style condo lofts."
+brandColor: "#203858"
 logo: "/uploads/leslieville-logo.png"
 heroImage: "/uploads/st-leslieville-completed-1.jpg"
 gallery: []
 website:
   url: ""
   label: ""
+lat: 43.66738
+lng: -79.33435
+leasing:
+  status: ""
+  url: ""
+  label: ""
+milestones: []
 ---
 
 Located in the heart of Toronto’s most pursued neighbourhood, St. Leslieville (formerly St. Clements) was built in 1913 and has graced Leslieville’s epicentre for over a century. 100 years later, de Cartier Development Corporation and LCH Developments created a stunning vision for the new St. Leslieville Lofts by embarking on a beautiful gothic revival that preserve the majestic nature of the building in its entirety.

@@ -1,16 +1,19 @@
 ---
 import type { CollectionEntry } from 'astro:content';
 import Img from './Img.astro';
-import { statusTone } from '../lib/site';
+import { stageTone, brandInk } from '../lib/site';
 interface Props { project: CollectionEntry<'projects'>; sizes?: string }
 const { project, sizes = '(max-width: 760px) 100vw, 33vw' } = Astro.props;
 const p = project.data;
 ---
 
-<a class="pcard reveal" href={`/projects/${project.id}/`} data-status={p.status}>
+<a class="pcard reveal" href={`/projects/${project.id}/`} data-stage={p.stage} style={`--accent: ${brandInk(project)}`}>
   <div class="pcard__media">
     <Img src={p.heroImage} alt={`${p.title} — ${p.neighbourhood}`} sizes={sizes} />
-    <span class="pill" data-tone={statusTone(p.status)}>{p.status}</span>
+    <span class="pcard__pills">
+      <span class="pill" data-tone={stageTone(p.stage)}>{p.stage}</span>
+      {p.leasing?.status && <span class="pill pill--leasing">{p.leasing.status}</span>}
+    </span>
   </div>
   <div class="pcard__body">
     <p class="pcard__meta">{p.neighbourhood}</p>
@@ -29,9 +32,9 @@ const p = project.data;
   .pcard__media { position: relative; overflow: hidden; border-radius: var(--radius); aspect-ratio: 4 / 3; background: var(--paper-2); }
   .pcard__media :global(img) { width: 100%; height: 100%; object-fit: cover; transition: transform 1.1s var(--ease); }
   .pcard:hover .pcard__media :global(img) { transform: scale(1.04); }
-  .pcard__media .pill { position: absolute; top: 16px; left: 16px; }
+  .pcard__pills { position: absolute; top: 16px; left: 16px; right: 16px; display: flex; flex-wrap: wrap; gap: 6px; }
   .pcard__body { padding-top: 20px; }
-  .pcard__meta { font-size: 13px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin-bottom: 6px; }
+  .pcard__meta { font-size: 13px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); margin-bottom: 6px; }
   .pcard__title { font-size: clamp(30px, 3vw, 40px); line-height: 1.05; margin-bottom: 10px; transition: color 0.25s; }
   .pcard:hover .pcard__title { color: var(--accent); }
   .pcard__summary { color: var(--muted); margin-bottom: 12px; }

@@ -3,13 +3,20 @@ import Base from '../layouts/Base.astro';
 import Img from '../components/Img.astro';
 import NewsCard from '../components/NewsCard.astro';
 import ProjectCard from '../components/ProjectCard.astro';
-import { home, getProjects, getNews, statusTone } from '../lib/site';
+import CorridorMap from '../components/CorridorMap.astro';
+import PressStrip from '../components/PressStrip.astro';
+import SocialFeed from '../components/SocialFeed.astro';
+import { home, getProjects, getNews, stageTone, latestMilestone, formatMilestoneDate, brandInk } from '../lib/site';
 
 const projects = await getProjects();
 const featured = projects.filter((p) => p.data.featured);
 const others = projects.filter((p) => !p.data.featured).slice(0, 4);
 const news = (await getNews()).slice(0, home.news.count || 3);
 const h = home.hero;
+const lb = home.leasingBand;
+const lbProject = projects.find((p) => p.id === lb?.project);
+const lbBrand = lbProject ? brandInk(lbProject) : '#0f3a2e';
+const ext = (url: string) => url?.startsWith('http');
 ---
 
 <Base overlay image={h.image}>
@@ -39,7 +46,27 @@ const h = home.hero;
     </section>
   )}
 
-  <section class="section">
+  {home.process?.steps?.length > 0 && (
+    <section class="section process">
+      <div class="container">
+        <div class="section-head reveal">
+          <p class="eyebrow">{home.process.eyebrow}</p>
+          <h2>{home.process.heading}</h2>
+        </div>
+        <ol class="steps">
+          {home.process.steps.map((st, i) => (
+            <li class="step reveal">
+              <span class="step__num">{String(i + 1).padStart(2, '0')}</span>
+              <h3 class="step__title display">{st.title}</h3>
+              <p>{st.body}</p>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </section>
+  )}
+
+  <section class="section section--alt">
     <div class="container">
       <div class="section-head reveal">
         <p class="eyebrow">{home.featured.eyebrow}</p>
@@ -47,49 +74,81 @@ const h = home.hero;
       </div>
 
       <div class="features">
-        {featured.map((p, i) => (
-          <article class:list={['feature reveal', { 'feature--flip': i % 2 === 1 }]}>
-            <a class="feature__media" href={`/projects/${p.id}/`} tabindex="-1" aria-hidden="true">
-              <Img src={p.data.heroImage} alt="" sizes="(max-width: 900px) 100vw, 60vw" />
-              <span class="pill" data-tone={statusTone(p.data.status)}>{p.data.status}</span>
-            </a>
-            <div class="feature__body">
-              {p.data.logo && <img class="feature__logo" src={p.data.logo} alt={p.data.title} loading="lazy" />}
-              <h3 class:list={["feature__title display", { "sr-only": p.data.logo }]}>{p.data.title}</h3>
-              <dl class="feature__facts">
-                <div><dt>Product</dt><dd>{p.data.type}</dd></div>
-                <div><dt>Location</dt><dd>{p.data.intersection || p.data.address}<br /><span>{p.data.neighbourhood}</span></dd></div>
-                {p.data.units && <div><dt>Homes</dt><dd>{p.data.units.toLocaleString()}</dd></div>}
-                {p.data.partners.length > 0 && <div><dt>Partner</dt><dd>{p.data.partners.join(', ')}</dd></div>}
-              </dl>
-              <p class="feature__summary">{p.data.summary}</p>
-              <div class="feature__links">
-                <a class="btn" href={`/projects/${p.id}/`}>View project <span class="arrow" aria-hidden="true">→</span></a>
-                {p.data.website?.url && <a class="link-arrow" href={p.data.website.url} target="_blank" rel="noopener">{p.data.website.label || 'Visit website'} ↗</a>}
+        {featured.map((p, i) => {
+          const m = latestMilestone(p);
+          return (
+            <article class:list={['feature reveal', { 'feature--flip': i % 2 === 1 }]} style={`--accent: ${brandInk(p)}`}>
+              <a class="feature__media" href={`/projects/${p.id}/`} tabindex="-1" aria-hidden="true">
+                <Img src={p.data.heroImage} alt="" sizes="(max-width: 900px) 100vw, 60vw" />
+                <span class="feature__pills">
+                  <span class="pill" data-tone={stageTone(p.data.stage)}>{p.data.stage}</span>
+                  {p.data.leasing?.status && <span class="pill pill--leasing">{p.data.leasing.status}</span>}
+                </span>
+              </a>
+              <div class="feature__body">
+                {p.data.logo && <img class="feature__logo" src={p.data.logo} alt={p.data.title} loading="lazy" />}
+                <h3 class:list={['feature__title display', { 'sr-only': p.data.logo }]}>{p.data.title}</h3>
+                <dl class="feature__facts">
+                  <div><dt>Product</dt><dd>{p.data.type}</dd></div>
+                  <div><dt>Location</dt><dd>{p.data.intersection || p.data.address}<br /><span>{p.data.neighbourhood}</span></dd></div>
+                  {p.data.units && <div><dt>Homes</dt><dd>{p.data.units.toLocaleString()}</dd></div>}
+                  {p.data.partners.length > 0 && <div><dt>Partner</dt><dd>{p.data.partners.join(', ')}</dd></div>}
+                </dl>
+                <p class="feature__summary">{p.data.summary}</p>
+                {m && (
+                  <p class="feature__latest">
+                    <span>Latest update · {formatMilestoneDate(m.date)}</span>
+                    {m.label}{m.source && <em> ({m.source})</em>}
+                  </p>
+                )}
+                <div class="feature__links">
+                  <a class="btn" href={`/projects/${p.id}/`}>View project <span class="arrow" aria-hidden="true">→</span></a>
+                  {p.data.leasing?.url && <a class="link-arrow link-arrow--leasing" href={p.data.leasing.url} target="_blank" rel="noopener">Leasing at {p.data.leasing.url.replace(/^https?:\/\/(www\.)?/, '').replace(/\/$/, '')} ↗</a>}
+                  {p.data.website?.url && <a class="link-arrow" href={p.data.website.url} target="_blank" rel="noopener">{p.data.website.label || 'Visit website'} ↗</a>}
+                </div>
               </div>
-            </div>
-          </article>
-        ))}
+            </article>
+          );
+        })}
       </div>
     </div>
   </section>
 
-  <section class="section section--dark philosophy">
-    <div class="container philosophy__grid">
-      <div class="philosophy__text reveal">
-        <p class="eyebrow">{home.philosophy.eyebrow}</p>
-        <h2>{home.philosophy.heading}</h2>
-        <p class="lede">{home.philosophy.body}</p>
-        <a class="btn btn--ghost-light" href={home.philosophy.ctaUrl}>{home.philosophy.ctaLabel} <span class="arrow" aria-hidden="true">→</span></a>
+  {lb?.enabled && (
+    <section class="leasing on-image" style={`--brand: ${lbBrand}`}>
+      <Img src={lb.image} alt="" class="leasing__bg" sizes="100vw" />
+      <div class="container leasing__inner">
+        <div>
+          <p class="eyebrow">{lb.eyebrow}</p>
+          <h2>{lb.heading}</h2>
+          <p class="leasing__body">{lb.body}</p>
+        </div>
+        <a class="btn btn--light leasing__cta" href={lb.ctaUrl} target={ext(lb.ctaUrl) ? '_blank' : undefined} rel="noopener">{lb.ctaLabel} <span class="arrow" aria-hidden="true">↗</span></a>
       </div>
-      <div class="philosophy__media reveal">
-        <Img src={home.philosophy.image} alt="LCH Developments founders Michal and Lukasz Wywrot" sizes="(max-width: 900px) 100vw, 45vw" />
+    </section>
+  )}
+
+  <CorridorMap eyebrow={home.map.eyebrow} heading={home.map.heading} body={home.map.body} />
+
+  {home.elevate && (
+    <section class="section section--dark elevate">
+      <div class="container elevate__grid">
+        <div class="reveal">
+          <p class="eyebrow">{home.elevate.eyebrow}</p>
+          <h2>{home.elevate.heading}</h2>
+        </div>
+        <div class="reveal">
+          <p class="lede">{home.elevate.body}</p>
+          <a class="btn btn--ghost-light" href={home.elevate.ctaUrl} target="_blank" rel="noopener">{home.elevate.ctaLabel} <span class="arrow" aria-hidden="true">↗</span></a>
+        </div>
       </div>
-    </div>
-  </section>
+    </section>
+  )}
+
+  <PressStrip eyebrow={home.press?.eyebrow} heading={home.press?.heading} />
 
   {others.length > 0 && (
-    <section class="section section--alt">
+    <section class="section">
       <div class="container">
         <div class="section-head section-head--row reveal">
           <div>
@@ -106,7 +165,7 @@ const h = home.hero;
   )}
 
   {news.length > 0 && (
-    <section class="section">
+    <section class="section section--alt">
       <div class="container">
         <div class="section-head section-head--row reveal">
           <div>
@@ -121,6 +180,8 @@ const h = home.hero;
       </div>
     </section>
   )}
+
+  <SocialFeed />
 </Base>
 
 <style>
@@ -185,5 +246,41 @@ const h = home.hero;
     .stat + .stat { padding-left: 12px; }
     .stat:nth-child(3) { padding-left: 0; }
     .feature__facts { grid-template-columns: 1fr; }
+  }
+  .steps { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(5, 1fr); gap: 0; border-top: 1px solid var(--line); }
+  .step { padding: 28px 24px 8px 0; }
+  .step + .step { padding-left: 24px; border-left: 1px solid var(--line); }
+  .step__num { font-size: 12px; font-weight: 700; letter-spacing: 0.12em; color: var(--accent); }
+  .step__title { font-size: clamp(30px, 2.6vw, 40px); margin: 12px 0 14px; }
+  .step p { font-size: 15px; color: var(--muted); margin: 0; }
+
+  .feature__pills { position: absolute; top: 20px; left: 20px; right: 20px; display: flex; flex-wrap: wrap; gap: 6px; }
+  .feature__latest { font-size: 15px; line-height: 1.5; margin: 0; padding: 14px 16px; background: var(--paper); border-left: 2px solid var(--accent); }
+  .section--alt .feature__latest { background: var(--white); }
+  .feature__latest span { display: block; font-size: 12px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin-bottom: 4px; }
+  .feature__latest em { color: var(--muted); font-style: normal; }
+  .link-arrow--leasing { color: var(--accent); }
+
+  .leasing { position: relative; isolation: isolate; color: var(--paper); padding-block: clamp(72px, 9vw, 128px); overflow: hidden; }
+  .leasing::after { content: ''; position: absolute; inset: 0; z-index: -1; background: linear-gradient(90deg, color-mix(in srgb, var(--brand) 92%, transparent) 0%, color-mix(in srgb, var(--brand) 70%, transparent) 55%, color-mix(in srgb, var(--brand) 30%, transparent) 100%); }
+  :global(.leasing__bg) { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: -2; }
+  .leasing__inner { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 32px; }
+  .leasing h2 { max-width: 18ch; margin-bottom: 16px; }
+  .leasing__body { font-size: 19px; color: rgba(246, 244, 239, 0.85); margin: 0; }
+  .leasing .eyebrow::before { background: currentColor; }
+
+  .elevate__grid { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(32px, 6vw, 96px); align-items: end; }
+  .elevate .lede { margin-bottom: 28px; }
+
+  @media (max-width: 1100px) {
+    .steps { grid-template-columns: repeat(3, 1fr); }
+    .step:nth-child(4) { padding-left: 0; border-left: 0; }
+    .step:nth-child(n + 4) { border-top: 1px solid var(--line); margin-top: 24px; }
+  }
+  @media (max-width: 700px) {
+    .steps { grid-template-columns: 1fr; }
+    .step, .step + .step { padding: 22px 0 18px; border-left: 0; border-top: 1px solid var(--line); margin-top: 0; }
+    .step:first-child { border-top: 0; }
+    .elevate__grid { grid-template-columns: 1fr; }
   }
 </style>

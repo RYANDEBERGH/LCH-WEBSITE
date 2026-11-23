@@ -26,5 +26,73 @@
     "text": "Stay up to date with our latest news on our upcoming communities.",
     "consent": "I consent to receive future communications from LCH Developments. I understand I can unsubscribe at any time.",
     "mailchimpUrl": ""
+  },
+  "socialAccounts": [
+    {
+      "name": "LCH Developments",
+      "network": "linkedin",
+      "url": "https://www.linkedin.com/company/lch-developments-to/",
+      "kind": "company"
+    },
+    {
+      "name": "LCH Developments",
+      "network": "instagram",
+      "url": "https://www.instagram.com/lch.to/",
+      "kind": "company"
+    },
+    {
+      "name": "Elevate Construction Management",
+      "network": "linkedin",
+      "url": "https://www.linkedin.com/company/elevate-construction-management/",
+      "kind": "company"
+    },
+    {
+      "name": "Elevate Construction Management",
+      "network": "instagram",
+      "url": "https://www.instagram.com/elevate.cm/",
+      "kind": "company"
+    },
+    {
+      "name": "Merge Spaces",
+      "network": "linkedin",
+      "url": "https://www.linkedin.com/company/merge-spaces/",
+      "kind": "company"
+    },
+    {
+      "name": "Everston",
+      "network": "instagram",
+      "url": "https://www.instagram.com/everstoncondos/",
+      "kind": "company"
+    },
+    {
+      "name": "Michal Wywrot",
+      "network": "linkedin",
+      "url": "",
+      "kind": "person"
+    },
+    {
+      "name": "Lukasz Wywrot",
+      "network": "linkedin",
+      "url": "",
+      "kind": "person"
+    },
+    {
+      "name": "Ryan Debergh",
+      "network": "linkedin",
+      "url": "",
+      "kind": "person"
+    },
+    {
+      "name": "Jure Selak",
+      "network": "linkedin",
+      "url": "",
+      "kind": "person"
+    }
+  ],
+  "socialFeed": {
+    "enabled": true,
+    "eyebrow": "Follow along",
+    "heading": "From the field and the feed.",
+    "count": 6
   }
 }

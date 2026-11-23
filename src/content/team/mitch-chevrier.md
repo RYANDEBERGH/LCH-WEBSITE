@@ -3,6 +3,7 @@ name: "Mitch Chevrier"
 credentials: "CPA"
 role: "Controller"
 photo: "/uploads/mitch.jpg"
+linkedin: ""
 order: 4
 ---
 

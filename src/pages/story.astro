@@ -56,6 +56,7 @@ const team = await Promise.all((await getTeam()).map(async (t) => ({ ...t, Conte
       <p class="eyebrow">Elevate Construction Management</p>
       <h2>{story.elevate.heading}</h2>
       <p class="lede">{story.elevate.body}</p>
+      {story.elevate.ctaUrl && <a class="btn btn--ghost" href={story.elevate.ctaUrl} target="_blank" rel="noopener">{story.elevate.ctaLabel} <span class="arrow" aria-hidden="true">↗</span></a>}
     </div></div>
   </section>
 
@@ -83,6 +84,7 @@ const team = await Promise.all((await getTeam()).map(async (t) => ({ ...t, Conte
                   <h2>{t.data.name}</h2>
                   {t.data.credentials && <p class="member__cred">{t.data.credentials}</p>}
                   <div class="prose"><t.Content /></div>
+                  {t.data.linkedin && <a class="link-arrow" href={t.data.linkedin} target="_blank" rel="noopener">{t.data.name.split(' ')[0]} on LinkedIn ↗</a>}
                 </div>
               </div>
             </dialog>
@@ -114,7 +116,7 @@ const team = await Promise.all((await getTeam()).map(async (t) => ({ ...t, Conte
 
   .history { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: clamp(40px, 7vw, 112px); align-items: start; }
   .history__media { position: sticky; top: calc(var(--header-h) + 24px); }
-  .history__media :global(img) { border-radius: var(--radius); width: 100%; aspect-ratio: 4 / 5; object-fit: cover; }
+  .history__media :global(img) { border-radius: var(--radius); width: 100%; height: auto; }
   .history h2 { margin-bottom: 32px; }
   .history .prose { font-size: 18px; }
   .timeline { list-style: none; padding: 0; margin: 32px 0 0; display: grid; gap: 0; }
@@ -124,6 +126,7 @@ const team = await Promise.all((await getTeam()).map(async (t) => ({ ...t, Conte
 
   .elevate { max-width: 900px; }
   .elevate h2 { margin-bottom: 24px; }
+  .elevate .lede { margin-bottom: 28px; }
 
   .team-h { margin-bottom: 48px; }
   .team { display: grid; grid-template-columns: repeat(4, 1fr); gap: 48px 28px; }

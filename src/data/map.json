@@ -1,0 +1,146 @@
+{
+ "landmarks": [
+  {
+   "name": "Broadview",
+   "kind": "subway",
+   "lat": 43.67699,
+   "lng": -79.35822,
+   "note": "Line 2 Bloor–Danforth"
+  },
+  {
+   "name": "Victoria Park",
+   "kind": "subway",
+   "lat": 43.69409,
+   "lng": -79.28856,
+   "note": "Line 2 Bloor–Danforth",
+   "labelPos": "left"
+  },
+  {
+   "name": "Warden",
+   "kind": "subway",
+   "lat": 43.71125,
+   "lng": -79.28047,
+   "note": "Line 2 Bloor–Danforth",
+   "labelPos": "left"
+  },
+  {
+   "name": "Kennedy",
+   "kind": "subway",
+   "lat": 43.7325,
+   "lng": -79.2637,
+   "note": "Line 2 and GO"
+  },
+  {
+   "name": "Danforth GO",
+   "kind": "go",
+   "lat": 43.68701,
+   "lng": -79.29751,
+   "note": "Lakeshore East",
+   "labelPos": "left"
+  },
+  {
+   "name": "Scarborough GO",
+   "kind": "go",
+   "lat": 43.71726,
+   "lng": -79.25448,
+   "note": "Lakeshore East",
+   "labelPos": "left"
+  },
+  {
+   "name": "Eglinton GO",
+   "kind": "go",
+   "lat": 43.73946,
+   "lng": -79.23209,
+   "note": "Lakeshore East",
+   "labelPos": "left"
+  },
+  {
+   "name": "Guildwood GO",
+   "kind": "go",
+   "lat": 43.75497,
+   "lng": -79.19713,
+   "note": "Lakeshore East"
+  },
+  {
+   "name": "Rouge Hill GO",
+   "kind": "go",
+   "lat": 43.78053,
+   "lng": -79.13016,
+   "note": "Lakeshore East"
+  },
+  {
+   "name": "Rosetta McClain Gardens",
+   "kind": "nature",
+   "lat": 43.69701,
+   "lng": -79.25549,
+   "note": "Bluffs-top gardens"
+  },
+  {
+   "name": "Bluffer's Park",
+   "kind": "nature",
+   "lat": 43.70806,
+   "lng": -79.23943,
+   "note": "Scarborough Bluffs"
+  },
+  {
+   "name": "Guild Park and Gardens",
+   "kind": "nature",
+   "lat": 43.74548,
+   "lng": -79.19265,
+   "note": "Bluffs-top park"
+  },
+  {
+   "name": "Morningside Park",
+   "kind": "nature",
+   "lat": 43.77453,
+   "lng": -79.20071,
+   "note": "Highland Creek ravine",
+   "labelPos": "left"
+  },
+  {
+   "name": "Colonel Danforth Park",
+   "kind": "nature",
+   "lat": 43.77961,
+   "lng": -79.17663,
+   "note": "Highland Creek valley"
+  },
+  {
+   "name": "U of T Scarborough",
+   "kind": "landmark",
+   "lat": 43.78532,
+   "lng": -79.18951,
+   "note": ""
+  },
+  {
+   "name": "Leslieville",
+   "kind": "neighbourhood",
+   "lat": 43.6627,
+   "lng": -79.33281,
+   "note": ""
+  },
+  {
+   "name": "Cliffcrest",
+   "kind": "neighbourhood",
+   "lat": 43.72184,
+   "lng": -79.23621,
+   "note": "",
+   "labelPos": "left"
+  },
+  {
+   "name": "Scarborough Village",
+   "kind": "neighbourhood",
+   "lat": 43.74374,
+   "lng": -79.21163,
+   "note": "",
+   "labelPos": "left"
+  },
+  {
+   "name": "West Hill",
+   "kind": "neighbourhood",
+   "lat": 43.76891,
+   "lng": -79.18729,
+   "note": "",
+   "labelPos": "left"
+  }
+ ]
+}

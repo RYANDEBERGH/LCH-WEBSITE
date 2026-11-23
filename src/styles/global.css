@@ -113,7 +113,8 @@ p { margin: 0 0 1em; text-wrap: pretty; }
   backdrop-filter: blur(6px);
 }
 .pill::before { content: ''; width: 7px; height: 7px; border-radius: 50%; background: var(--dot, #8a8680); }
-.pill[data-tone='live'] { --dot: #2f9e5b; }
+.pill--leasing { background: var(--accent); color: #fff; }
+.pill--leasing::before { background: #fff; }
 .pill[data-tone='build'] { --dot: #e09a1d; }
 .pill[data-tone='soon'] { --dot: var(--accent); }
 .pill[data-tone='done'] { --dot: #8a8680; }

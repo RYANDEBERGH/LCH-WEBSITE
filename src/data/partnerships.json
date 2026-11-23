@@ -1,0 +1,89 @@
+{
+  "eyebrow": "Partnerships",
+  "heading": "Good places are built by good partnerships.",
+  "intro": "We bring together capital partners, co-developers, community institutions and our own construction team to move projects from opportunity to delivery.",
+  "partners": [
+    {
+      "name": "Fiera Real Estate",
+      "role": "Capital partner",
+      "projects": [
+        "retreat"
+      ],
+      "body": "In June 2026, LCH and Fiera Real Estate’s Canadian Built Opportunities Fund announced a strategic partnership to develop Retreat, a 320-unit purpose-built rental community at 2–4 Windy Ridge Drive. The announcement anticipated construction beginning in fall 2026.",
+      "quote": "Strong partnerships are built on alignment, execution and a shared commitment to the communities we are building in.",
+      "quoteBy": "Michal Wywrot, Managing Partner, LCH Developments",
+      "linkLabel": "Read the announcement",
+      "linkUrl": "https://www.fierarealestate.ca/press-releases/lch-developments-and-fiera-real-estate-announce-strategic-partnership-to-build-retreat-a-purpose-built-rental-community-in-scarboroughs-cliffcrest-neighbourhood/"
+    },
+    {
+      "name": "Cogir Real Estate",
+      "role": "Development partner",
+      "projects": [
+        "cliffside"
+      ],
+      "body": "Cliffside is being developed together with Cogir Real Estate: 209 purpose-built rental homes with retail and live-work space at Kingston Road and Sharpe Street, now under construction.",
+      "quote": "",
+      "quoteBy": "",
+      "linkLabel": "",
+      "linkUrl": ""
+    },
+    {
+      "name": "deCartier Developments",
+      "role": "Co-developer",
+      "projects": [
+        "st-leslieville-church-lofts",
+        "415-broadview"
+      ],
+      "body": "With deCartier, LCH restored the 1913 St. Clements church in Leslieville as 14 St. Leslieville Church Lofts, and is now working on 415 Broadview, which pairs heritage restoration with new rental housing.",
+      "quote": "",
+      "quoteBy": "",
+      "linkLabel": "",
+      "linkUrl": ""
+    },
+    {
+      "name": "St. John’s Presbyterian Church",
+      "role": "Community partner",
+      "projects": [
+        "415-broadview"
+      ],
+      "body": "At 415 Broadview, the plan restores the historic church building so the congregation can continue at the address it has called home since 1908.",
+      "quote": "",
+      "quoteBy": "",
+      "linkLabel": "",
+      "linkUrl": ""
+    },
+    {
+      "name": "Elevate Construction Management",
+      "role": "Affiliated construction manager",
+      "projects": [
+        "everston",
+        "cliffside",
+        "retreat"
+      ],
+      "body": "Elevate brings in-house construction expertise and trade relationships to LCH projects, from pre-construction through completion.",
+      "quote": "",
+      "quoteBy": "",
+      "linkLabel": "Visit elevatecm.com",
+      "linkUrl": "https://elevatecm.com"
+    }
+  ],
+  "workWithUs": {
+    "heading": "Work with us",
+    "items": [
+      {
+        "title": "Landowners & brokers",
+        "body": "We look at infill and mid-rise sites across the GTA, with a focus on transit corridors and growing neighbourhoods."
+      },
+      {
+        "title": "Capital partners",
+        "body": "We partner on purpose-built rental and mixed-use projects, with development and construction managed in-house."
+      },
+      {
+        "title": "Community organizations",
+        "body": "From the Scarborough Food Security Initiative to St. John’s Presbyterian Church, we look for ways our projects can serve their neighbourhoods."
+      }
+    ],
+    "ctaLabel": "Start a conversation",
+    "ctaUrl": "/contact/"
+  }
+}

@@ -3,6 +3,7 @@ name: "Andreas Giannaris"
 credentials: "B.Eng."
 role: "Project Manager"
 photo: "/uploads/andreas-landscape.png"
+linkedin: ""
 order: 9
 ---
 

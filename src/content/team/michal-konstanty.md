@@ -3,6 +3,7 @@ name: "Michal Konstanty"
 credentials: ""
 role: "Project Manager & CPO"
 photo: "/uploads/mikek.jpg"
+linkedin: ""
 order: 5
 ---
 

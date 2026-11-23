@@ -3,6 +3,7 @@ name: "Lukasz Wywrot"
 credentials: "P.Eng, PMP"
 role: "CEO & COO"
 photo: "/uploads/luke.jpg"
+linkedin: ""
 order: 1
 ---
 

@@ -17,7 +17,7 @@ const topics = [...new Set(news.map((n) => n.data.topic))];
     <div class="container">
       {lead && (
         <a class="lead reveal" href={`/news/${lead.id}/`}>
-          <div class="lead__media">{lead.data.image && <Img src={lead.data.image} alt="" sizes="(max-width: 900px) 100vw, 60vw" loading="eager" />}</div>
+          <div class:list={["lead__media", { "is-contain": lead.data.imageFit === "contain" }]}>{lead.data.image && <Img src={lead.data.image} alt="" sizes="(max-width: 900px) 100vw, 60vw" loading="eager" />}</div>
           <div class="lead__body">
             <p class="lead__meta"><span>{lead.data.topic}</span> · {formatDate(lead.data.date)}</p>
             <h2>{lead.data.title}</h2>
@@ -56,6 +56,8 @@ const topics = [...new Set(news.map((n) => n.data.topic))];
   .lead__media { aspect-ratio: 3 / 2; overflow: hidden; border-radius: var(--radius); background: var(--paper-2); }
   .lead__media :global(img) { width: 100%; height: 100%; object-fit: cover; transition: transform 1s var(--ease); }
   .lead:hover .lead__media :global(img) { transform: scale(1.03); }
+  .lead__media.is-contain { background: #1f3a5c; }
+  .lead__media.is-contain :global(img) { object-fit: contain; }
   .lead h2 { font-size: clamp(32px, 3.4vw, 48px); margin-bottom: 20px; }
   .lead:hover h2 { color: var(--accent); }
   .lead .lede { font-size: 17px; margin-bottom: 24px; }
