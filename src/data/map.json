@@ -1,74 +1,6 @@
 {
  "landmarks": [
   {
-   "name": "Broadview",
-   "kind": "subway",
-   "lat": 43.67699,
-   "lng": -79.35822,
-   "note": "Line 2 Bloor–Danforth"
-  },
-  {
-   "name": "Victoria Park",
-   "kind": "subway",
-   "lat": 43.69409,
-   "lng": -79.28856,
-   "note": "Line 2 Bloor–Danforth",
-   "labelPos": "left"
-  },
-  {
-   "name": "Warden",
-   "kind": "subway",
-   "lat": 43.71125,
-   "lng": -79.28047,
-   "note": "Line 2 Bloor–Danforth",
-   "labelPos": "left"
-  },
-  {
-   "name": "Kennedy",
-   "kind": "subway",
-   "lat": 43.7325,
-   "lng": -79.2637,
-   "note": "Line 2 and GO"
-  },
-  {
-   "name": "Danforth GO",
-   "kind": "go",
-   "lat": 43.68701,
-   "lng": -79.29751,
-   "note": "Lakeshore East",
-   "labelPos": "left"
-  },
-  {
-   "name": "Scarborough GO",
-   "kind": "go",
-   "lat": 43.71726,
-   "lng": -79.25448,
-   "note": "Lakeshore East",
-   "labelPos": "left"
-  },
-  {
-   "name": "Eglinton GO",
-   "kind": "go",
-   "lat": 43.73946,
-   "lng": -79.23209,
-   "note": "Lakeshore East",
-   "labelPos": "left"
-  },
-  {
-   "name": "Guildwood GO",
-   "kind": "go",
-   "lat": 43.75497,
-   "lng": -79.19713,
-   "note": "Lakeshore East"
-  },
-  {
-   "name": "Rouge Hill GO",
-   "kind": "go",
-   "lat": 43.78053,
-   "lng": -79.13016,
-   "note": "Lakeshore East"
-  },
-  {
    "name": "Rosetta McClain Gardens",
    "kind": "nature",
    "lat": 43.69701,
@@ -142,5 +74,26 @@
    "note": "",
    "labelPos": "left"
   }
+ ],
+ "roadLabels": [
+  "Danforth Avenue",
+  "Danforth Road",
+  "Eglinton Avenue East",
+  "Lawrence Avenue East",
+  "Victoria Park Avenue",
+  "Warden Avenue",
+  "Kennedy Road",
+  "Midland Avenue",
+  "Brimley Road",
+  "McCowan Road",
+  "Markham Road",
+  "Morningside Avenue",
+  "Queen Street East",
+  "Gerrard Street East",
+  "Broadview Avenue",
+  "Don Valley Parkway",
+  "Highway 401 Express",
+  "St Clair Avenue East",
+  "Port Union Road"
  ]
 }

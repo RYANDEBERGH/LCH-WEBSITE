@@ -3,8 +3,9 @@ import Base from '../layouts/Base.astro';
 import PageHero from '../components/PageHero.astro';
 import Img from '../components/Img.astro';
 import { render } from 'astro:content';
-import { story, getTeam, md } from '../lib/site';
+import { story, getTeam, md, formatMilestoneDate, getProjects, brandInk } from '../lib/site';
 
+const projectsById = Object.fromEntries((await getProjects()).map((p) => [p.id, p]));
 const team = await Promise.all((await getTeam()).map(async (t) => ({ ...t, Content: (await render(t)).Content })));
 ---
 
@@ -37,11 +38,6 @@ const team = await Promise.all((await getTeam()).map(async (t) => ({ ...t, Conte
     <div class="container history">
       <div class="history__media reveal">
         <Img src={story.history.image} alt="Michal and Lukasz Wywrot" sizes="(max-width: 900px) 100vw, 40vw" />
-        {story.timeline?.length > 0 && (
-          <ol class="timeline">
-            {story.timeline.map((t) => <li><span class="display">{t.year}</span><p>{t.text}</p></li>)}
-          </ol>
-        )}
       </div>
       <div class="history__text">
         <p class="eyebrow">{story.history.eyebrow}</p>
@@ -50,6 +46,34 @@ const team = await Promise.all((await getTeam()).map(async (t) => ({ ...t, Conte
       </div>
     </div>
   </section>
+
+  {story.timeline?.length > 0 && (
+    <section class="section journey">
+      <div class="container">
+        <p class="eyebrow">{story.timelineHeading?.eyebrow}</p>
+        <h2 class="journey__h">{story.timelineHeading?.heading}</h2>
+        <ol class="journey__list">
+          {story.timeline.map((t) => {
+            const proj = t.project ? projectsById[t.project] : undefined;
+            const ext = t.sourceUrl?.startsWith('http');
+            return (
+              <li class="jitem reveal" style={proj ? `--brand: ${brandInk(proj)}` : undefined}>
+                <time class="jitem__date" datetime={t.date}>{t.date.length > 4 ? formatMilestoneDate(t.date) : t.date}</time>
+                <div class="jitem__body">
+                  <h3>{t.title}</h3>
+                  <p>{t.text}</p>
+                  <p class="jitem__links">
+                    {proj && <a href={`/projects/${proj.id}/`} class="jitem__proj">{proj.data.title}</a>}
+                    {t.sourceUrl && <a href={t.sourceUrl} target={ext ? '_blank' : undefined} rel="noopener">Source{ext ? ' ↗' : ''}</a>}
+                  </p>
+                </div>
+              </li>
+            );
+          })}
+        </ol>
+      </div>
+    </section>
+  )}
 
   <section class="section section--alt">
     <div class="container"><div class="elevate reveal">
@@ -159,4 +183,18 @@ const team = await Promise.all((await getTeam()).map(async (t) => ({ ...t, Conte
     .bio__grid { grid-template-columns: 1fr; }
     .bio__grid :global(.bio__photo) { max-width: 200px; }
   }
+
+  .journey { border-top: 1px solid var(--line); }
+  .journey__h { max-width: 22ch; margin-bottom: clamp(36px, 4vw, 56px); }
+  .journey__list { list-style: none; margin: 0; padding: 0; columns: 2; column-gap: clamp(32px, 5vw, 80px); }
+  .jitem { break-inside: avoid; display: grid; grid-template-columns: 110px 1fr; gap: 20px; padding: 22px 0; border-top: 1px solid var(--line); }
+  .jitem__date { font-family: var(--font-display); font-size: 26px; line-height: 1.05; color: var(--brand, var(--accent)); }
+  .jitem__body h3 { font-size: 18px; margin-bottom: 6px; }
+  .jitem__body p { margin: 0; font-size: 15px; color: var(--ink-2); }
+  .jitem__links { display: flex; flex-wrap: wrap; gap: 6px 16px; margin-top: 8px !important; font-size: 13px !important; }
+  .jitem__links a { color: var(--muted); }
+  .jitem__proj { color: var(--brand, var(--accent)) !important; font-weight: 600; text-decoration: none; }
+  .jitem__proj::before { content: ''; display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: currentColor; margin-right: 6px; }
+  @media (max-width: 860px) { .journey__list { columns: 1; } }
+  @media (max-width: 480px) { .jitem { grid-template-columns: 1fr; gap: 6px; } }
 </style>

@@ -74,6 +74,9 @@ public/
 scripts/
   optimize-images.mjs   makes responsive WebP sizes into public/_img (runs before dev/build)
   import-wordpress.mjs  one-time import used to pull content from the old WordPress site
+  build-map-tiles.mjs   redraws the Kingston Road map's base layer from OpenFreeMap / OpenStreetMap data
+                        (NODE_USE_ENV_PROXY=1 only needed behind a proxy). Output: src/data/map-geo.json
+  geocode.mjs           looks up latitude/longitude for an address: node scripts/geocode.mjs "4630 Kingston Road, Toronto"
 ```
 
 **Adding a field:** add it to the collection in `public/admin/config.yml`, then to the matching schema in `src/content.config.ts`, then use it in the page template.

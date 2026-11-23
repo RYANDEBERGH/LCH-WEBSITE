@@ -30,20 +30,102 @@
   },
   "timeline": [
     {
-      "year": "2007",
-      "text": "Michal and Lukasz Wywrot start a property investment business — student rentals, rent-to-own and multifamily."
+      "date": "2007",
+      "title": "The beginning",
+      "text": "Brothers Michal and Lukasz Wywrot start a property investment business: student rentals, rent-to-own homes, multifamily properties and conversions.",
+      "project": "",
+      "sourceUrl": ""
     },
     {
-      "year": "2013",
-      "text": "Expansion into custom homes and townhouses."
+      "date": "2013",
+      "title": "Custom homes and townhouses",
+      "text": "LCH expands from investing into building, starting with custom homes and townhouses.",
+      "project": "",
+      "sourceUrl": ""
     },
     {
-      "year": "2017",
-      "text": "Focus shifts to higher-density, mid-rise development."
+      "date": "2015-10",
+      "title": "One6Nine Jones launches",
+      "text": "Twelve modern townhomes in Leslieville go to market.",
+      "project": "one6nine-jones",
+      "sourceUrl": "https://urbantoronto.ca/news/2015/10/one6nine-jones-townhomes-launch-october-7th.17770"
     },
     {
-      "year": "Today",
-      "text": "Merge Condos complete; Everston pre-leasing; Cliffside under construction; Retreat and 415 Broadview advancing."
+      "date": "2017",
+      "title": "Into mid-rise development",
+      "text": "The focus shifts to higher-density, mid-rise communities.",
+      "project": "",
+      "sourceUrl": ""
+    },
+    {
+      "date": "2018-04",
+      "title": "First Kingston Road proposal",
+      "text": "An 11-storey building is proposed where Kingston Road meets Danforth Avenue. It becomes Merge Condos.",
+      "project": "merge-condos",
+      "sourceUrl": "https://urbantoronto.ca/news/2018/04/11-storey-development-proposed-kingston-road-birch-cliff.32125"
+    },
+    {
+      "date": "2019-09",
+      "title": "Merge Condos approved",
+      "text": "Final planning approvals clear the way for Merge Condos.",
+      "project": "merge-condos",
+      "sourceUrl": "https://urbantoronto.ca/news/2019/09/approved-merge-condos-mid-rise-coming-kingston-and-danforth.38752"
+    },
+    {
+      "date": "2020-10",
+      "title": "Merge Condos breaks ground",
+      "text": "Construction begins at 2201 Kingston Road.",
+      "project": "merge-condos",
+      "sourceUrl": "/news/merge-condos-breaks-ground/"
+    },
+    {
+      "date": "2022-01",
+      "title": "Everston proposed",
+      "text": "An application for a mid-rise building at 4630 Kingston Road in West Hill is reported.",
+      "project": "everston",
+      "sourceUrl": "https://urbantoronto.ca/news/2022/01/textured-mid-rise-condo-proposed-kingston-road-west-hill.47051"
+    },
+    {
+      "date": "2022-02",
+      "title": "Retreat proposed",
+      "text": "An application for Kingston Road in Scarborough Village, steps from Gates Gully, is reported.",
+      "project": "retreat",
+      "sourceUrl": "https://urbantoronto.ca/news/2022/02/lch-proposes-development-kingston-road-scarborough-village.47226"
+    },
+    {
+      "date": "2024-05",
+      "title": "Cliffside launches",
+      "text": "Cliffside is launched as a condominium in Cliffside Village.",
+      "project": "cliffside",
+      "sourceUrl": "https://urbantoronto.ca/news/2024/05/lch-developments-launching-cliffside-condos-above-scarborough-bluffs.55918"
+    },
+    {
+      "date": "2025-03",
+      "title": "Everston breaks ground",
+      "text": "Demolition starts at 4630 Kingston Road; construction follows in July.",
+      "project": "everston",
+      "sourceUrl": "/news/4630-kingston-road-demolition-has-begun/"
+    },
+    {
+      "date": "2026-06",
+      "title": "Partnership on Retreat",
+      "text": "A strategic partnership with an institutional real estate fund is announced for Retreat, a 320-home rental community.",
+      "project": "retreat",
+      "sourceUrl": "/news/lch-developments-and-fiera-real-estate-announce-strategic-partnership/"
+    },
+    {
+      "date": "2026-10",
+      "title": "Everston tops off",
+      "text": "Everston is reported topped off, with its tower crane removed. Pre-leasing is underway.",
+      "project": "everston",
+      "sourceUrl": "https://urbantoronto.ca/news/2026/10/everston-sheds-crane-angled-balconies-define-kingston-road-frontage.62077"
+    },
+    {
+      "date": "2026-11",
+      "title": "Cliffside rises as rentals",
+      "text": "Now 209 purpose-built rental homes, Cliffside has its tower crane up.",
+      "project": "cliffside",
+      "sourceUrl": "https://urbantoronto.ca/news/2026/11/crane-rises-high-cliffside-site-scarborough.62110"
     }
   ],
   "elevate": {
@@ -55,5 +137,9 @@
   "team": {
     "eyebrow": "Our team",
     "heading": "The people behind the projects."
+  },
+  "timelineHeading": {
+    "eyebrow": "Our journey",
+    "heading": "From modest beginnings to over a thousand rental homes in the pipeline."
   }
 }

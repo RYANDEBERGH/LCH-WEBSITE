@@ -1,99 +1,221 @@
 ---
 import Base from '../layouts/Base.astro';
-import PageHero from '../components/PageHero.astro';
 import Img from '../components/Img.astro';
-import { partnerships as P, getProjects, stageTone } from '../lib/site';
+import { partnerships as P, getProjects, stageTone, brandInk } from '../lib/site';
 
 const projects = await getProjects();
-const byId = Object.fromEntries(projects.map((p) => [p.id, p]));
 ---
 
-<Base title="Partnerships" description="LCH Developments works with capital partners, co-developers, community institutions and its affiliated construction manager, Elevate.">
-  <PageHero eyebrow={P.eyebrow} heading={P.heading} lede={P.intro} />
+<Base title="Partner with us" description="Why landowners, capital partners, co-developers and community organizations partner with LCH Developments.">
+  <section class="phead">
+    <div class="container phead__grid">
+      <div>
+        <p class="eyebrow">{P.eyebrow}</p>
+        <h1>{P.heading}</h1>
+        <p class="lede">{P.intro}</p>
+        <a class="btn" href="#partner-form">{P.form.heading} <span class="arrow" aria-hidden="true">→</span></a>
+      </div>
+      <dl class="proof">
+        {P.proof.map((p) => (
+          <div class="proof__item">
+            <dt class="display">{p.value}</dt>
+            <dd>{p.label}</dd>
+          </div>
+        ))}
+      </dl>
+    </div>
+  </section>
 
-  <section style="padding-bottom: clamp(72px, 10vw, 144px)">
+  <section class="section section--alt">
     <div class="container">
-      <ul class="partners">
-        {P.partners.map((pt) => (
-          <li class="partner reveal">
-            <div class="partner__head">
-              <p class="partner__role">{pt.role}</p>
-              <h2 class="partner__name">{pt.name}</h2>
-            </div>
-            <div class="partner__body">
-              <p>{pt.body}</p>
-              {pt.quote && (
-                <blockquote>
-                  <p>“{pt.quote}”</p>
-                  {pt.quoteBy && <footer>{pt.quoteBy}</footer>}
-                </blockquote>
-              )}
-              {pt.linkUrl && <a class="link-arrow" href={pt.linkUrl} target="_blank" rel="noopener">{pt.linkLabel || 'Learn more'} ↗</a>}
-            </div>
-            <div class="partner__projects">
-              {pt.projects.map((id) => byId[id]).filter(Boolean).map((p) => (
-                <a class="pp" href={`/projects/${p.id}/`}>
-                  <Img src={p.data.heroImage} alt="" sizes="160px" />
-                  <span>
-                    <strong>{p.data.title}</strong>
-                    <em><i class="dot" data-tone={stageTone(p.data.stage)}></i>{p.data.stage}</em>
-                  </span>
-                </a>
-              ))}
-            </div>
+      <h2 class="sec-h reveal">{P.audiences.heading}</h2>
+      {P.audiences.groups.map((g) => (
+        <div class="aud-group">
+          <p class="aud-group__label">{g.label}</p>
+          <div class="aud">
+            {g.items.map((it) => (
+              <article class="aud__item reveal">
+                <h3 class="display">{it.title}</h3>
+                <p>{it.body}</p>
+                <a class="link-arrow" href="#partner-form" data-type={it.type}>{it.cta} →</a>
+              </article>
+            ))}
+          </div>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <h2 class="sec-h reveal">{P.reasons.heading}</h2>
+      <ol class="reasons">
+        {P.reasons.items.map((r, i) => (
+          <li class="reason reveal">
+            <span class="reason__num">{String(i + 1).padStart(2, '0')}</span>
+            <h3>{r.title}</h3>
+            <p>{r.body}</p>
+            {r.proof && (
+              <p class="reason__proof">
+                <span>Proof</span>
+                {r.link ? <a href={r.link}>{r.proof}</a> : r.proof}
+              </p>
+            )}
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  <section class="section section--dark">
+    <div class="container track">
+      <div class="track__head">
+        <p class="eyebrow">Track record</p>
+        <h2>Eight communities, from heritage lofts to 566 rental homes.</h2>
+      </div>
+      <ul class="track__list">
+        {projects.map((p) => (
+          <li>
+            <a href={`/projects/${p.id}/`} class="tp" style={`--brand: ${brandInk(p)}`}>
+              <Img src={p.data.heroImage} alt="" sizes="(max-width: 700px) 50vw, 25vw" />
+              <span class="tp__body">
+                <strong>{p.data.title}</strong>
+                <em>{p.data.type}{p.data.units ? ` · ${p.data.units.toLocaleString()} homes` : ''}</em>
+                <span class="pill" data-tone={stageTone(p.data.stage)}>{p.data.stage}</span>
+              </span>
+            </a>
           </li>
         ))}
       </ul>
     </div>
   </section>
 
-  <section class="section section--dark">
-    <div class="container">
-      <p class="eyebrow">{P.workWithUs.heading}</p>
-      <div class="wwu">
-        {P.workWithUs.items.map((it) => (
-          <div class="wwu__item reveal">
-            <h3 class="display">{it.title}</h3>
-            <p>{it.body}</p>
-          </div>
-        ))}
+  <section class="section">
+    <div class="container split">
+      <div class="reveal">
+        <h2 class="sec-h">{P.criteria.heading}</h2>
+        <ul class="criteria">
+          {P.criteria.items.map((c) => <li>{c}</li>)}
+        </ul>
       </div>
-      <a class="btn btn--light" href={P.workWithUs.ctaUrl}>{P.workWithUs.ctaLabel} <span class="arrow" aria-hidden="true">→</span></a>
+      <div class="reveal">
+        <h2 class="sec-h">{P.process.heading}</h2>
+        <ol class="steps">
+          {P.process.steps.map((s, i) => (
+            <li>
+              <span class="steps__num">{i + 1}</span>
+              <div><h3>{s.title}</h3><p>{s.body}</p></div>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--alt" id="partner-form">
+    <div class="container formwrap">
+      <div>
+        <p class="eyebrow">Partner with LCH</p>
+        <h2>{P.form.heading}</h2>
+        <p class="lede">{P.form.intro}</p>
+      </div>
+      <form class="pform" name="partnerships" method="POST" action="/thank-you/" data-netlify="true" netlify-honeypot="company">
+        <input type="hidden" name="form-name" value="partnerships" />
+        <p class="hidden-field"><label>Leave this field empty: <input name="company" tabindex="-1" autocomplete="off" /></label></p>
+        <div class="field">
+          <label for="pf-type">I am a</label>
+          <select id="pf-type" name="partner_type" data-type-select>
+            {P.form.types.map((t) => <option>{t}</option>)}
+          </select>
+        </div>
+        <div class="row">
+          <div class="field"><label for="pf-name">Name</label><input id="pf-name" name="name" autocomplete="name" required /></div>
+          <div class="field"><label for="pf-org">Organization <span class="opt">(optional)</span></label><input id="pf-org" name="organization" autocomplete="organization" /></div>
+        </div>
+        <div class="row">
+          <div class="field"><label for="pf-email">Email</label><input id="pf-email" type="email" name="email" autocomplete="email" required /></div>
+          <div class="field"><label for="pf-phone">Phone <span class="opt">(optional)</span></label><input id="pf-phone" type="tel" name="phone" autocomplete="tel" /></div>
+        </div>
+        <div class="field"><label for="pf-site">Site address or opportunity <span class="opt">(optional)</span></label><input id="pf-site" name="site" /></div>
+        <div class="field"><label for="pf-msg">Tell us more</label><textarea id="pf-msg" name="message" required></textarea></div>
+        <button class="btn" type="submit">Send <span class="arrow" aria-hidden="true">→</span></button>
+      </form>
     </div>
   </section>
 </Base>
 
+<script>
+  // "Tell us about a site" etc. pre-select the matching partner type in the form
+  const sel = document.querySelector<HTMLSelectElement>('[data-type-select]');
+  document.querySelectorAll<HTMLAnchorElement>('[data-type]').forEach((a) =>
+    a.addEventListener('click', () => { if (sel) sel.value = a.dataset.type!; }),
+  );
+</script>
+
 <style>
-  .partners { list-style: none; margin: 0; padding: 0; }
-  .partner { display: grid; grid-template-columns: minmax(0, 4fr) minmax(0, 5fr) minmax(0, 3fr); gap: clamp(24px, 4vw, 56px); padding: 40px 0; border-top: 1px solid var(--line); align-items: start; }
-  .partner:last-child { border-bottom: 1px solid var(--line); }
-  .partner__role { font-size: 12px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); margin-bottom: 10px; }
-  .partner__name { font-size: clamp(32px, 3.2vw, 46px); }
-  .partner__body p { color: var(--ink-2); }
-  .partner__body blockquote { margin: 20px 0; padding-left: 18px; border-left: 2px solid var(--accent); }
-  .partner__body blockquote p { font-family: var(--font-display); font-size: 22px; line-height: 1.3; margin-bottom: 8px; color: var(--ink); }
-  .partner__body blockquote footer { font-size: 13px; color: var(--muted); }
-  .partner__projects { display: grid; gap: 10px; }
-  .pp { display: grid; grid-template-columns: 72px 1fr; gap: 12px; align-items: center; text-decoration: none; padding: 6px; border-radius: var(--radius); transition: background 0.2s; }
-  .pp:hover { background: var(--paper-2); }
-  .pp :global(img) { width: 72px; height: 54px; object-fit: cover; border-radius: 3px; }
-  .pp span { display: grid; gap: 2px; }
-  .pp strong { font-weight: 600; font-size: 15px; }
-  .pp em { font-style: normal; font-size: 13px; color: var(--muted); display: inline-flex; align-items: center; gap: 6px; }
-  .dot { width: 7px; height: 7px; border-radius: 50%; background: #8a8680; display: inline-block; }
-  .dot[data-tone='build'] { background: #e09a1d; }
-  .dot[data-tone='soon'] { background: var(--accent); }
+  .phead { padding-block: clamp(56px, 8vw, 112px) clamp(48px, 6vw, 88px); }
+  .phead__grid { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: clamp(40px, 6vw, 96px); align-items: end; }
+  .phead h1 { font-size: clamp(44px, 6vw, 88px); max-width: 14ch; }
+  .phead .lede { margin: 24px 0 32px; }
+  .proof { margin: 0; display: grid; grid-template-columns: 1fr 1fr; border-top: 1px solid var(--line); }
+  .proof__item { padding: 22px 16px 22px 0; border-bottom: 1px solid var(--line); }
+  .proof__item:nth-child(even) { padding-left: 20px; border-left: 1px solid var(--line); }
+  .proof dt { font-size: clamp(30px, 3vw, 42px); line-height: 1; margin-bottom: 8px; }
+  .proof dd { margin: 0; font-size: 14px; color: var(--muted); }
 
-  .wwu { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(24px, 4vw, 56px); margin: 8px 0 40px; }
-  .wwu__item { border-top: 1px solid rgba(246, 244, 239, 0.2); padding-top: 24px; }
-  .wwu__item h3 { font-size: clamp(28px, 2.6vw, 36px); margin-bottom: 14px; }
-  .wwu__item p { color: rgba(246, 244, 239, 0.75); font-size: 16px; }
+  .sec-h { font-size: clamp(32px, 3.6vw, 52px); margin-bottom: clamp(28px, 3vw, 44px); }
 
-  @media (max-width: 1000px) {
-    .partner { grid-template-columns: 1fr 1fr; }
-    .partner__projects { grid-column: 1 / -1; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); }
-  }
-  @media (max-width: 680px) {
-    .partner, .wwu { grid-template-columns: 1fr; }
+  .aud-group + .aud-group { margin-top: 40px; }
+  .aud-group__label { font-size: 12px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); margin: 0 0 16px; }
+  .aud { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: clamp(20px, 2.5vw, 32px); }
+  .aud__item { background: var(--white); border: 1px solid var(--line); border-radius: var(--radius); padding: 28px 24px; display: flex; flex-direction: column; gap: 14px; }
+  .aud__item h3 { font-size: 30px; }
+  .aud__item p { margin: 0; color: var(--ink-2); font-size: 15.5px; flex: 1; }
+  .aud__item .link-arrow { align-self: flex-start; font-size: 14px; }
+
+  .reasons { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 0 clamp(24px, 3vw, 48px); }
+  .reason { padding: 28px 0 36px; border-top: 1px solid var(--line); display: flex; flex-direction: column; gap: 12px; }
+  .reason__num { font-size: 12px; font-weight: 700; letter-spacing: 0.12em; color: var(--accent); }
+  .reason h3 { font-size: 21px; }
+  .reason > p { margin: 0; color: var(--ink-2); font-size: 15.5px; }
+  .reason__proof { margin: 4px 0 0 !important; padding: 12px 14px; background: var(--paper-2); border-left: 2px solid var(--accent); font-size: 14px !important; }
+  .reason__proof span { display: block; font-size: 11px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); margin-bottom: 4px; }
+  .reason__proof a { text-decoration: none; }
+  .reason__proof a:hover { color: var(--accent); text-decoration: underline; }
+
+  .track__head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 20px; margin-bottom: 36px; }
+  .track__head h2 { max-width: 22ch; font-size: clamp(32px, 3.6vw, 52px); }
+  .track__list { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+  .tp { display: block; text-decoration: none; color: inherit; }
+  .tp :global(img) { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; border-radius: var(--radius); margin-bottom: 12px; transition: opacity 0.2s; }
+  .tp:hover :global(img) { opacity: 0.85; }
+  .tp__body { display: grid; gap: 4px; justify-items: start; padding-left: 12px; border-left: 3px solid var(--brand); }
+  .tp strong { font-size: 17px; font-weight: 600; }
+  .tp em { font-style: normal; font-size: 13px; color: rgba(246, 244, 239, 0.65); }
+  .tp .pill { margin-top: 6px; font-size: 10.5px; padding: 4px 10px; }
+
+  .split { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(40px, 6vw, 96px); }
+  .criteria { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--line); }
+  .criteria li { padding: 16px 0 16px 30px; border-bottom: 1px solid var(--line); position: relative; font-size: 17px; }
+  .criteria li::before { content: ''; position: absolute; left: 4px; top: 24px; width: 12px; height: 2px; background: var(--accent); }
+  .steps { list-style: none; margin: 0; padding: 0; display: grid; gap: 0; }
+  .steps li { display: grid; grid-template-columns: 44px 1fr; gap: 16px; padding: 16px 0; border-top: 1px solid var(--line); }
+  .steps li:last-child { border-bottom: 1px solid var(--line); }
+  .steps__num { width: 34px; height: 34px; border-radius: 50%; border: 1px solid var(--ink); display: grid; place-items: center; font-weight: 600; font-size: 14px; }
+  .steps h3 { font-size: 18px; margin-bottom: 4px; }
+  .steps p { margin: 0; color: var(--muted); font-size: 15px; }
+
+  .formwrap { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: clamp(40px, 6vw, 96px); align-items: start; }
+  .formwrap h2 { margin-bottom: 20px; }
+  .pform { display: grid; gap: 18px; background: var(--white); border: 1px solid var(--line); border-radius: var(--radius); padding: clamp(24px, 3.5vw, 44px); }
+  .pform .btn { justify-self: start; }
+  .row { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+  .opt { font-weight: 400; color: var(--muted); }
+
+  @media (max-width: 1100px) { .track__list { grid-template-columns: repeat(2, 1fr); } .reasons { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 860px) { .phead__grid, .split, .formwrap { grid-template-columns: 1fr; } }
+  @media (max-width: 600px) {
+    .reasons, .row { grid-template-columns: 1fr; }
+    .track__list { grid-template-columns: 1fr 1fr; gap: 16px; }
   }
 </style>

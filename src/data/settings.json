@@ -18,7 +18,8 @@
     "enabled": true,
     "text": "Everston is now pre-leasing — apartments by the Campus Valley",
     "linkLabel": "Explore Everston",
-    "url": "https://everston.ca"
+    "url": "https://everston.ca",
+    "color": "#0f3a2e"
   },
   "newsletter": {
     "enabled": true,

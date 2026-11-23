@@ -229,6 +229,7 @@ collections:
               - { label: Text, name: text, widget: string }
               - { label: Link label, name: linkLabel, widget: string, required: false }
               - { label: Link URL, name: url, widget: string, required: false }
+              - { label: Banner colour, name: color, widget: color, required: false, hint: 'e.g. the promoted project’s brand colour. Leave blank for the site accent colour.' }
           - label: Newsletter sign-up (footer)
             name: newsletter
             widget: object
@@ -336,13 +337,18 @@ collections:
               - { label: Heading, name: heading, widget: string }
               - { label: Image, name: image, widget: image }
               - { label: Story, name: body, widget: markdown }
-          - label: Timeline
+          - { label: Timeline heading, name: timelineHeading, widget: object, fields: [{ label: Small text, name: eyebrow, widget: string }, { label: Heading, name: heading, widget: string }] }
+          - label: Company timeline
             name: timeline
             widget: list
-            summary: '{{fields.year}}'
+            summary: '{{fields.date}} — {{fields.title}}'
+            hint: 'Oldest first. Only verified, dated milestones.'
             fields:
-              - { label: Year, name: year, widget: string }
+              - { label: Date (YYYY, YYYY-MM or YYYY-MM-DD), name: date, widget: string, pattern: ['^\d{4}(-\d{2}(-\d{2})?)?$', 'Use YYYY, YYYY-MM or YYYY-MM-DD'] }
+              - { label: Title, name: title, widget: string }
               - { label: Text, name: text, widget: text }
+              - { label: Related project, name: project, widget: relation, collection: projects, search_fields: [title], value_field: '{{slug}}', display_fields: [title], required: false }
+              - { label: Source link, name: sourceUrl, widget: string, required: false }
           - { label: Elevate section, name: elevate, widget: object, fields: [{ label: Heading, name: heading, widget: string }, { label: Text, name: body, widget: text }, { label: Button label, name: ctaLabel, widget: string }, { label: Button link, name: ctaUrl, widget: string }] }
           - { label: Team section, name: team, widget: object, fields: [{ label: Small text, name: eyebrow, widget: string }, { label: Heading, name: heading, widget: string }] }
 
@@ -358,34 +364,34 @@ collections:
           - { label: Inquiry types (dropdown), name: inquiryTypes, widget: list }
 
       - name: partnerships
-        label: Partnerships page
+        label: Partner with us page
         file: src/data/partnerships.json
         fields:
           - { label: Small text, name: eyebrow, widget: string }
           - { label: Heading, name: heading, widget: string }
           - { label: Intro, name: intro, widget: text }
-          - label: Partners
-            name: partners
-            widget: list
-            summary: '{{fields.name}} — {{fields.role}}'
-            hint: 'Only publicly announced relationships.'
-            fields:
-              - { label: Name, name: name, widget: string }
-              - { label: Role, name: role, widget: string }
-              - { label: Projects, name: projects, widget: relation, collection: projects, search_fields: [title], value_field: '{{slug}}', display_fields: [title], multiple: true }
-              - { label: Description, name: body, widget: text }
-              - { label: Quote, name: quote, widget: text, required: false }
-              - { label: Quote attribution, name: quoteBy, widget: string, required: false }
-              - { label: Link label, name: linkLabel, widget: string, required: false }
-              - { label: Link, name: linkUrl, widget: string, required: false }
-          - label: Work with us
-            name: workWithUs
+          - { label: Proof points, name: proof, widget: list, summary: '{{fields.value}} — {{fields.label}}', fields: [{ label: Number / word, name: value, widget: string }, { label: Label, name: label, widget: string }] }
+          - label: Who we work with
+            name: audiences
             widget: object
             fields:
               - { label: Heading, name: heading, widget: string }
-              - { label: Items, name: items, widget: list, summary: '{{fields.title}}', fields: [{ label: Title, name: title, widget: string }, { label: Text, name: body, widget: text }] }
-              - { label: Button label, name: ctaLabel, widget: string }
-              - { label: Button link, name: ctaUrl, widget: string }
+              - label: Groups
+                name: groups
+                widget: list
+                summary: '{{fields.label}}'
+                fields:
+                  - { label: Group name, name: label, widget: string }
+                  - { label: Partner types, name: items, widget: list, summary: '{{fields.title}}', fields: [{ label: Title, name: title, widget: string }, { label: Text, name: body, widget: text }, { label: Link text, name: cta, widget: string }, { label: Form option to pre-select, name: type, widget: string }] }
+          - label: Why partner with LCH
+            name: reasons
+            widget: object
+            fields:
+              - { label: Heading, name: heading, widget: string }
+              - { label: Reasons, name: items, widget: list, summary: '{{fields.title}}', fields: [{ label: Title, name: title, widget: string }, { label: Text, name: body, widget: text }, { label: Proof (a real example), name: proof, widget: string }, { label: Proof link, name: link, widget: string, required: false }] }
+          - { label: What we look for, name: criteria, widget: object, fields: [{ label: Heading, name: heading, widget: string }, { label: Items, name: items, widget: list }] }
+          - { label: How a partnership works, name: process, widget: object, fields: [{ label: Heading, name: heading, widget: string }, { label: Steps, name: steps, widget: list, summary: '{{fields.title}}', fields: [{ label: Title, name: title, widget: string }, { label: Text, name: body, widget: text }] }] }
+          - { label: Enquiry form, name: form, widget: object, fields: [{ label: Heading, name: heading, widget: string }, { label: Intro, name: intro, widget: text }, { label: Partner types (dropdown), name: types, widget: list }] }
 
       - name: map
         label: Map landmarks
@@ -395,14 +401,15 @@ collections:
             name: landmarks
             widget: list
             summary: '{{fields.name}} ({{fields.kind}})'
-            hint: 'Transit, parks and neighbourhood labels on the Kingston Road map. Project pins come from each project’s latitude/longitude.'
+            hint: 'Parks, landmarks and neighbourhood labels on the Kingston Road map. Streets, transit, water and parks outlines come from OpenStreetMap; project pins come from each project’s latitude/longitude.'
             fields:
               - { label: Name, name: name, widget: string }
-              - { label: Type, name: kind, widget: select, options: [subway, go, nature, landmark, neighbourhood] }
+              - { label: Type, name: kind, widget: select, options: [nature, landmark, neighbourhood] }
               - { label: Latitude, name: lat, widget: number, value_type: float }
               - { label: Longitude, name: lng, widget: number, value_type: float }
               - { label: Note, name: note, widget: string, required: false }
               - { label: Label position, name: labelPos, widget: select, required: false, options: [right, left, top, bottom] }
+          - { label: Road names shown on the map, name: roadLabels, widget: list, hint: 'Exact OpenStreetMap names, e.g. Eglinton Avenue East.' }
 
       - name: corporate
         label: Corporate page

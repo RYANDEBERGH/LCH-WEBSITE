@@ -1,6 +1,8 @@
 ---
-// "Where we build" map. Base geography: src/data/map-geo.json (OpenStreetMap, built by scripts/build-map-data.mjs).
-// Landmarks: src/data/map.json. Project pins: each project's lat/lng. All editable in /admin except the base geography.
+// "Where we build" map.
+// Base map: src/data/map-geo.json, built from OpenFreeMap/OpenStreetMap tiles by scripts/build-map-tiles.mjs.
+// Parks, landmarks, neighbourhood labels and which road names to show: src/data/map.json (editable in /admin).
+// Project pins: each project's lat/lng (editable in /admin).
 import Img from './Img.astro';
 import geo from '../data/map-geo.json';
 import { mapData, getProjects, isKingstonRoad, latestMilestone, formatMilestoneDate, brandInk } from '../lib/site';
@@ -8,55 +10,53 @@ import { mapData, getProjects, isKingstonRoad, latestMilestone, formatMilestoneD
 interface Props { heading?: string; eyebrow?: string; body?: string; id?: string }
 const { heading, eyebrow, body, id = 'map' } = Astro.props;
 
-const { w, e, s, n } = geo.bbox;
-const COS = Math.cos((((n + s) / 2) * Math.PI) / 180);
-const W = 1000;
-const K = W / ((e - w) * COS);
-const H = Math.round((n - s) * K);
-const X = (lng: number) => +((lng - w) * COS * K).toFixed(1);
-const Y = (lat: number) => +((n - lat) * K).toFixed(1);
-const path = (pts: number[][]) => pts.map(([lng, lat], i) => `${i ? 'L' : 'M'}${X(lng)} ${Y(lat)}`).join('');
-const pxPerKm = K / 111.2;
+// Web Mercator, same projection the base map was built with
+const { z, x0, y0, s, w: W, h: H } = geo.proj;
+const X = (lng: number) => +((((lng + 180) / 360) * 2 ** z - x0) * s).toFixed(1);
+const Y = (lat: number) => {
+  const r = (lat * Math.PI) / 180;
+  return +((((1 - Math.log(Math.tan(r) + 1 / Math.cos(r)) / Math.PI) / 2) * 2 ** z - y0) * s).toFixed(1);
+};
+const kmPx = Y(43.72) - Y(43.72 + 1 / 111.2);
 
-// Lake: shoreline run, closed off along the bottom of the map
-const shore = geo.lake;
-const westToEast = shore[0][0] < shore[shore.length - 1][0];
-const lakePath =
-  path(shore) +
-  (westToEast
-    ? `L${X(e + 0.05)} ${Y(s - 0.05)}L${X(w - 0.05)} ${Y(s - 0.05)}Z`
-    : `L${X(w - 0.05)} ${Y(s - 0.05)}L${X(e + 0.05)} ${Y(s - 0.05)}Z`);
+// Transit from the map data: Line 2 drawn through its stations (it runs under Danforth Avenue), GO stations marked
+const uniq = <T extends { name: string }>(a: T[]) => [...new Map(a.map((x) => [x.name, x])).values()];
+const LINE2 = ['Castle Frank', 'Broadview', 'Chester', 'Pape', 'Donlands', 'Greenwood', 'Coxwell', 'Woodbine', 'Main Street', 'Victoria Park', 'Warden', 'Kennedy'];
+const subway = uniq(geo.stations.filter((st) => st.subclass === 'subway' && LINE2.includes(st.name))).sort((a, b) => a.x - b.x);
+const GO = ['Danforth', 'Scarborough', 'Eglinton', 'Guildwood', 'Rouge Hill'];
+const goStations = uniq(geo.stations.filter((st) => st.subclass === 'station' && GO.includes(st.name)));
+const line2Path = subway.map((st, i) => `${i ? 'L' : 'M'}${st.x} ${st.y}`).join('');
+
+const wantedLabels = new Set(mapData.roadLabels ?? []);
+const roadLabels = geo.roadLabels.filter((l) => wantedLabels.has(l.name)).map((l) => ({ ...l, name: l.name.replace(' Express', '') }));
 
 const all = (await getProjects()).filter((p) => p.data.lat != null && p.data.lng != null);
 const kingston = all.filter(isKingstonRoad);
 const elsewhere = all.filter((p) => !isKingstonRoad(p));
 const ordered = [...kingston.sort((a, b) => (a.data.lng ?? 0) - (b.data.lng ?? 0)), ...elsewhere];
-const pins = ordered.map((p, i) => ({ p, num: i + 1, x: X(p.data.lng!), y: Y(p.data.lat!), px: 0, py: 0 }));
+const pins = ordered.map((p, i) => ({ p, num: i + 1, x: X(p.data.lng!), y: Y(p.data.lat!), dx: 0, dy: 0, color: brandInk(p) }));
 
-// Fan out pins that sit on top of each other (e.g. Merge Condos, Merge Spaces and Cliffside) with leader lines
-const R = 15;
+// Pins within 80 map units of each other (they overlap at the full view on phones) (e.g. Merge Condos, Merge Spaces, Cliffside) fan out on short leader lines.
+// Offsets are in screen pixels, so the fan stays the same size when zoomed.
+const R = 13;
 const used = new Set<number>();
 for (let i = 0; i < pins.length; i++) {
   if (used.has(i)) continue;
-  const group = pins.map((q, j) => j).filter((j) => !used.has(j) && Math.hypot(pins[j].x - pins[i].x, pins[j].y - pins[i].y) < R * 2.4);
+  const group = pins.map((_, j) => j).filter((j) => !used.has(j) && Math.hypot(pins[j].x - pins[i].x, pins[j].y - pins[i].y) < 80);
   group.forEach((j) => used.add(j));
-  if (group.length === 1) { pins[i].px = pins[i].x; pins[i].py = pins[i].y; continue; }
-  const cx = group.reduce((a, j) => a + pins[j].x, 0) / group.length;
-  const cy = group.reduce((a, j) => a + pins[j].y, 0) / group.length;
-  const radius = 44;
+  if (group.length < 2) continue;
   group.forEach((j, k) => {
-    const ang = (-160 + (100 / Math.max(1, group.length - 1)) * k) * (Math.PI / 180);
-    pins[j].px = +(cx + radius * Math.cos(ang)).toFixed(1);
-    pins[j].py = +(cy + radius * Math.sin(ang)).toFixed(1);
+    const ang = ((-130 + (100 / (group.length - 1)) * k) * Math.PI) / 180;
+    pins[j].dx = +(40 * Math.cos(ang)).toFixed(1);
+    pins[j].dy = +(40 * Math.sin(ang)).toFixed(1);
   });
 }
 
-// Kingston Road label: placed along the road between Victoria Park and Birchmount, rotated to match it
-const [ra, rb] = [geo.kingston[3], geo.kingston[5]];
-const rx = (X(ra[0]) + X(rb[0])) / 2, ry = (Y(ra[1]) + Y(rb[1])) / 2;
-const rAng = (Math.atan2(Y(rb[1]) - Y(ra[1]), X(rb[0]) - X(ra[0])) * 180) / Math.PI;
-const marks = mapData.landmarks.map((l) => ({ ...l, x: X(l.lng), y: Y(l.lat) }));
-const pos = (l: (typeof marks)[number]) => (l as { labelPos?: string }).labelPos ?? 'right';
+const marks = mapData.landmarks.map((l) => ({ ...l, x: X(l.lng), y: Y(l.lat), pos: (l as { labelPos?: string }).labelPos ?? 'right' }));
+const lx = (pos: string) => (pos === 'left' ? -10 : pos === 'right' ? 10 : 0);
+const ly = (pos: string) => (pos === 'top' ? -11 : pos === 'bottom' ? 18 : 4);
+const anchor = (pos: string) => (pos === 'left' ? 'end' : pos === 'right' ? 'start' : 'middle');
+const L = geo.layers as Record<string, string>;
 ---
 
 <section class="cmap section" id={id}>
@@ -71,73 +71,99 @@ const pos = (l: (typeof marks)[number]) => (l as { labelPos?: string }).labelPos
 
     <div class="cmap__grid">
       <figure class="cmap__figure">
-        <svg viewBox={`0 0 ${W} ${H}`} role="img" aria-labelledby={`${id}-title`} class="cmap__svg">
-          <title id={`${id}-title`}>Map of LCH Developments projects in east Toronto, along Kingston Road and in Leslieville and Riverdale</title>
-          <rect width={W} height={H} class="m-land" />
-          <path d={lakePath} class="m-lake" />
-          {geo.water.map((l) => <path d={path(l)} class="m-creek" />)}
-          <path d={path(geo.subway)} class="m-subway" />
-          <path d={path(geo.kingston)} class="m-kingston-casing" />
-          <path d={path(geo.kingston)} class="m-kingston" />
+        <div class="cmap__frame" data-frame>
+          <svg viewBox={`0 0 ${W} ${H}`} data-w={W} data-h={H} data-km={kmPx.toFixed(2)} role="img" aria-labelledby={`${id}-title`} class="cmap__svg" data-svg style="--k: 1">
+            <title id={`${id}-title`}>Map of LCH Developments projects in east Toronto: five on Kingston Road in Scarborough, and three in Leslieville and Riverdale</title>
+            <defs>
+              {roadLabels.map((l, i) => <path id={`${id}-rl-${i}`} d={l.d} />)}
+            </defs>
+            <rect x="-2000" y="-2000" width="5000" height="5000" class="m-land" />
+            <path d={L.park} class="m-park" />
+            <path d={L.wood} class="m-wood" />
+            <path d={L.water} class="m-water" />
+            <path d={L.stream} class="m-stream" />
+            <path d={L.river} class="m-river" />
+            <path d={L.minor} class="m-minor" />
+            <path d={L.tertiary} class="m-tertiary" />
+            <path d={L.secondary} class="m-secondary" />
+            <path d={L.primary} class="m-primary" />
+            <path d={L.motorway} class="m-motorway" />
+            <path d={L.rail} class="m-rail" />
+            {L.lrt && <path d={L.lrt} class="m-lrt" />}
+            {L.lrtTunnel && <path d={L.lrtTunnel} class="m-lrt m-lrt--tunnel" />}
+            <path d={line2Path} class="m-subway" />
+            {geo.kingston.map((k) => <path d={k} class="m-kingston-casing" />)}
+            {geo.kingston.map((k) => <path d={k} class="m-kingston" />)}
 
-          <text x={X(-79.205)} y={Y(43.708)} class="m-water-label">Lake Ontario</text>
-          <text x={X(-79.2035)} y={Y(43.7175)} class="m-shore-label" text-anchor="middle" transform={`rotate(-47 ${X(-79.2035)} ${Y(43.7175)})`}>Scarborough Bluffs</text>
-          <text x={rx.toFixed(1)} y={(ry + 18).toFixed(1)} class="m-road-label" text-anchor="middle" transform={`rotate(${rAng.toFixed(1)} ${rx.toFixed(1)} ${(ry + 18).toFixed(1)})`}>Kingston Road</text>
-
-          {marks.filter((m) => m.kind === 'neighbourhood').map((m) => (
-            <text
-              x={pos(m) === 'left' ? m.x - 12 : pos(m) === 'right' ? m.x + 12 : m.x}
-              y={pos(m) === 'top' ? m.y - 14 : pos(m) === 'bottom' ? m.y + 18 : m.y + 4}
-              class="m-hood"
-              text-anchor={pos(m) === 'left' ? 'end' : pos(m) === 'right' ? 'start' : 'middle'}
-            >{m.name}</text>
-          ))}
-
-          {marks.filter((m) => m.kind !== 'neighbourhood').map((m) => (
-            <g class={`m-poi m-poi--${m.kind}`}>
-              <title>{m.name}{m.note ? ` — ${m.note}` : ''}</title>
-              {m.kind === 'go' ? <rect x={m.x - 5} y={m.y - 5} width="10" height="10" rx="2" /> :
-               m.kind === 'subway' ? <circle cx={m.x} cy={m.y} r="5" /> :
-               m.kind === 'nature' ? <path d={`M${m.x} ${m.y - 7}L${m.x + 6} ${m.y + 4}H${m.x - 6}Z`} /> :
-               <rect x={m.x - 4.5} y={m.y - 4.5} width="9" height="9" />}
-              <text
-                x={pos(m) === 'left' ? m.x - 10 : pos(m) === 'right' ? m.x + 10 : m.x}
-                y={pos(m) === 'top' ? m.y - 11 : pos(m) === 'bottom' ? m.y + 19 : m.y + 4}
-                text-anchor={pos(m) === 'left' ? 'end' : pos(m) === 'right' ? 'start' : 'middle'}
-              >{m.name}</text>
+            <g class="m-roadlabels">
+              {roadLabels.map((l, i) => (
+                <text class="m-roadlabel" dy="-4"><textPath href={`#${id}-rl-${i}`} startOffset="50%" text-anchor="middle">{l.name}</textPath></text>
+              ))}
             </g>
-          ))}
 
-          {pins.map((pin) => (
-            <g class="m-pin" data-pin={pin.p.id} tabindex="0" role="button" aria-label={`${pin.num}. ${pin.p.data.title}, ${pin.p.data.stage}`}>
-              {(pin.px !== pin.x || pin.py !== pin.y) && (
-                <>
-                  <line x1={pin.x} y1={pin.y} x2={pin.px} y2={pin.py} class="m-leader" />
-                  <circle cx={pin.x} cy={pin.y} r="3" class="m-dot" />
-                </>
-              )}
-              <circle cx={pin.px} cy={pin.py} r={R} class="m-pin__circle" style={`fill: ${brandInk(pin.p)}`} />
-              <text x={pin.px} y={pin.py + 5} text-anchor="middle" class="m-pin__num">{pin.num}</text>
-            </g>
-          ))}
+            <g class="m-fixed" style={`transform: translate(${X(-79.2)}px, ${Y(43.705)}px) scale(calc(var(--k) * var(--ps, 1)))`}><text class="m-water-label" text-anchor="middle">Lake Ontario</text></g>
+            <g class="m-fixed" style={`transform: translate(${X(-79.2155)}px, ${Y(43.7205)}px) scale(calc(var(--k) * var(--ps, 1)))`}><text class="m-shore-label" text-anchor="middle" transform="rotate(-50)">Scarborough Bluffs</text></g>
 
-          <g class="m-scale" transform={`translate(${W - 40 - 2 * pxPerKm} ${H - 34})`}>
-            <path d={`M0 0V6H${(2 * pxPerKm).toFixed(1)}V0`} />
-            <text x="0" y="22">0</text>
-            <text x={(2 * pxPerKm).toFixed(1)} y="22" text-anchor="end">2 km</text>
-          </g>
-          <g class="m-north" transform={`translate(${W - 34} 40)`}>
-            <path d="M0 -16L7 8L0 3L-7 8Z" />
-            <text y="24" text-anchor="middle">N</text>
-          </g>
-        </svg>
+            {marks.filter((m) => m.kind === 'neighbourhood').map((m) => (
+              <g class="m-fixed" style={`transform: translate(${m.x}px, ${m.y}px) scale(calc(var(--k) * var(--ps, 1)))`}>
+                <text class="m-hood" x={lx(m.pos)} y={ly(m.pos)} text-anchor={anchor(m.pos)}>{m.name}</text>
+              </g>
+            ))}
+
+            {marks.filter((m) => m.kind !== 'neighbourhood').map((m) => (
+              <g class={`m-fixed m-poi m-poi--${m.kind}`} style={`transform: translate(${m.x}px, ${m.y}px) scale(calc(var(--k) * var(--ps, 1)))`}>
+                <title>{m.name}{m.note ? ` (${m.note})` : ''}</title>
+                {m.kind === 'nature' ? <path d="M0 -6L5.5 4H-5.5Z" /> : <rect x="-4.5" y="-4.5" width="9" height="9" />}
+                <text x={lx(m.pos)} y={ly(m.pos)} text-anchor={anchor(m.pos)}>{m.name}</text>
+              </g>
+            ))}
+
+            {subway.map((st) => (
+              <g class="m-fixed m-station m-station--subway" style={`transform: translate(${st.x}px, ${st.y}px) scale(calc(var(--k) * var(--ps, 1)))`}>
+                <title>{st.name} station (Line 2)</title>
+                <circle r="4.5" />
+                <text y="-9" text-anchor="middle" class="m-zoom-only">{st.name}</text>
+              </g>
+            ))}
+            {goStations.map((st) => (
+              <g class="m-fixed m-station m-station--go" style={`transform: translate(${st.x}px, ${st.y}px) scale(calc(var(--k) * var(--ps, 1)))`}>
+                <title>{st.name} GO</title>
+                <rect x="-5" y="-5" width="10" height="10" rx="2" />
+                <text x="9" y="4">{st.name} GO</text>
+              </g>
+            ))}
+
+            {pins.map((pin) => (
+              <g class="m-fixed m-pin" style={`transform: translate(${pin.x}px, ${pin.y}px) scale(calc(var(--k) * var(--ps, 1)))`} data-pin={pin.p.id} data-x={pin.x} data-y={pin.y} tabindex="0" role="button" aria-label={`${pin.num}. ${pin.p.data.title}, ${pin.p.data.stage}`}>
+                {(pin.dx || pin.dy) ? (
+                  <>
+                    <line x1="0" y1="0" x2={pin.dx} y2={pin.dy} class="m-leader" />
+                    <circle r="3" class="m-dot" />
+                  </>
+                ) : null}
+                <g class="m-pin__offset" transform={`translate(${pin.dx} ${pin.dy})`}>
+                  <circle r={R} class="m-pin__circle" style={`fill: ${pin.color}`} />
+                  <text y="4.5" text-anchor="middle" class="m-pin__num">{pin.num}</text>
+                </g>
+              </g>
+            ))}
+          </svg>
+
+          <div class="cmap__scale" aria-hidden="true"><span data-scale-bar></span><em data-scale-label>2 km</em></div>
+          <div class="cmap__controls" role="group" aria-label="Map zoom">
+            <button type="button" data-zoom="in" aria-label="Zoom in">+</button>
+            <button type="button" data-zoom="out" aria-label="Zoom out">−</button>
+            <button type="button" data-zoom="reset" aria-label="Show whole map" class="cmap__reset">Reset</button>
+          </div>
+          <p class="cmap__hint" aria-hidden="true">Select a project to zoom in · drag to move</p>
+        </div>
         <figcaption class="cmap__legend">
-          <span><i class="lg lg--pin"></i>LCH project (in its brand colour)</span>
+          <span><i class="lg lg--pin"></i>LCH project, in its brand colour</span>
           <span><i class="lg lg--road"></i>Kingston Road</span>
           <span><i class="lg lg--subway"></i>Line 2 subway</span>
-          <span><i class="lg lg--go"></i>GO station</span>
-          <span><i class="lg lg--nature"></i>Park or ravine</span>
-          <span class="cmap__attr">Map data © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> contributors</span>
+          <span><i class="lg lg--rail"></i>GO rail and station</span>
+          <span><i class="lg lg--park"></i>Park, ravine or woodland</span>
+          <span class="cmap__attr">Map data © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> contributors · © OpenMapTiles · OpenFreeMap</span>
         </figcaption>
       </figure>
 
@@ -146,19 +172,19 @@ const pos = (l: (typeof marks)[number]) => (l as { labelPos?: string }).labelPos
           <div class="cmap__group">
             <p class="cmap__group-label">{label} <span>{(list as typeof pins).length}</span></p>
             <ol>
-              {(list as typeof pins).map(({ p, num }) => {
+              {(list as typeof pins).map(({ p, num, color }) => {
                 const m = latestMilestone(p);
                 return (
                   <li class="cmap__item" data-item={p.id}>
                     <button class="cmap__btn" data-select={p.id} aria-expanded="false">
-                      <span class="cmap__num" style={`background: ${brandInk(p)}`}>{num}</span>
+                      <span class="cmap__num" style={`background: ${color}`}>{num}</span>
                       <span class="cmap__name">{p.data.title}</span>
                       <span class="cmap__stage">{p.data.stage}</span>
                     </button>
                     <div class="cmap__detail" hidden>
                       <Img src={p.data.heroImage} alt="" sizes="320px" />
                       <p class="cmap__addr">{p.data.address}<br />{p.data.neighbourhood}</p>
-                      {p.data.leasing?.status && <p class="cmap__leasing">Leasing: {p.data.leasing.status}</p>}
+                      {p.data.leasing?.status && <p class="cmap__leasing" style={`color: ${color}`}>Leasing: {p.data.leasing.status}</p>}
                       {m && <p class="cmap__latest"><strong>{formatMilestoneDate(m.date)}</strong> {m.label}</p>}
                       <a class="link-arrow" href={`/projects/${p.id}/`}>View {p.data.title} →</a>
                     </div>
@@ -175,7 +201,92 @@ const pos = (l: (typeof marks)[number]) => (l as { labelPos?: string }).labelPos
 
 <script>
   document.querySelectorAll<HTMLElement>('.cmap').forEach((root) => {
-    const select = (id: string, scroll = false) => {
+    const svg = root.querySelector<SVGSVGElement>('[data-svg]')!;
+    const frame = root.querySelector<HTMLElement>('[data-frame]')!;
+    const scaleBar = root.querySelector<HTMLElement>('[data-scale-bar]')!;
+    const scaleLabel = root.querySelector<HTMLElement>('[data-scale-label]')!;
+    const W = Number(svg.dataset.w), H = Number(svg.dataset.h);
+    const KM = Number(svg.dataset.km);
+    let vb = { x: 0, y: 0, w: W, h: H };
+    const MIN = W / 10; // up to 10× zoom
+
+    const updateScale = () => {
+      const pxPerUnit = svg.getBoundingClientRect().width / vb.w;
+      const kmOnScreen = KM * pxPerUnit;
+      const nice = [0.25, 0.5, 1, 2, 5].find((d) => d * kmOnScreen >= 60) ?? 5;
+      scaleBar.style.width = `${(nice * kmOnScreen).toFixed(0)}px`;
+      scaleLabel.textContent = nice < 1 ? `${nice * 1000} m` : `${nice} km`;
+    };
+    const apply = () => {
+      vb.w = Math.min(W, Math.max(MIN, vb.w));
+      vb.h = (vb.w * H) / W;
+      vb.x = Math.min(W - vb.w, Math.max(0, vb.x));
+      vb.y = Math.min(H - vb.h, Math.max(0, vb.y));
+      svg.setAttribute('viewBox', `${vb.x.toFixed(1)} ${vb.y.toFixed(1)} ${vb.w.toFixed(1)} ${vb.h.toFixed(1)}`);
+      const zoom = vb.w / W; // 1 = whole map
+      // --k = map units per screen pixel, so pins and labels keep the same on-screen size at any zoom and on any device
+      const px = svg.getBoundingClientRect().width || W;
+      svg.style.setProperty('--k', (vb.w / px).toFixed(4));
+      svg.classList.toggle('is-zoomed', zoom < 0.75);
+      svg.classList.toggle('is-close', zoom < 0.35);
+      frame.classList.toggle('is-zoomed', zoom < 0.999);
+      updateScale();
+    };
+    // Smoothly animate between views
+    let raf = 0;
+    const animateTo = (target: typeof vb) => {
+      cancelAnimationFrame(raf);
+      const from = { ...vb }, t0 = performance.now(), dur = matchMedia('(prefers-reduced-motion: reduce)').matches ? 0 : 450;
+      const step = (now: number) => {
+        const t = dur ? Math.min(1, (now - t0) / dur) : 1, e = 1 - (1 - t) ** 3;
+        vb = { x: from.x + (target.x - from.x) * e, y: from.y + (target.y - from.y) * e, w: from.w + (target.w - from.w) * e, h: from.h + (target.h - from.h) * e };
+        apply();
+        if (t < 1) raf = requestAnimationFrame(step);
+      };
+      raf = requestAnimationFrame(step);
+    };
+    const zoomAt = (factor: number, cx = vb.x + vb.w / 2, cy = vb.y + vb.h / 2) => {
+      const nw = Math.min(W, Math.max(MIN, vb.w / factor)), f = nw / vb.w;
+      animateTo({ x: cx - (cx - vb.x) * f, y: cy - (cy - vb.y) * f, w: nw, h: (nw * H) / W });
+    };
+    const focus = (x: number, y: number, k = 0.28) => {
+      const nw = W * k;
+      animateTo({ x: x - nw / 2, y: y - (nw * H) / W / 2, w: nw, h: (nw * H) / W });
+    };
+
+    root.querySelectorAll<HTMLButtonElement>('[data-zoom]').forEach((b) =>
+      b.addEventListener('click', () => {
+        if (b.dataset.zoom === 'in') zoomAt(1.7);
+        else if (b.dataset.zoom === 'out') zoomAt(1 / 1.7);
+        else animateTo({ x: 0, y: 0, w: W, h: H });
+      }),
+    );
+
+    // Drag to pan, only once zoomed in, so the page still scrolls normally on phones
+    let drag: { id: number; sx: number; sy: number; vx: number; vy: number; moved: boolean } | null = null;
+    svg.addEventListener('pointerdown', (e) => {
+      if (vb.w >= W - 0.5) return;
+      cancelAnimationFrame(raf);
+      drag = { id: e.pointerId, sx: e.clientX, sy: e.clientY, vx: vb.x, vy: vb.y, moved: false };
+    });
+    svg.addEventListener('pointermove', (e) => {
+      if (!drag || e.pointerId !== drag.id) return;
+      const scale = vb.w / svg.getBoundingClientRect().width;
+      const dx = e.clientX - drag.sx, dy = e.clientY - drag.sy;
+      if (!drag.moved && Math.hypot(dx, dy) > 4) { drag.moved = true; svg.setPointerCapture(e.pointerId); }
+      if (drag.moved) { vb.x = drag.vx - dx * scale; vb.y = drag.vy - dy * scale; apply(); }
+    });
+    const end = () => setTimeout(() => (drag = null), 0);
+    svg.addEventListener('pointerup', end);
+    svg.addEventListener('pointercancel', end);
+    svg.addEventListener('dblclick', (e) => {
+      const pt = svg.createSVGPoint(); pt.x = e.clientX; pt.y = e.clientY;
+      const p = pt.matrixTransform(svg.getScreenCTM()!.inverse());
+      zoomAt(2, p.x, p.y);
+    });
+    addEventListener('resize', () => apply());
+
+    const select = (id: string, { zoom = false, scroll = false } = {}) => {
       root.querySelectorAll<HTMLElement>('[data-item]').forEach((li) => {
         const on = li.dataset.item === id;
         li.classList.toggle('is-active', on);
@@ -183,21 +294,28 @@ const pos = (l: (typeof marks)[number]) => (l as { labelPos?: string }).labelPos
         li.querySelector('.cmap__btn')!.setAttribute('aria-expanded', String(on));
         if (on && scroll && matchMedia('(max-width: 960px)').matches) li.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
       });
-      root.querySelectorAll<SVGGElement>('[data-pin]').forEach((g) => g.classList.toggle('is-active', g.dataset.pin === id));
+      root.querySelectorAll<SVGGElement>('[data-pin]').forEach((g) => {
+        g.classList.toggle('is-active', g.dataset.pin === id);
+        if (g.dataset.pin === id) {
+          g.parentNode!.appendChild(g);
+          if (zoom) focus(Number(g.dataset.x), Number(g.dataset.y));
+        }
+      });
     };
     root.querySelectorAll<SVGGElement>('[data-pin]').forEach((g) => {
-      g.addEventListener('click', () => select(g.dataset.pin!, true));
-      g.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); select(g.dataset.pin!, true); } });
+      g.addEventListener('click', () => { if (!drag?.moved) select(g.dataset.pin!, { scroll: true }); });
+      g.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); select(g.dataset.pin!, { zoom: true }); } });
       g.addEventListener('mouseenter', () => root.querySelector(`[data-item="${g.dataset.pin}"]`)?.classList.add('is-hover'));
       g.addEventListener('mouseleave', () => root.querySelector(`[data-item="${g.dataset.pin}"]`)?.classList.remove('is-hover'));
     });
     root.querySelectorAll<HTMLButtonElement>('[data-select]').forEach((b) => {
-      b.addEventListener('click', () => select(b.dataset.select!));
+      b.addEventListener('click', () => select(b.dataset.select!, { zoom: true }));
       b.addEventListener('mouseenter', () => root.querySelector(`[data-pin="${b.dataset.select}"]`)?.classList.add('is-hover'));
       b.addEventListener('mouseleave', () => root.querySelector(`[data-pin="${b.dataset.select}"]`)?.classList.remove('is-hover'));
     });
     const first = root.querySelector<HTMLElement>('[data-item]');
     if (first) select(first.dataset.item!);
+    apply();
   });
 </script>
 
@@ -206,47 +324,84 @@ const pos = (l: (typeof marks)[number]) => (l as { labelPos?: string }).labelPos
   .cmap__head h2 { margin-bottom: 20px; }
   .cmap__grid { display: grid; grid-template-columns: minmax(0, 1fr) 340px; gap: clamp(24px, 3vw, 40px); align-items: start; }
   .cmap__figure { margin: 0; min-width: 0; }
-  .cmap__svg { display: block; width: 100%; height: auto; border-radius: var(--radius); border: 1px solid var(--line); background: #efece4; font-family: var(--font-sans); }
+  .cmap__frame { position: relative; border-radius: var(--radius); border: 1px solid var(--line); overflow: hidden; background: #f1eee7; }
+  .cmap__frame.is-zoomed .cmap__svg { cursor: grab; touch-action: none; }
+  .cmap__frame.is-zoomed .cmap__svg:active { cursor: grabbing; }
+  .cmap__svg { display: block; width: 100%; height: auto; font-family: var(--font-sans); user-select: none; -webkit-user-select: none; }
 
-  .m-land { fill: #efece4; }
-  .m-lake { fill: #cfdde3; stroke: #a9c0c9; stroke-width: 1.2; }
-  .m-creek { fill: none; stroke: #9dbcc8; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
-  .m-subway { fill: none; stroke: #2f8f4e; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; opacity: 0.75; }
-  .m-kingston-casing { fill: none; stroke: #fff; stroke-width: 9; stroke-linecap: round; stroke-linejoin: round; }
+  /* Base map. Strokes keep their on-screen width at every zoom level. */
+  .cmap__svg path, .cmap__svg line { vector-effect: non-scaling-stroke; }
+  .m-land { fill: #f1eee7; }
+  .m-park { fill: #dbe5cf; }
+  .m-wood { fill: #c8d9b8; }
+  .m-water { fill: #c6dbe4; }
+  .m-river { fill: none; stroke: #a9c8d5; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+  .m-stream { fill: none; stroke: #b5d0db; stroke-width: 1.1; stroke-linecap: round; stroke-linejoin: round; }
+  .m-minor { fill: none; stroke: #fff; stroke-width: 0.5; }
+  .is-zoomed .m-minor { stroke-width: 1.4; }
+  .is-close .m-minor { stroke-width: 2.4; }
+  .m-tertiary { fill: none; stroke: #fff; stroke-width: 1.2; stroke-linecap: round; }
+  .m-secondary { fill: none; stroke: #fff; stroke-width: 2; stroke-linecap: round; }
+  .m-primary { fill: none; stroke: #fff; stroke-width: 2.8; stroke-linecap: round; }
+  .m-motorway { fill: none; stroke: #e5d9bf; stroke-width: 3.4; stroke-linecap: round; }
+  .is-zoomed .m-tertiary { stroke-width: 2.2; }
+  .is-zoomed .m-secondary { stroke-width: 3.2; }
+  .is-zoomed .m-primary { stroke-width: 4.2; }
+  .is-zoomed .m-motorway { stroke-width: 5; }
+  .m-rail { fill: none; stroke: #8f897e; stroke-width: 1.4; stroke-dasharray: 5 3; }
+  .m-lrt { fill: none; stroke: #e58f2a; stroke-width: 2; opacity: 0.75; }
+  .m-lrt--tunnel { stroke-dasharray: 3 3; }
+  .m-subway { fill: none; stroke: #2f8f4e; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 7 4; }
+  .m-kingston-casing { fill: none; stroke: #fff; stroke-width: 8; stroke-linecap: round; stroke-linejoin: round; }
   .m-kingston { fill: none; stroke: var(--accent); stroke-width: 4.5; stroke-linecap: round; stroke-linejoin: round; }
-  .m-water-label { fill: #6d8b97; font-family: var(--font-display); font-style: italic; font-size: 30px; }
-  .m-shore-label { fill: #6d8b97; font-family: var(--font-display); font-style: italic; font-size: 15px; }
-  .m-road-label { fill: var(--accent); font-size: 12px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; }
-  .m-hood { fill: #8a857b; font-size: 11px; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; }
-  .m-poi text { font-size: 11.5px; fill: #3b3934; paint-order: stroke; stroke: #efece4; stroke-width: 3px; stroke-linejoin: round; }
-  .m-poi--subway circle { fill: #fff; stroke: #2f8f4e; stroke-width: 2.5; }
-  .m-poi--go rect { fill: #2f7d5a; }
+  .is-zoomed .m-kingston-casing { stroke-width: 11; }
+  .is-zoomed .m-kingston { stroke-width: 6.5; }
+
+  .m-roadlabel { font-size: calc(10px * var(--k)); fill: #7c776d; font-weight: 500; letter-spacing: 0.02em; paint-order: stroke; stroke: #f1eee7; stroke-width: calc(3px * var(--k)); }
+  .m-water-label { fill: #6a8d9b; font-family: var(--font-display); font-style: italic; font-size: 30px; }
+  .m-shore-label { fill: #6a8d9b; font-family: var(--font-display); font-style: italic; font-size: 14px; }
+  .m-hood { fill: #8a857b; font-size: 10.5px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; paint-order: stroke; stroke: #f1eee7; stroke-width: 3px; }
+  .m-fixed text { pointer-events: none; }
+  .m-poi text, .m-station text { font-size: 11px; fill: #3b3934; paint-order: stroke; stroke: #f1eee7; stroke-width: 3px; stroke-linejoin: round; }
   .m-poi--nature path { fill: #6f9a63; }
   .m-poi--nature text { font-style: italic; fill: #4d6b44; }
   .m-poi--landmark rect { fill: #3b3934; }
+  .m-station--subway circle { fill: #fff; stroke: #2f8f4e; stroke-width: 2.2; }
+  .m-station--go rect { fill: #2f7d5a; }
+  .m-station--go text { font-weight: 600; fill: #2f5e47; }
+  .m-zoom-only { display: none; }
+  .is-zoomed .m-zoom-only { display: block; }
 
   .m-pin { cursor: pointer; outline: none; }
   .m-leader { stroke: var(--ink); stroke-width: 1.2; }
   .m-dot { fill: var(--ink); }
-  .m-pin__circle { fill: var(--ink); stroke: #fff; stroke-width: 2.5; transition: transform 0.2s var(--ease), fill 0.2s; transform-box: fill-box; transform-origin: center; }
-  .m-pin__num { fill: #fff; font-size: 13px; font-weight: 700; pointer-events: none; }
-  .m-pin:hover .m-pin__circle, .m-pin.is-hover .m-pin__circle, .m-pin:focus-visible .m-pin__circle { transform: scale(1.18); }
+  .m-pin__circle { stroke: #fff; stroke-width: 2.5; vector-effect: none; transition: transform 0.2s var(--ease); transform-box: fill-box; transform-origin: center; }
+  .m-pin__num { fill: #fff; font-size: 12.5px; font-weight: 700; pointer-events: none; }
+  .is-close .m-leader, .is-close .m-dot { display: none; }
+  .is-close .m-pin__offset { transform: none; }
+  .m-pin:hover .m-pin__circle, .m-pin.is-hover .m-pin__circle { transform: scale(1.18); }
   .m-pin.is-active .m-pin__circle { stroke: var(--ink); stroke-width: 3.5; transform: scale(1.25); }
   .m-pin:focus-visible .m-pin__circle { stroke: var(--accent); stroke-width: 4; }
 
-  .m-scale path { fill: none; stroke: #3b3934; stroke-width: 1.5; }
-  .m-scale text, .m-north text { font-size: 11px; fill: #3b3934; font-weight: 600; }
-  .m-north path { fill: #3b3934; }
+  .cmap__scale { position: absolute; right: 12px; bottom: 10px; display: flex; flex-direction: column; align-items: flex-end; gap: 2px; font-size: 11px; font-weight: 600; color: #3b3934; pointer-events: none; }
+  .cmap__scale span { display: block; height: 6px; border: 1.5px solid #3b3934; border-top: 0; }
+  .cmap__scale em { font-style: normal; order: -1; }
+  .cmap__controls { position: absolute; top: 12px; right: 12px; display: flex; flex-direction: column; gap: 6px; }
+  .cmap__controls button { width: 40px; height: 40px; border-radius: 8px; border: 1px solid var(--line); background: #fff; color: var(--ink); font-size: 20px; line-height: 1; cursor: pointer; box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06); }
+  .cmap__controls button:hover { border-color: var(--ink); }
+  .cmap__controls .cmap__reset { font-size: 11px; font-weight: 600; }
+  .cmap__hint { position: absolute; left: 12px; bottom: 8px; margin: 0; font-size: 12px; color: #6f6a61; background: rgba(241, 238, 231, 0.88); padding: 2px 8px; border-radius: 4px; }
 
-  .cmap__legend { display: flex; flex-wrap: wrap; gap: 8px 20px; margin-top: 14px; font-size: 13px; color: var(--muted); align-items: center; }
+  .cmap__legend { display: flex; flex-wrap: wrap; gap: 8px 18px; margin-top: 14px; font-size: 13px; color: var(--muted); align-items: center; }
   .cmap__legend span { display: inline-flex; align-items: center; gap: 8px; }
   .lg { display: inline-block; flex: none; }
-  .lg--pin { width: 14px; height: 14px; border-radius: 50%; background: var(--ink); }
+  .lg--pin { width: 14px; height: 14px; border-radius: 50%; background: conic-gradient(#0f3a2e 0 25%, #c7423f 0 50%, #6b1219 0 75%, #704078 0); }
   .lg--road { width: 22px; height: 4px; background: var(--accent); border-radius: 2px; }
-  .lg--subway { width: 22px; height: 3px; background: #2f8f4e; border-radius: 2px; }
-  .lg--go { width: 10px; height: 10px; background: #2f7d5a; border-radius: 2px; }
-  .lg--nature { width: 0; height: 0; border-left: 6px solid transparent; border-right: 6px solid transparent; border-bottom: 10px solid #6f9a63; }
-  .cmap__attr { margin-left: auto; font-size: 12px; }
+  .lg--subway { width: 22px; height: 0; border-top: 3px dashed #2f8f4e; }
+  .lg--rail { width: 22px; height: 0; border-top: 2px dashed #8f897e; position: relative; }
+  .lg--rail::after { content: ''; position: absolute; right: -4px; top: -6px; width: 9px; height: 9px; background: #2f7d5a; border-radius: 2px; }
+  .lg--park { width: 14px; height: 10px; background: #c8d9b8; border-radius: 2px; }
+  .cmap__attr { flex-basis: 100%; font-size: 12px; }
 
   .cmap__list { display: grid; gap: 28px; }
   .cmap__group-label { font-size: 12px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); margin: 0 0 8px; display: flex; justify-content: space-between; }
@@ -254,7 +409,7 @@ const pos = (l: (typeof marks)[number]) => (l as { labelPos?: string }).labelPos
   .cmap__item { border-bottom: 1px solid var(--line); }
   .cmap__btn { all: unset; box-sizing: border-box; cursor: pointer; display: grid; grid-template-columns: 28px 1fr auto; gap: 12px; align-items: center; width: 100%; padding: 12px 4px; }
   .cmap__btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
-  .cmap__num { width: 26px; height: 26px; border-radius: 50%; background: var(--ink); color: #fff; font-size: 12px; font-weight: 700; display: grid; place-items: center; transition: background 0.2s; }
+  .cmap__num { width: 26px; height: 26px; border-radius: 50%; color: #fff; font-size: 12px; font-weight: 700; display: grid; place-items: center; transition: box-shadow 0.2s; }
   .cmap__item.is-active .cmap__num, .cmap__item.is-hover .cmap__num { box-shadow: 0 0 0 3px var(--paper), 0 0 0 5px var(--ink); }
   .cmap__item.is-active .cmap__name { font-weight: 700; }
   .cmap__name { font-weight: 500; }
@@ -263,7 +418,7 @@ const pos = (l: (typeof marks)[number]) => (l as { labelPos?: string }).labelPos
   .cmap__detail { padding: 0 4px 18px 44px; display: grid; gap: 10px; font-size: 14px; }
   .cmap__detail :global(img) { width: 100%; aspect-ratio: 16 / 10; object-fit: cover; border-radius: var(--radius); }
   .cmap__detail p { margin: 0; color: var(--muted); line-height: 1.5; }
-  .cmap__leasing { color: #2f7d5a !important; font-weight: 600; }
+  .cmap__leasing { font-weight: 600; }
   .cmap__latest strong { color: var(--ink); font-weight: 600; margin-right: 4px; }
   .cmap__detail .link-arrow { justify-self: start; font-size: 14px; }
 
@@ -272,8 +427,11 @@ const pos = (l: (typeof marks)[number]) => (l as { labelPos?: string }).labelPos
     .cmap__list { grid-template-columns: 1fr 1fr; gap: 24px; }
   }
   @media (max-width: 640px) {
+    .cmap__svg { --ps: 0.7; }
+    .cmap__svg.is-zoomed { --ps: 0.85; }
     .cmap__list { grid-template-columns: 1fr; }
-    .m-poi text, .m-hood { display: none; }
-    .cmap__attr { margin-left: 0; }
+    .m-poi text, .m-hood, .m-station--go text, .m-roadlabel { display: none; }
+    .is-zoomed .m-poi text, .is-zoomed .m-hood, .is-zoomed .m-station--go text, .is-zoomed .m-roadlabel { display: block; }
+    .cmap__hint { display: none; }
   }
 </style>

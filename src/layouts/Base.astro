@@ -65,7 +65,7 @@ const orgLd = {
     <a class="skip" href="#main">Skip to content</a>
 
     {a?.enabled && a.text && (
-      <div class="announce">
+      <div class="announce" style={a.color ? `background: ${a.color}` : undefined}>
         <div class="container announce__inner">
           <span>{a.text}</span>
           {a.url && (

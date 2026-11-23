@@ -4,3 +4,5 @@ dist/
 public/_img/
 .DS_Store
 .env
+scripts/.tilecache/
+scripts/.geocache.json

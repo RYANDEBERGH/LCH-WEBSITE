@@ -9,7 +9,8 @@ neighbourhood: "West Hill, Scarborough"
 intersection: "Kingston Road & Manse Road"
 units: 566
 storeys: 13
-partners: []
+partners:
+  - "Cogir Real Estate"
 architect: "Turner Fleischer"
 summary: "566 purpose-built rental apartments near the University of Toronto Scarborough and Highland Creek Valley."
 brandColor: "#0f3a2e"

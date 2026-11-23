@@ -1,89 +1,171 @@
 {
-  "eyebrow": "Partnerships",
-  "heading": "Good places are built by good partnerships.",
-  "intro": "We bring together capital partners, co-developers, community institutions and our own construction team to move projects from opportunity to delivery.",
-  "partners": [
+  "eyebrow": "Partner with LCH",
+  "heading": "Bring us the opportunity. We’ll make it happen.",
+  "intro": "Landowners, investors, lenders, co-developers, consultants, trades and community organizations work with LCH because we take projects from site to keys under one roof: acquisition, approvals, design, financing, construction and leasing.",
+  "proof": [
     {
-      "name": "Fiera Real Estate",
-      "role": "Capital partner",
-      "projects": [
-        "retreat"
-      ],
-      "body": "In June 2026, LCH and Fiera Real Estate’s Canadian Built Opportunities Fund announced a strategic partnership to develop Retreat, a 320-unit purpose-built rental community at 2–4 Windy Ridge Drive. The announcement anticipated construction beginning in fall 2026.",
-      "quote": "Strong partnerships are built on alignment, execution and a shared commitment to the communities we are building in.",
-      "quoteBy": "Michal Wywrot, Managing Partner, LCH Developments",
-      "linkLabel": "Read the announcement",
-      "linkUrl": "https://www.fierarealestate.ca/press-releases/lch-developments-and-fiera-real-estate-announce-strategic-partnership-to-build-retreat-a-purpose-built-rental-community-in-scarboroughs-cliffcrest-neighbourhood/"
+      "value": "Since 2007",
+      "label": "Investing and building in Toronto"
     },
     {
-      "name": "Cogir Real Estate",
-      "role": "Development partner",
-      "projects": [
-        "cliffside"
-      ],
-      "body": "Cliffside is being developed together with Cogir Real Estate: 209 purpose-built rental homes with retail and live-work space at Kingston Road and Sharpe Street, now under construction.",
-      "quote": "",
-      "quoteBy": "",
-      "linkLabel": "",
-      "linkUrl": ""
+      "value": "1,095",
+      "label": "Rental homes at Everston, Cliffside and Retreat"
     },
     {
-      "name": "deCartier Developments",
-      "role": "Co-developer",
-      "projects": [
-        "st-leslieville-church-lofts",
-        "415-broadview"
-      ],
-      "body": "With deCartier, LCH restored the 1913 St. Clements church in Leslieville as 14 St. Leslieville Church Lofts, and is now working on 415 Broadview, which pairs heritage restoration with new rental housing.",
-      "quote": "",
-      "quoteBy": "",
-      "linkLabel": "",
-      "linkUrl": ""
+      "value": "In-house",
+      "label": "Construction management through Elevate"
     },
     {
-      "name": "St. John’s Presbyterian Church",
-      "role": "Community partner",
-      "projects": [
-        "415-broadview"
-      ],
-      "body": "At 415 Broadview, the plan restores the historic church building so the congregation can continue at the address it has called home since 1908.",
-      "quote": "",
-      "quoteBy": "",
-      "linkLabel": "",
-      "linkUrl": ""
-    },
-    {
-      "name": "Elevate Construction Management",
-      "role": "Affiliated construction manager",
-      "projects": [
-        "everston",
-        "cliffside",
-        "retreat"
-      ],
-      "body": "Elevate brings in-house construction expertise and trade relationships to LCH projects, from pre-construction through completion.",
-      "quote": "",
-      "quoteBy": "",
-      "linkLabel": "Visit elevatecm.com",
-      "linkUrl": "https://elevatecm.com"
+      "value": "5 of 8",
+      "label": "Communities on the Kingston Road corridor"
     }
   ],
-  "workWithUs": {
-    "heading": "Work with us",
+  "audiences": {
+    "heading": "Who we work with",
+    "groups": [
+      {
+        "label": "Deal partners",
+        "items": [
+          {
+            "title": "Landowners & brokers",
+            "body": "Have a site, a church, a plaza or an assembly? We move quickly to evaluate it, and we’re comfortable with heritage buildings, ravine edges and complex approvals.",
+            "cta": "Tell us about a site",
+            "type": "Landowner or broker"
+          },
+          {
+            "title": "Capital partners & lenders",
+            "body": "Equity and debt for purpose-built rental and mixed-use projects, with development and construction managed in-house and reporting that shares the bad news as promptly as the good.",
+            "cta": "Discuss an investment",
+            "type": "Capital partner or lender"
+          },
+          {
+            "title": "Co-developers & operators",
+            "body": "We bring local knowledge, an approvals track record and a construction team. You bring scale, operations or a complementary platform.",
+            "cta": "Explore a joint venture",
+            "type": "Co-developer or operator"
+          },
+          {
+            "title": "Community organizations",
+            "body": "Places of worship, non-profits and neighbourhood groups: we look for ways a project can restore a building, house a congregation or give space back to the community.",
+            "cta": "Start a conversation",
+            "type": "Community organization"
+          }
+        ]
+      },
+      {
+        "label": "Project partners",
+        "items": [
+          {
+            "title": "Architects & consultants",
+            "body": "Planners, architects, engineers and specialists who want an owner that engages early, decides quickly and builds what gets designed.",
+            "cta": "Introduce your firm",
+            "type": "Architect or consultant"
+          },
+          {
+            "title": "Trades & suppliers",
+            "body": "Through Elevate, we run our own sites and build long-term relationships with trades, including Canadian union trades, and suppliers who deliver on schedule.",
+            "cta": "Work on our sites",
+            "type": "Trade or supplier"
+          },
+          {
+            "title": "Property management & leasing",
+            "body": "As our rental portfolio grows, we partner with operators, leasing teams and service providers who care about residents as much as we do.",
+            "cta": "Get in touch",
+            "type": "Property management or leasing"
+          }
+        ]
+      }
+    ]
+  },
+  "reasons": {
+    "heading": "Why partner with LCH",
     "items": [
       {
-        "title": "Landowners & brokers",
-        "body": "We look at infill and mid-rise sites across the GTA, with a focus on transit corridors and growing neighbourhoods."
+        "title": "Development and construction under one roof",
+        "body": "Elevate Construction Management, our affiliated construction manager, is involved from pre-construction onward, so the team that prices a project is the team that builds it.",
+        "proof": "Everston went from demolition in March 2025 to a reported top-off by October 2026.",
+        "link": "/projects/everston/"
       },
       {
-        "title": "Capital partners",
-        "body": "We partner on purpose-built rental and mixed-use projects, with development and construction managed in-house."
+        "title": "We know the neighbourhoods",
+        "body": "We’ve been investing in east Toronto since 2007 and our office is on Kingston Road. Five of our eight communities are on the corridor.",
+        "proof": "Merge Condos, Merge Spaces, Cliffside, Retreat and Everston.",
+        "link": "/projects/"
       },
       {
-        "title": "Community organizations",
-        "body": "From the Scarborough Food Security Initiative to St. John’s Presbyterian Church, we look for ways our projects can serve their neighbourhoods."
+        "title": "We take on complex sites",
+        "body": "Heritage churches, ravine-edge lots and multi-parcel assemblies are where we do our best work.",
+        "proof": "St. Leslieville restored a 1913 church as 14 lofts; 415 Broadview pairs heritage restoration with new rental housing.",
+        "link": "/projects/st-leslieville-church-lofts/"
+      },
+      {
+        "title": "We adapt the plan when the market moves",
+        "body": "We’d rather rethink a project than force it. That protects partners’ capital and gets homes built.",
+        "proof": "Cliffside launched as condominiums in 2024 and is now under construction as 209 rental homes.",
+        "link": "/projects/cliffside/"
+      },
+      {
+        "title": "Transparent by default",
+        "body": "Partners, investors and lenders get industry-leading reporting on every project, and we share negative news as promptly as positive.",
+        "proof": "Transparency is one of our three company values.",
+        "link": "/story/"
+      },
+      {
+        "title": "We deliver",
+        "body": "Condominiums, townhomes, lofts, a workspace and now purpose-built rentals, completed and occupied.",
+        "proof": "Merge Condos, One6Nine Jones, St. Leslieville and Merge Spaces are complete.",
+        "link": "/projects/"
       }
-    ],
-    "ctaLabel": "Start a conversation",
-    "ctaUrl": "/contact/"
+    ]
+  },
+  "criteria": {
+    "heading": "What we look for",
+    "items": [
+      "Mid-rise infill and mixed-use sites",
+      "Transit corridors and growing neighbourhoods",
+      "Purpose-built rental, condominium or mixed tenure",
+      "Heritage buildings and adaptive reuse",
+      "Sites needing rezoning or Official Plan amendments",
+      "Toronto and the wider GTA, with deep roots in the east end"
+    ]
+  },
+  "process": {
+    "heading": "How a partnership works",
+    "steps": [
+      {
+        "title": "Introduce",
+        "body": "Tell us about the site, the capital or the idea. We’ll respond quickly."
+      },
+      {
+        "title": "Evaluate",
+        "body": "We study zoning, massing, market and costs, with input from Elevate on constructability."
+      },
+      {
+        "title": "Structure",
+        "body": "We agree on a structure that fits: joint venture, land partnership or development management."
+      },
+      {
+        "title": "Approve & build",
+        "body": "We lead approvals, design and construction, with regular reporting throughout."
+      },
+      {
+        "title": "Deliver",
+        "body": "We bring the community to market and stay involved through lease-up and beyond."
+      }
+    ]
+  },
+  "form": {
+    "heading": "Start a conversation",
+    "intro": "Share a few details and the right person on our team will get back to you. Everything you send is kept confidential.",
+    "types": [
+      "Landowner or broker",
+      "Capital partner or lender",
+      "Co-developer or operator",
+      "Community organization",
+      "Architect or consultant",
+      "Trade or supplier",
+      "Property management or leasing",
+      "Other"
+    ]
   }
 }
