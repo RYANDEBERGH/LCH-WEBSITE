@@ -27,7 +27,7 @@ const { eyebrow, heading, lede, image } = Astro.props;
 
 <style>
   .phero { padding-block: clamp(56px, 9vw, 128px) clamp(40px, 6vw, 80px); }
-  .phero h1 { max-width: 18ch; }
+  .phero h1 { max-width: 24ch; font-size: clamp(30px, 3.2vw, 46px); }
   .phero .lede { margin-top: 24px; }
   .phero--image { position: relative; min-height: min(calc(78svh - var(--announce-h)), 720px); display: flex; align-items: flex-end; color: var(--paper); padding-top: calc(var(--header-h) + 48px); isolation: isolate; }
   .phero--image::after { content: ''; position: absolute; inset: 0; z-index: -1; background: linear-gradient(90deg, rgba(10, 10, 9, 0.6) 0%, rgba(10, 10, 9, 0) 65%), linear-gradient(180deg, rgba(10, 10, 9, 0.45) 0%, rgba(10, 10, 9, 0.1) 35%, rgba(10, 10, 9, 0.75) 100%); }
