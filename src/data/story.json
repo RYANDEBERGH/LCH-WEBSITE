@@ -110,20 +110,41 @@
       ]
     },
     {
-      "label": "Today",
-      "title": "A growing rental portfolio",
-      "text": "Everston, Cliffside and Retreat reflect LCH’s focus on purpose-built rental housing. At Broadview, the team is bringing heritage restoration together with new rental homes and the church’s continuing use.",
+      "label": "2025",
+      "title": "Everston breaks ground",
+      "text": "Construction began on Everston, 566 purpose-built rental homes in West Hill, with Elevate managing construction. Both tower cranes were up by October.",
       "images": [
         {
-          "image": "/uploads/dji-fly-20261024-174610-177-1793113753722-photo.jpg",
-          "alt": "Aerial view of Everston during construction",
+          "image": "/uploads/adobe-express-file-3-1.jpg",
+          "alt": "Everston’s tower cranes during construction, October 2025",
           "caption": ""
-        },
+        }
+      ],
+      "projects": [
+        "everston"
+      ]
+    },
+    {
+      "label": "2026",
+      "title": "Cliffside breaks ground",
+      "text": "Construction began on Cliffside, now 209 purpose-built rental homes in Cliffside Village, while Everston topped off and opened pre-leasing.",
+      "images": [
         {
           "image": "/uploads/crane-1-web.jpg",
           "alt": "Tower crane and excavation at Cliffside",
           "caption": ""
-        },
+        }
+      ],
+      "projects": [
+        "cliffside",
+        "everston"
+      ]
+    },
+    {
+      "label": "2027 and beyond",
+      "title": "A growing rental portfolio",
+      "text": "Everston prepares to welcome its first residents and Cliffside continues to rise. Retreat, with Fiera Real Estate, and 415 Broadview, with its heritage church, are the next communities to move forward.",
+      "images": [
         {
           "image": "/uploads/ext-kingston-road-cam-dji-0457-5-1-gigapixel.jpg",
           "alt": "Proposed Retreat rental community",
@@ -136,8 +157,6 @@
         }
       ],
       "projects": [
-        "everston",
-        "cliffside",
         "retreat",
         "415-broadview"
       ]

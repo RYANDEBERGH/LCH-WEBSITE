@@ -52,7 +52,7 @@ const e = home.elevate;
                       {im.caption && <figcaption>{im.caption}</figcaption>}
                       {c.images.length > 1 && <span class="tl__more">+{c.images.length - 1}</span>}
                     </figure>
-                  ) : <div class="tl__noimg" aria-hidden="true"><span>{c.label}</span></div>}
+                  ) : <div class:list={["tl__noimg", { "tl__noimg--long": c.label.length > 8 }]} aria-hidden="true"><span>{c.label}</span></div>}
                 </div>
                 <h3>{c.title}</h3>
                 <p class="tl__text">{c.text}</p>
@@ -225,6 +225,7 @@ const e = home.elevate;
   .tl__media figure { margin: 0; position: relative; }
   .tl__media :global(img), .tl__noimg { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; border-radius: var(--radius); display: block; }
   .tl__noimg { display: flex; align-items: flex-end; padding: 18px; background: var(--paper-2); border: 1px solid var(--line); color: var(--ink); font-size: 44px; font-weight: 700; letter-spacing: -0.03em; }
+  .tl__noimg--long { font-size: 28px; line-height: 1.1; }
   .tl__media figcaption, .tl__more { position: absolute; bottom: 8px; font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; background: rgba(255, 255, 255, 0.92); color: var(--ink); padding: 3px 7px; border-radius: 2px; }
   .tl__media figcaption { left: 8px; }
   .tl__more { right: 8px; }
