@@ -135,7 +135,7 @@ const team = await Promise.all((await getTeam()).map(async (t) => ({ ...t, Conte
   .values { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(32px, 4vw, 64px); }
   .value { border-top: 1px solid rgba(246, 244, 239, 0.2); padding-top: 28px; }
   .value__num { font-size: 13px; letter-spacing: 0.12em; color: var(--accent); font-weight: 600; }
-  .value__title { font-size: clamp(36px, 3.4vw, 52px); margin-bottom: 20px; }
+  .value__title { font-size: clamp(28px, 2.6vw, 38px); margin-bottom: 20px; }
   .value p:last-child { color: rgba(246, 244, 239, 0.72); font-size: 16px; }
 
   .history { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: clamp(40px, 7vw, 112px); align-items: start; }
@@ -188,7 +188,7 @@ const team = await Promise.all((await getTeam()).map(async (t) => ({ ...t, Conte
   .journey__h { max-width: 22ch; margin-bottom: clamp(36px, 4vw, 56px); }
   .journey__list { list-style: none; margin: 0; padding: 0; columns: 2; column-gap: clamp(32px, 5vw, 80px); }
   .jitem { break-inside: avoid; display: grid; grid-template-columns: 110px 1fr; gap: 20px; padding: 22px 0; border-top: 1px solid var(--line); }
-  .jitem__date { font-family: var(--font-display); font-size: 26px; line-height: 1.05; color: var(--brand, var(--accent)); }
+  .jitem__date { font-family: var(--font-display); font-weight: 700; letter-spacing: -0.02em; font-size: 20px; line-height: 1.05; color: var(--brand, var(--accent)); }
   .jitem__body h3 { font-size: 18px; margin-bottom: 6px; }
   .jitem__body p { margin: 0; font-size: 15px; color: var(--ink-2); }
   .jitem__links { display: flex; flex-wrap: wrap; gap: 6px 16px; margin-top: 8px !important; font-size: 13px !important; }
