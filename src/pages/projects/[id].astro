@@ -1,0 +1,197 @@
+---
+import { getCollection, render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import Img from '../../components/Img.astro';
+import NewsCard from '../../components/NewsCard.astro';
+import ProjectCard from '../../components/ProjectCard.astro';
+import { getProjects, getNews, statusTone } from '../../lib/site';
+
+export async function getStaticPaths() {
+  const projects = await getCollection('projects', (p) => !p.data.hidden);
+  return projects.map((project) => ({ params: { id: project.id }, props: { project } }));
+}
+const { project } = Astro.props;
+const p = project.data;
+const { Content } = await render(project);
+const images = [{ image: p.heroImage, caption: '' }, ...p.gallery];
+const related = (await getNews()).filter((n) => n.data.project === project.id).slice(0, 3);
+const all = await getProjects();
+const idx = all.findIndex((x) => x.id === project.id);
+const next = all[(idx + 1) % all.length];
+
+const facts = [
+  ['Status', p.status],
+  ['Product', p.type],
+  ['Address', p.address],
+  ['Neighbourhood', p.neighbourhood],
+  ['Homes', p.units ? p.units.toLocaleString() : ''],
+  ['Storeys', p.storeys ? String(p.storeys) : ''],
+  ['Partners', p.partners.join(', ')],
+  ['Architect', p.architect ?? ''],
+].filter(([, v]) => v);
+---
+
+<Base overlay title={p.title} description={p.summary} image={p.heroImage}>
+  <section class="phead on-image">
+    <Img src={p.heroImage} alt={`${p.title} rendering`} loading="eager" fetchpriority="high" class="phead__bg" />
+    <div class="container phead__content">
+      <a class="back" href="/projects/">← All projects</a>
+      <span class="pill" data-tone={statusTone(p.status)}>{p.status}</span>
+      <h1>{p.title}</h1>
+      <p class="phead__loc">{[p.address, p.neighbourhood].filter(Boolean).join(' · ')}</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container pbody">
+      <div class="pbody__main">
+        {p.logo && <img class="pbody__logo" src={p.logo} alt={`${p.title} logo`} />}
+        <p class="pbody__summary display">{p.summary}</p>
+        <div class="prose"><Content /></div>
+        {p.website?.url && (
+          <a class="btn" href={p.website.url} target="_blank" rel="noopener">{p.website.label || 'Visit project website'} <span class="arrow" aria-hidden="true">↗</span></a>
+        )}
+      </div>
+      <aside class="pbody__facts" aria-label="Project facts">
+        <dl>
+          {facts.map(([k, v]) => <div><dt>{k}</dt><dd>{v}</dd></div>)}
+        </dl>
+        <a class="btn btn--ghost" href="/contact/">Enquire about {p.title}</a>
+      </aside>
+    </div>
+  </section>
+
+  {images.length > 1 && (
+    <section class="section--tight gallery-wrap">
+      <div class="container">
+        <p class="eyebrow">Gallery</p>
+        <div class="gallery">
+          {images.map((g, i) => (
+            <button class="gallery__item reveal" data-index={i} aria-label={`Open image ${i + 1} of ${images.length}`}>
+              <Img src={g.image} alt={g.caption || `${p.title} image ${i + 1}`} sizes="(max-width: 760px) 100vw, 50vw" />
+            </button>
+          ))}
+        </div>
+      </div>
+      <dialog class="lightbox" data-lightbox aria-label="Image viewer">
+        <button class="lightbox__close" data-close aria-label="Close">×</button>
+        <button class="lightbox__nav lightbox__prev" data-prev aria-label="Previous image">←</button>
+        <figure>
+          <img data-full alt="" />
+          <figcaption data-caption></figcaption>
+        </figure>
+        <button class="lightbox__nav lightbox__next" data-next aria-label="Next image">→</button>
+      </dialog>
+      <script is:inline type="application/json" data-images set:html={JSON.stringify(images.map((g) => ({ src: g.image, caption: g.caption || '' })))} />
+    </section>
+  )}
+
+  {related.length > 0 && (
+    <section class="section">
+      <div class="container">
+        <p class="eyebrow">In the news</p>
+        <h2 class="related-h">{p.title} updates</h2>
+        <div class="grid-3">{related.map((n) => <NewsCard post={n} />)}</div>
+      </div>
+    </section>
+  )}
+
+  {next && next.id !== project.id && (
+    <section class="section section--alt">
+      <div class="container next">
+        <div>
+          <p class="eyebrow">Next project</p>
+          <h2>{next.data.title}</h2>
+          <p class="lede">{next.data.summary}</p>
+          <a class="btn" href={`/projects/${next.id}/`}>View {next.data.title} <span class="arrow" aria-hidden="true">→</span></a>
+        </div>
+        <ProjectCard project={next} sizes="(max-width: 900px) 100vw, 50vw" />
+      </div>
+    </section>
+  )}
+</Base>
+
+<script>
+  const dlg = document.querySelector<HTMLDialogElement>('[data-lightbox]');
+  if (dlg) {
+    const data: { src: string; caption: string }[] = JSON.parse(document.querySelector('[data-images]')!.textContent!);
+    const img = dlg.querySelector<HTMLImageElement>('[data-full]')!;
+    const cap = dlg.querySelector<HTMLElement>('[data-caption]')!;
+    let i = 0;
+    const show = (n: number) => {
+      i = (n + data.length) % data.length;
+      img.src = data[i].src;
+      img.alt = data[i].caption;
+      cap.textContent = data[i].caption ? data[i].caption : `${i + 1} / ${data.length}`;
+    };
+    document.querySelectorAll<HTMLElement>('[data-index]').forEach((b) =>
+      b.addEventListener('click', () => { show(Number(b.dataset.index)); dlg.showModal(); }),
+    );
+    dlg.querySelector('[data-close]')!.addEventListener('click', () => dlg.close());
+    dlg.querySelector('[data-prev]')!.addEventListener('click', () => show(i - 1));
+    dlg.querySelector('[data-next]')!.addEventListener('click', () => show(i + 1));
+    dlg.addEventListener('click', (e) => { if (e.target === dlg) dlg.close(); });
+    dlg.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowLeft') show(i - 1);
+      if (e.key === 'ArrowRight') show(i + 1);
+    });
+  }
+</script>
+
+<style>
+  .phead { position: relative; min-height: 88svh; display: flex; align-items: flex-end; color: var(--paper); isolation: isolate; padding-block: calc(var(--header-h) + 64px) clamp(48px, 7vw, 88px); }
+  .phead::after { content: ''; position: absolute; inset: 0; z-index: -1; background: linear-gradient(180deg, rgba(10, 10, 9, 0.45), rgba(10, 10, 9, 0.05) 35%, rgba(10, 10, 9, 0.75)); }
+  :global(.phead__bg) { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: -2; }
+  .phead__content { display: flex; flex-direction: column; align-items: flex-start; gap: 18px; }
+  .phead h1 { font-size: clamp(56px, 9vw, 136px); line-height: 0.95; }
+  .phead__loc { font-size: 18px; color: rgba(246, 244, 239, 0.85); margin: 0; }
+  .back { font-size: 14px; text-decoration: none; color: rgba(246, 244, 239, 0.8); margin-bottom: 12px; }
+  .back:hover { color: #fff; }
+
+  .pbody { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 4fr); gap: clamp(40px, 7vw, 112px); align-items: start; }
+  .pbody__logo { height: 40px; width: auto; max-width: 200px; object-fit: contain; object-position: left; margin-bottom: 32px; }
+  .pbody__summary { font-size: clamp(28px, 2.8vw, 40px); line-height: 1.15; margin-bottom: 32px; }
+  .pbody .prose { font-size: 18px; margin-bottom: 32px; }
+  .pbody__facts { position: sticky; top: calc(var(--header-h) + 24px); background: var(--white); border: 1px solid var(--line); border-radius: var(--radius); padding: 28px; }
+  .pbody__facts dl { margin: 0 0 24px; }
+  .pbody__facts dl > div { display: grid; grid-template-columns: 120px 1fr; gap: 12px; padding: 14px 0; border-bottom: 1px solid var(--line); }
+  .pbody__facts dl > div:first-child { padding-top: 0; }
+  .pbody__facts dt { font-size: 12px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); padding-top: 3px; }
+  .pbody__facts dd { margin: 0; font-size: 15px; }
+  .pbody__facts .btn { width: 100%; }
+
+  .gallery { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+  .gallery__item { padding: 0; border: 0; background: var(--paper-2); cursor: zoom-in; overflow: hidden; border-radius: var(--radius); aspect-ratio: 3 / 2; }
+  .gallery__item:first-child { grid-column: 1 / -1; aspect-ratio: 21 / 9; }
+  .gallery__item :global(img) { width: 100%; height: 100%; object-fit: cover; transition: transform 1s var(--ease); }
+  .gallery__item:hover :global(img) { transform: scale(1.03); }
+
+  .lightbox { width: 100vw; height: 100dvh; max-width: none; max-height: none; margin: 0; padding: 0; border: 0; background: rgba(10, 10, 9, 0.95); color: #fff; }
+  .lightbox[open] { display: grid; grid-template-columns: 72px 1fr 72px; align-items: center; }
+  .lightbox::backdrop { background: transparent; }
+  .lightbox figure { margin: 0; display: grid; gap: 12px; justify-items: center; padding: 56px 0; height: 100%; align-content: center; }
+  .lightbox img { max-height: calc(100dvh - 140px); width: auto; max-width: 100%; object-fit: contain; }
+  .lightbox figcaption { font-size: 14px; color: rgba(255, 255, 255, 0.7); }
+  .lightbox button { background: transparent; border: 0; color: #fff; cursor: pointer; font-size: 28px; height: 56px; }
+  .lightbox__close { position: absolute; top: 12px; right: 16px; font-size: 40px !important; z-index: 2; }
+
+  .related-h { margin-bottom: 40px; }
+  .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(28px, 3vw, 44px); }
+
+  .next { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(32px, 6vw, 96px); align-items: center; }
+  .next h2 { margin-bottom: 16px; }
+  .next .lede { margin-bottom: 28px; }
+  .next :global(.pcard__body) { display: none; }
+
+  @media (max-width: 900px) {
+    .pbody, .next { grid-template-columns: 1fr; }
+    .pbody__facts { position: static; }
+    .grid-3 { grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 600px) {
+    .gallery { grid-template-columns: 1fr; }
+    .gallery__item:first-child { aspect-ratio: 3 / 2; }
+    .grid-3 { grid-template-columns: 1fr; }
+    .lightbox[open] { grid-template-columns: 44px 1fr 44px; }
+  }
+</style>

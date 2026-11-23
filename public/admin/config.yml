@@ -1,0 +1,272 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# LCH Developments — Content Manager (Decap CMS)
+# Editors use this at https://YOUR-SITE/admin/
+# Every save becomes a commit in GitHub, and the site rebuilds automatically.
+# ─────────────────────────────────────────────────────────────────────────────
+
+backend:
+  name: github
+  repo: YOUR-GITHUB-USERNAME/lch-website   # ← change to your repository
+  branch: main
+  commit_messages:
+    create: 'Create {{collection}} “{{slug}}”'
+    update: 'Update {{collection}} “{{slug}}”'
+    delete: 'Delete {{collection}} “{{slug}}”'
+    uploadMedia: 'Upload “{{path}}”'
+    deleteMedia: 'Delete “{{path}}”'
+
+# Lets you edit on your own computer with `npm run cms` + `npm run dev`
+local_backend: true
+
+# Uncomment to get Draft → In Review → Ready workflow instead of instant publishing
+# publish_mode: editorial_workflow
+
+site_url: https://lchdevelopments.com
+display_url: https://lchdevelopments.com
+logo_url: /uploads/brand/lch-logo-dark.png
+
+media_folder: public/uploads
+public_folder: /uploads
+
+collections:
+  # ── PROJECTS ──────────────────────────────────────────────────────────────
+  - name: projects
+    label: Projects
+    label_singular: Project
+    description: Every community and space. Lower “Order” numbers appear first. Tick “Featured” to show a project in the large homepage section.
+    folder: src/content/projects
+    create: true
+    slug: '{{fields.title}}'
+    identifier_field: title
+    summary: '{{title}} — {{status}}'
+    sortable_fields: [order, title, status]
+    view_groups:
+      - { label: Status, field: status }
+    fields:
+      - { label: Project name, name: title, widget: string }
+      - { label: Status, name: status, widget: select, options: ['Now Pre-Leasing', 'Now Leasing', 'Under Construction', 'Coming Soon', 'In Planning', 'Complete'] }
+      - { label: Order (1 = first), name: order, widget: number, value_type: int, default: 10 }
+      - { label: Featured on homepage, name: featured, widget: boolean, default: false }
+      - { label: Hide from website, name: hidden, widget: boolean, default: false, required: false }
+      - { label: Product type, name: type, widget: string, hint: 'e.g. Purpose-Built Rental, Condominium, Townhomes' }
+      - { label: Short summary (cards & search results), name: summary, widget: text, hint: 'One or two sentences.' }
+      - { label: Street address, name: address, widget: string, required: false }
+      - { label: Neighbourhood, name: neighbourhood, widget: string, required: false, hint: 'e.g. West Hill, Scarborough' }
+      - { label: Major intersection, name: intersection, widget: string, required: false }
+      - { label: Number of homes, name: units, widget: number, value_type: int, required: false }
+      - { label: Storeys, name: storeys, widget: number, value_type: int, required: false }
+      - { label: Partners, name: partners, widget: list, required: false, field: { label: Partner, name: partner, widget: string } }
+      - { label: Architect, name: architect, widget: string, required: false }
+      - { label: Project logo, name: logo, widget: image, required: false, hint: 'Transparent PNG or SVG works best.' }
+      - { label: Main image, name: heroImage, widget: image, hint: 'Large landscape image, at least 2000px wide.' }
+      - label: Gallery
+        name: gallery
+        widget: list
+        required: false
+        summary: '{{fields.caption}}'
+        fields:
+          - { label: Image, name: image, widget: image }
+          - { label: Caption, name: caption, widget: string, required: false }
+      - label: Project website
+        name: website
+        widget: object
+        required: false
+        collapsed: true
+        fields:
+          - { label: URL, name: url, widget: string, required: false }
+          - { label: Button label, name: label, widget: string, required: false }
+      - { label: Description, name: body, widget: markdown }
+
+  # ── NEWS ──────────────────────────────────────────────────────────────────
+  - name: news
+    label: News & Media
+    label_singular: Article
+    description: Project updates, press coverage and announcements. Newest first.
+    folder: src/content/news
+    create: true
+    slug: '{{year}}-{{month}}-{{day}}-{{slug}}'
+    summary: '{{date | date("YYYY-MM-DD")}} — {{title}}'
+    sortable_fields: [date, title]
+    view_groups:
+      - { label: Topic, field: topic }
+    fields:
+      - { label: Headline, name: title, widget: string }
+      - { label: Date, name: date, widget: datetime, format: 'YYYY-MM-DD', date_format: 'YYYY-MM-DD', time_format: false }
+      - { label: Topic, name: topic, widget: select, options: ['Project Update', 'In the Press', 'Company News', 'Community'] }
+      - { label: Related project, name: project, widget: relation, collection: projects, search_fields: [title], value_field: '{{slug}}', display_fields: [title], required: false }
+      - { label: Image, name: image, widget: image, required: false }
+      - { label: Short excerpt, name: excerpt, widget: text, required: false }
+      - { label: Link to original article (optional), name: sourceUrl, widget: string, required: false, hint: 'For press coverage — adds a “Read the full article” button.' }
+      - { label: Save as draft (hidden from site), name: draft, widget: boolean, default: false, required: false }
+      - { label: Article, name: body, widget: markdown, required: false }
+
+  # ── TEAM ──────────────────────────────────────────────────────────────────
+  - name: team
+    label: Team
+    label_singular: Team member
+    folder: src/content/team
+    create: true
+    slug: '{{fields.name}}'
+    identifier_field: name
+    summary: '{{order}}. {{name}} — {{role}}'
+    sortable_fields: [order, name]
+    fields:
+      - { label: Name, name: name, widget: string }
+      - { label: Credentials, name: credentials, widget: string, required: false, hint: 'e.g. P.Eng, PMP' }
+      - { label: Role, name: role, widget: string }
+      - { label: Photo, name: photo, widget: image, required: false, hint: 'Portrait orientation, plain background.' }
+      - { label: Order (1 = first), name: order, widget: number, value_type: int, default: 20 }
+      - { label: Hide from website, name: hidden, widget: boolean, default: false, required: false }
+      - { label: Bio, name: body, widget: markdown }
+
+  # ── SIMPLE PAGES (legal etc.) ─────────────────────────────────────────────
+  - name: pages
+    label: Legal Pages
+    label_singular: Page
+    description: Appear at /legal/page-name/
+    folder: src/content/pages
+    create: true
+    slug: '{{slug}}'
+    fields:
+      - { label: Title, name: title, widget: string }
+      - { label: Description, name: description, widget: string, required: false }
+      - { label: Content, name: body, widget: markdown }
+
+  # ── SITE SETTINGS & PAGE TEXT ─────────────────────────────────────────────
+  - name: settings
+    label: Site Settings & Pages
+    editor: { preview: false }
+    files:
+      - name: general
+        label: General settings (contact, social, banner, colour)
+        file: src/data/settings.json
+        fields:
+          - { label: Company name, name: siteName, widget: string }
+          - { label: Search engine description, name: metaDescription, widget: text }
+          - { label: Website address, name: siteUrl, widget: string }
+          - { label: Logo (on light backgrounds), name: logo, widget: image }
+          - { label: Logo (on dark backgrounds / photos), name: logoLight, widget: image }
+          - { label: Brand accent colour, name: accentColor, widget: color, hint: 'Used for buttons, links and highlights across the site.' }
+          - { label: Email, name: email, widget: string }
+          - { label: Phone, name: phone, widget: string }
+          - { label: Office address, name: address, widget: string }
+          - { label: Google Maps link, name: mapsUrl, widget: string }
+          - label: Social media
+            name: social
+            widget: object
+            fields:
+              - { label: Instagram, name: instagram, widget: string, required: false }
+              - { label: Facebook, name: facebook, widget: string, required: false }
+              - { label: LinkedIn, name: linkedin, widget: string, required: false }
+          - label: Announcement banner (top of every page)
+            name: announcement
+            widget: object
+            fields:
+              - { label: Show banner, name: enabled, widget: boolean }
+              - { label: Text, name: text, widget: string }
+              - { label: Link label, name: linkLabel, widget: string, required: false }
+              - { label: Link URL, name: url, widget: string, required: false }
+          - label: Newsletter sign-up (footer)
+            name: newsletter
+            widget: object
+            fields:
+              - { label: Show sign-up, name: enabled, widget: boolean }
+              - { label: Heading, name: heading, widget: string }
+              - { label: Text, name: text, widget: text }
+              - { label: Consent checkbox text, name: consent, widget: text }
+              - { label: Mailchimp form URL (optional), name: mailchimpUrl, widget: string, required: false, hint: 'Paste the form action URL from Mailchimp → Audience → Signup forms → Embedded forms (ends in /subscribe/post?u=…&id=…). Leave blank to collect sign-ups in Netlify instead.' }
+
+      - name: home
+        label: Homepage
+        file: src/data/home.json
+        fields:
+          - label: Hero (top of page)
+            name: hero
+            widget: object
+            fields:
+              - { label: Small text above heading, name: eyebrow, widget: string }
+              - { label: Heading, name: heading, widget: string }
+              - { label: Sub-heading, name: subheading, widget: text }
+              - { label: Background image, name: image, widget: image }
+              - { label: Main button, name: primaryCta, widget: object, fields: [{ label: Label, name: label, widget: string }, { label: Link, name: url, widget: string }] }
+              - { label: Second button, name: secondaryCta, widget: object, fields: [{ label: Label, name: label, widget: string, required: false }, { label: Link, name: url, widget: string, required: false }] }
+          - label: Key numbers
+            name: stats
+            widget: list
+            summary: '{{fields.value}} — {{fields.label}}'
+            fields:
+              - { label: Number / word, name: value, widget: string }
+              - { label: Label, name: label, widget: string }
+          - label: Featured projects section
+            name: featured
+            widget: object
+            fields:
+              - { label: Small text, name: eyebrow, widget: string }
+              - { label: Heading, name: heading, widget: string }
+          - label: Our approach section
+            name: philosophy
+            widget: object
+            fields:
+              - { label: Small text, name: eyebrow, widget: string }
+              - { label: Heading, name: heading, widget: text }
+              - { label: Body, name: body, widget: text }
+              - { label: Image, name: image, widget: image }
+              - { label: Button label, name: ctaLabel, widget: string }
+              - { label: Button link, name: ctaUrl, widget: string }
+          - label: Latest news section
+            name: news
+            widget: object
+            fields:
+              - { label: Small text, name: eyebrow, widget: string }
+              - { label: Heading, name: heading, widget: string }
+              - { label: Number of articles, name: count, widget: number, value_type: int, min: 0, max: 9 }
+
+      - name: story
+        label: Story page
+        file: src/data/story.json
+        fields:
+          - { label: Hero, name: hero, widget: object, fields: [{ label: Small text, name: eyebrow, widget: string }, { label: Heading, name: heading, widget: string }, { label: Image, name: image, widget: image }] }
+          - { label: Intro, name: intro, widget: object, fields: [{ label: Heading, name: heading, widget: string }, { label: Body, name: body, widget: text }] }
+          - label: Values
+            name: values
+            widget: list
+            summary: '{{fields.title}}'
+            fields:
+              - { label: Title, name: title, widget: string }
+              - { label: Text, name: body, widget: text }
+          - label: History
+            name: history
+            widget: object
+            fields:
+              - { label: Small text, name: eyebrow, widget: string }
+              - { label: Heading, name: heading, widget: string }
+              - { label: Image, name: image, widget: image }
+              - { label: Story, name: body, widget: markdown }
+          - label: Timeline
+            name: timeline
+            widget: list
+            summary: '{{fields.year}}'
+            fields:
+              - { label: Year, name: year, widget: string }
+              - { label: Text, name: text, widget: text }
+          - { label: Elevate section, name: elevate, widget: object, fields: [{ label: Heading, name: heading, widget: string }, { label: Text, name: body, widget: text }] }
+          - { label: Team section, name: team, widget: object, fields: [{ label: Small text, name: eyebrow, widget: string }, { label: Heading, name: heading, widget: string }] }
+
+      - name: contact
+        label: Contact page
+        file: src/data/contact.json
+        fields:
+          - { label: Small text, name: eyebrow, widget: string }
+          - { label: Heading, name: heading, widget: string }
+          - { label: Intro, name: intro, widget: text }
+          - { label: Show contact form, name: formEnabled, widget: boolean }
+          - { label: Thank-you message, name: formSuccess, widget: text }
+          - { label: Inquiry types (dropdown), name: inquiryTypes, widget: list }
+
+      - name: corporate
+        label: Corporate page
+        file: src/data/corporate.json
+        fields:
+          - { label: Heading, name: heading, widget: string }
+          - { label: Intro, name: intro, widget: text }
+          - { label: Corporations, name: entities, widget: list }

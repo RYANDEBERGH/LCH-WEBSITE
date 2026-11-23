@@ -1,0 +1,45 @@
+{
+  "hero": {
+    "eyebrow": "Our story",
+    "heading": "A true start-up development company.",
+    "image": "/uploads/team-photo-compressed.jpg"
+  },
+  "intro": {
+    "heading": "We see residential spaces differently.",
+    "body": "This focus on the big picture—the greater purpose—is at the core of our design philosophy. For each of our select communities, we start by taking a bird’s-eye view of unique neighbourhoods with high growth and untapped potential. This allows us to understand the needs of renters and envision a community where people can put down roots. We carry this vision through every decision, from functional suite layouts and beautiful, durable finishes to shared spaces that bring neighbours together. It’s how we create thoughtfully designed rental homes that support everyday living and reflect the character of their communities."
+  },
+  "values": [
+    {
+      "title": "Purpose",
+      "body": "At the end of the day, we are a company that puts purpose over profit. We want to drive our organization forward not because of the paycheque at the end of a project, but because of the quality establishments and sustainable communities that we help to build. Our team tackles any problems and challenges that come with the job because we are passionate about repurposing properties to their fullest potential while doing so in an honourable and compassionate manner. We are making a positive impact in the community throughout the entire development chain – from influencing decisions made in our pre-construction development teams, all the way towards building properties for the public to enjoy."
+    },
+    {
+      "title": "Transparency",
+      "body": "Communication is key, which is why our team goes above and beyond to communicate with all stakeholders in a timely and effective manner. Customers, investors and lenders will have full transparency in our business practices, meaning LCH Developments will communicate both positive and negative information that arises. Our investors and lenders will be provided with industry leading reporting standards across all of our projects. This level of transparency builds trust, and trust is the foundation of any thriving organization. Our pledge to you is that we treat your money the way we would treat our own, which is possible by working effectively with a great deal of caution and care."
+    },
+    {
+      "title": "Efficiency",
+      "body": "We are always looking for innovative solutions in order to remain as competitive as possible in the ever-changing real-estate industry. When developing our project action plans, our goal is to move pre-construction and construction ready projects forward as fast as possible and in the most cost-effective way. Our team is equipped with the right people, tools, experience, and training in order to achieve this objective. We strive to under-promise and over-deliver by meeting timelines and exceeding expectations across all projects."
+    }
+  ],
+  "history": {
+    "eyebrow": "Since 2007",
+    "heading": "From modest beginnings to a new generation of rental housing.",
+    "image": "/uploads/mike-and-luke-sales-center.png",
+    "body": "Founded by brothers Michal and Lukasz Wywrot, first-generation Polish immigrants, LCH Developments is a Toronto-based real estate developer creating homes, workspaces and communities across the Greater Toronto Area.\n\nLCH’s story began in 2007, when the brothers built a property investment business from modest beginnings. Their early experience spanned student rentals, rent-to-own housing, multifamily properties and residential conversions. In 2013, they expanded into custom homes and townhouses, before turning their focus to higher-density, mid-rise development in 2017.\n\nThat entrepreneurial spirit continues to shape how LCH approaches development. We look for opportunities others may overlook and remain willing to rethink our plans as neighbourhoods, markets and housing needs evolve. Our growing focus on purpose-built rentals reflects this approach: recognizing the need for quality rental homes and adapting our projects to create communities where residents can put down roots. We bring the curiosity and flexibility of a startup to a business grounded in hands-on development experience.\n\nToday, LCH’s portfolio includes completed condominium communities, purpose-built rental apartments and adaptive reuse projects. The completion of Merge Condos marked a major milestone for the company, establishing a new residential community at the meeting point of Kingston Road and Danforth Avenue. Nearby, Merge Spaces brings private offices, coworking, meeting rooms and event space to Cliffside Village, putting LCH’s vision for live-work-play communities into practice.\n\nBuilding on this foundation, LCH is advancing a new generation of rental housing in Scarborough. Everston is now pre-leasing, offering apartments near the University of Toronto Scarborough and Highland Creek Valley. Cliffside Apartments is under construction, continuing LCH’s investment in Cliffside Village through new rental homes and commercial space. Retreat Apartments, developed in partnership with Fiera Real Estate, will further expand the company’s rental portfolio near the Scarborough Bluffs. At 415 Broadview, heritage restoration and mass-timber design will come together with new rental housing.\n\nAs LCH grows, its focus remains on thoughtful development that responds to the needs of each neighbourhood—creating places where people can live, work and build lasting connections."
+  },
+  "timeline": [
+    { "year": "2007", "text": "Michal and Lukasz Wywrot start a property investment business — student rentals, rent-to-own and multifamily." },
+    { "year": "2013", "text": "Expansion into custom homes and townhouses." },
+    { "year": "2017", "text": "Focus shifts to higher-density, mid-rise development." },
+    { "year": "Today", "text": "Merge Condos complete; Everston pre-leasing; Cliffside under construction; Retreat and 415 Broadview advancing." }
+  ],
+  "elevate": {
+    "heading": "Development and construction, under one roof.",
+    "body": "Through Elevate Construction Management, LCH combines its development experience with construction expertise, supporting projects from early planning through delivery. This close connection helps the team make informed decisions about design, cost, quality and how each community will serve its residents."
+  },
+  "team": {
+    "eyebrow": "Our team",
+    "heading": "The people behind the projects."
+  }
+}

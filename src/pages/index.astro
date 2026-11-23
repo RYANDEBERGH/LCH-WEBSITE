@@ -1,0 +1,189 @@
+---
+import Base from '../layouts/Base.astro';
+import Img from '../components/Img.astro';
+import NewsCard from '../components/NewsCard.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+import { home, getProjects, getNews, statusTone } from '../lib/site';
+
+const projects = await getProjects();
+const featured = projects.filter((p) => p.data.featured);
+const others = projects.filter((p) => !p.data.featured).slice(0, 4);
+const news = (await getNews()).slice(0, home.news.count || 3);
+const h = home.hero;
+---
+
+<Base overlay image={h.image}>
+  <section class="hero on-image">
+    <Img src={h.image} alt="" loading="eager" fetchpriority="high" class="hero__bg" />
+    <div class="container hero__content">
+      <p class="eyebrow">{h.eyebrow}</p>
+      <h1>{h.heading}</h1>
+      <p class="hero__sub">{h.subheading}</p>
+      <div class="hero__ctas">
+        {h.primaryCta?.label && <a class="btn btn--light" href={h.primaryCta.url}>{h.primaryCta.label} <span class="arrow" aria-hidden="true">→</span></a>}
+        {h.secondaryCta?.label && <a class="btn btn--ghost-light" href={h.secondaryCta.url}>{h.secondaryCta.label}</a>}
+      </div>
+    </div>
+  </section>
+
+  {home.stats?.length > 0 && (
+    <section class="stats">
+      <div class="container stats__grid">
+        {home.stats.map((s) => (
+          <div class="stat reveal">
+            <p class="stat__value display">{s.value}</p>
+            <p class="stat__label">{s.label}</p>
+          </div>
+        ))}
+      </div>
+    </section>
+  )}
+
+  <section class="section">
+    <div class="container">
+      <div class="section-head reveal">
+        <p class="eyebrow">{home.featured.eyebrow}</p>
+        <h2>{home.featured.heading}</h2>
+      </div>
+
+      <div class="features">
+        {featured.map((p, i) => (
+          <article class:list={['feature reveal', { 'feature--flip': i % 2 === 1 }]}>
+            <a class="feature__media" href={`/projects/${p.id}/`} tabindex="-1" aria-hidden="true">
+              <Img src={p.data.heroImage} alt="" sizes="(max-width: 900px) 100vw, 60vw" />
+              <span class="pill" data-tone={statusTone(p.data.status)}>{p.data.status}</span>
+            </a>
+            <div class="feature__body">
+              {p.data.logo && <img class="feature__logo" src={p.data.logo} alt={p.data.title} loading="lazy" />}
+              <h3 class:list={["feature__title display", { "sr-only": p.data.logo }]}>{p.data.title}</h3>
+              <dl class="feature__facts">
+                <div><dt>Product</dt><dd>{p.data.type}</dd></div>
+                <div><dt>Location</dt><dd>{p.data.intersection || p.data.address}<br /><span>{p.data.neighbourhood}</span></dd></div>
+                {p.data.units && <div><dt>Homes</dt><dd>{p.data.units.toLocaleString()}</dd></div>}
+                {p.data.partners.length > 0 && <div><dt>Partner</dt><dd>{p.data.partners.join(', ')}</dd></div>}
+              </dl>
+              <p class="feature__summary">{p.data.summary}</p>
+              <div class="feature__links">
+                <a class="btn" href={`/projects/${p.id}/`}>View project <span class="arrow" aria-hidden="true">→</span></a>
+                {p.data.website?.url && <a class="link-arrow" href={p.data.website.url} target="_blank" rel="noopener">{p.data.website.label || 'Visit website'} ↗</a>}
+              </div>
+            </div>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--dark philosophy">
+    <div class="container philosophy__grid">
+      <div class="philosophy__text reveal">
+        <p class="eyebrow">{home.philosophy.eyebrow}</p>
+        <h2>{home.philosophy.heading}</h2>
+        <p class="lede">{home.philosophy.body}</p>
+        <a class="btn btn--ghost-light" href={home.philosophy.ctaUrl}>{home.philosophy.ctaLabel} <span class="arrow" aria-hidden="true">→</span></a>
+      </div>
+      <div class="philosophy__media reveal">
+        <Img src={home.philosophy.image} alt="LCH Developments founders Michal and Lukasz Wywrot" sizes="(max-width: 900px) 100vw, 45vw" />
+      </div>
+    </div>
+  </section>
+
+  {others.length > 0 && (
+    <section class="section section--alt">
+      <div class="container">
+        <div class="section-head section-head--row reveal">
+          <div>
+            <p class="eyebrow">Portfolio</p>
+            <h2>More from LCH</h2>
+          </div>
+          <a class="link-arrow" href="/projects/">All projects →</a>
+        </div>
+        <div class="grid-4">
+          {others.map((p) => <ProjectCard project={p} sizes="(max-width: 760px) 100vw, 25vw" />)}
+        </div>
+      </div>
+    </section>
+  )}
+
+  {news.length > 0 && (
+    <section class="section">
+      <div class="container">
+        <div class="section-head section-head--row reveal">
+          <div>
+            <p class="eyebrow">{home.news.eyebrow}</p>
+            <h2>{home.news.heading}</h2>
+          </div>
+          <a class="link-arrow" href="/news/">All news →</a>
+        </div>
+        <div class="grid-3">
+          {news.map((n) => <NewsCard post={n} />)}
+        </div>
+      </div>
+    </section>
+  )}
+</Base>
+
+<style>
+  .hero { position: relative; overflow: hidden; min-height: 100svh; display: flex; align-items: flex-end; color: var(--paper); isolation: isolate; padding-block: calc(var(--header-h) + 64px) clamp(56px, 9vh, 112px); }
+  .hero::after { content: ''; position: absolute; inset: 0; z-index: -1; background: linear-gradient(180deg, rgba(10, 10, 9, 0.5) 0%, rgba(10, 10, 9, 0.08) 38%, rgba(10, 10, 9, 0.72) 100%); }
+  :global(.hero__bg) { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: -2; animation: heroZoom 14s var(--ease) both; }
+  @keyframes heroZoom { from { transform: scale(1.08); } to { transform: scale(1); } }
+  .hero h1 { max-width: 13ch; }
+  .hero__sub { font-size: clamp(18px, 1.6vw, 22px); max-width: 52ch; margin-top: 24px; color: rgba(246, 244, 239, 0.86); }
+  .hero__ctas { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 36px; }
+
+  .stats { border-bottom: 1px solid var(--line); }
+  .stats__grid { display: grid; grid-template-columns: repeat(4, 1fr); }
+  .stat { padding: 40px 24px 36px 0; }
+  .stat + .stat { padding-left: 24px; border-left: 1px solid var(--line); }
+  .stat__value { font-size: clamp(34px, 3.6vw, 52px); line-height: 1; margin: 0 0 10px; }
+  .stat__label { font-size: 14px; color: var(--muted); margin: 0; }
+
+  .section-head { margin-bottom: clamp(40px, 5vw, 72px); }
+  .section-head h2 { max-width: 20ch; }
+  .section-head--row { display: flex; justify-content: space-between; align-items: flex-end; gap: 24px; flex-wrap: wrap; }
+
+  .features { display: grid; gap: clamp(64px, 9vw, 128px); }
+  .feature { display: grid; grid-template-columns: 7fr 5fr; gap: clamp(32px, 5vw, 80px); align-items: center; }
+  .feature--flip .feature__media { order: 2; }
+  .feature__media { position: relative; display: block; overflow: hidden; border-radius: var(--radius); aspect-ratio: 5 / 4; background: var(--paper-2); }
+  .feature__media :global(img) { width: 100%; height: 100%; object-fit: cover; transition: transform 1.2s var(--ease); }
+  .feature__media:hover :global(img) { transform: scale(1.03); }
+  .feature__media .pill { position: absolute; top: 20px; left: 20px; }
+  .feature__logo { height: 44px; width: auto; max-width: 180px; object-fit: contain; object-position: left; margin-bottom: 24px; }
+  .feature__title { font-size: clamp(40px, 4.4vw, 64px); margin-bottom: 24px; }
+  .feature__facts { display: grid; grid-template-columns: 1fr 1fr; gap: 18px 24px; margin: 0 0 24px; padding: 22px 0; border-block: 1px solid var(--line); }
+  .feature__facts dt { font-size: 12px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); margin-bottom: 4px; }
+  .feature__facts dd { margin: 0; font-size: 15px; line-height: 1.45; }
+  .feature__facts dd span { color: var(--muted); }
+  .feature__summary { color: var(--muted); font-size: 17px; }
+  .feature__links { display: flex; flex-wrap: wrap; align-items: center; gap: 16px 28px; margin-top: 28px; }
+
+  .philosophy__grid { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(40px, 6vw, 96px); align-items: center; }
+  .philosophy h2 { font-size: clamp(32px, 3.6vw, 52px); margin-bottom: 28px; }
+  .philosophy .lede { margin-bottom: 36px; }
+  .philosophy__media { border-radius: var(--radius); overflow: hidden; }
+  .philosophy__media :global(img) { width: 100%; aspect-ratio: 4 / 5; object-fit: cover; }
+
+  .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(28px, 3vw, 44px); }
+  .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: clamp(24px, 2.5vw, 36px); }
+  .grid-4 :global(.pcard__title) { font-size: 30px; }
+  .grid-4 :global(.pcard__summary) { font-size: 15px; }
+
+  @media (max-width: 1100px) { .grid-4 { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 900px) {
+    .feature, .philosophy__grid { grid-template-columns: 1fr; }
+    .feature--flip .feature__media { order: 0; }
+    .stats__grid { grid-template-columns: repeat(2, 1fr); }
+    .stat:nth-child(3) { padding-left: 0; border-left: 0; }
+    .stat:nth-child(n + 3) { border-top: 1px solid var(--line); }
+    .grid-3 { grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 600px) {
+    .grid-3, .grid-4 { grid-template-columns: 1fr; }
+    .stat { padding: 28px 12px 24px 0; }
+    .stat + .stat { padding-left: 12px; }
+    .stat:nth-child(3) { padding-left: 0; }
+    .feature__facts { grid-template-columns: 1fr; }
+  }
+</style>

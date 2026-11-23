@@ -1,0 +1,52 @@
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "22"
+
+# Keep generated image sizes between builds so deploys stay fast
+[[plugins]]
+  package = "netlify-plugin-cache"
+  [plugins.inputs]
+    paths = ["public/_img"]
+
+[[headers]]
+  for = "/_img/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+[[headers]]
+  for = "/_astro/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+
+# ── Redirects from the old WordPress site, so existing links & Google results keep working ──
+[[redirects]]
+  from = "/media/*"
+  to = "/news/"
+  status = 301
+[[redirects]]
+  from = "/category/*"
+  to = "/news/"
+  status = 301
+[[redirects]]
+  from = "/privacy-policy*"
+  to = "/legal/privacy-policy/"
+  status = 301
+[[redirects]]
+  from = "/:year/:month/:day/:slug/"
+  to = "/news/:slug/"
+  status = 301
+[[redirects]]
+  from = "/:year/:month/:day/:slug"
+  to = "/news/:slug/"
+  status = 301
+[[redirects]]
+  from = "/wp-admin/*"
+  to = "/admin/"
+  status = 301

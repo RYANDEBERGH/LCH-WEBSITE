@@ -1,0 +1,67 @@
+---
+import { getCollection, getEntry, render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import Img from '../../components/Img.astro';
+import NewsCard from '../../components/NewsCard.astro';
+import { getNews, formatDate } from '../../lib/site';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('news', (n) => !n.data.draft || import.meta.env.DEV);
+  return posts.map((post) => ({ params: { id: post.id }, props: { post } }));
+}
+const { post } = Astro.props;
+const d = post.data;
+const { Content } = await render(post);
+const project = d.project ? await getEntry('projects', d.project) : undefined;
+const more = (await getNews()).filter((n) => n.id !== post.id).slice(0, 3);
+// Hide the body's own trailing "Read More" link when we show a proper source button
+const hasBody = post.body && post.body.replace(/\[Read More\]\([^)]*\)/gi, '').trim().length > 0;
+---
+
+<Base title={d.title} description={d.excerpt || d.title} image={d.image || undefined}>
+  <article class="post">
+    <header class="container"><div class="post__head">
+      <a class="back" href="/news/">← All news</a>
+      <p class="post__meta"><span>{d.topic}</span> · <time datetime={d.date.toISOString()}>{formatDate(d.date)}</time></p>
+      <h1>{d.title}</h1>
+      {project && <p class="post__project">Project: <a href={`/projects/${project.id}/`}>{project.data.title}</a></p>}
+    </div></header>
+    {d.image && (
+      <div class="container post__image">
+        <Img src={d.image} alt="" loading="eager" fetchpriority="high" sizes="(max-width: 1360px) 100vw, 1360px" />
+      </div>
+    )}
+    <div class="container"><div class:list={["post__body", { "has-source": d.sourceUrl }]}>
+      {hasBody ? <div class="prose"><Content /></div> : d.excerpt && <p class="lede">{d.excerpt}</p>}
+      {d.sourceUrl && (
+        <a class="btn" href={d.sourceUrl} target="_blank" rel="noopener">Read the full article <span class="arrow" aria-hidden="true">↗</span></a>
+      )}
+    </div></div>
+  </article>
+
+  <section class="section section--alt">
+    <div class="container">
+      <h2 class="more-h">More news</h2>
+      <div class="grid-3">{more.map((n) => <NewsCard post={n} />)}</div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .post { padding-bottom: clamp(64px, 8vw, 112px); }
+  .post__head { padding-block: clamp(48px, 7vw, 96px) 40px; max-width: 980px; }
+  .post__head h1 { font-size: clamp(40px, 5.4vw, 76px); }
+  .back { display: inline-block; font-size: 14px; text-decoration: none; color: var(--muted); margin-bottom: 28px; }
+  .post__meta { font-size: 14px; color: var(--muted); }
+  .post__meta span { color: var(--accent); font-weight: 600; }
+  .post__project { margin-top: 20px; color: var(--muted); }
+  .post__project a { color: var(--ink); font-weight: 500; }
+  .post__image :global(img) { width: 100%; max-height: 78vh; object-fit: cover; border-radius: var(--radius); }
+  .post__body { padding-top: 48px; max-width: 760px; display: grid; justify-items: start; gap: 24px; }
+  .post__body .prose { font-size: 19px; }
+  .has-source :global(.prose > p:last-child:has(> a:only-child)) { display: none; }
+  .more-h { margin-bottom: 40px; }
+  .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(28px, 3vw, 44px); }
+  @media (max-width: 900px) { .grid-3 { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 600px) { .grid-3 { grid-template-columns: 1fr; } }
+</style>

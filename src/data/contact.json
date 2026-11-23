@@ -1,0 +1,8 @@
+{
+  "eyebrow": "Contact",
+  "heading": "Have a question? Let’s talk.",
+  "intro": "Whether you’re a future resident, an investor, a landowner or a member of the community, we’d love to hear from you.",
+  "formEnabled": true,
+  "formSuccess": "Thanks — your message has been sent. We’ll be in touch shortly.",
+  "inquiryTypes": ["General inquiry", "Leasing", "Investment & partnerships", "Land & acquisitions", "Media", "Careers"]
+}

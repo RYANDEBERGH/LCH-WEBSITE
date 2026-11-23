@@ -1,0 +1,33 @@
+{
+  "hero": {
+    "eyebrow": "Toronto real estate development since 2007",
+    "heading": "We see residential spaces differently.",
+    "subheading": "They aren’t just places where people eat and sleep. They’re communities with the power to house dreams, energize neighbourhoods and push boundaries.",
+    "image": "/uploads/everston-evening-2.png",
+    "primaryCta": { "label": "Explore our projects", "url": "/projects/" },
+    "secondaryCta": { "label": "Our story", "url": "/story/" }
+  },
+  "stats": [
+    { "value": "2007", "label": "Building in the GTA since" },
+    { "value": "1,000+", "label": "Rental homes in our pipeline" },
+    { "value": "8", "label": "Communities & spaces" },
+    { "value": "Scarborough", "label": "Where we’re rooted" }
+  ],
+  "featured": {
+    "eyebrow": "Current communities",
+    "heading": "Purpose-built rentals, shaped by their neighbourhoods."
+  },
+  "philosophy": {
+    "eyebrow": "Our approach",
+    "heading": "We start by taking a bird’s-eye view of unique neighbourhoods with high growth and untapped potential.",
+    "body": "This focus on the big picture, the greater purpose, is at the core of our design philosophy. It lets us understand the needs of renters and envision a community where people can put down roots — and we carry that vision through every decision, from functional suite layouts and durable finishes to shared spaces that bring neighbours together.",
+    "image": "/uploads/mike-and-luke-sales-center.png",
+    "ctaLabel": "Discover our story",
+    "ctaUrl": "/story/"
+  },
+  "news": {
+    "eyebrow": "News & media",
+    "heading": "Latest from LCH",
+    "count": 3
+  }
+}

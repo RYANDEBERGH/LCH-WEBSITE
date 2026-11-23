@@ -1,0 +1,18 @@
+---
+import { getCollection, render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import PageHero from '../../components/PageHero.astro';
+
+export async function getStaticPaths() {
+  return (await getCollection('pages')).map((page) => ({ params: { id: page.id }, props: { page } }));
+}
+const { page } = Astro.props;
+const { Content } = await render(page);
+---
+
+<Base title={page.data.title} description={page.data.description ?? undefined}>
+  <PageHero eyebrow="Legal" heading={page.data.title} />
+  <section class="section--tight" style="padding-top:0">
+    <div class="container"><div class="prose"><Content /></div></div>
+  </section>
+</Base>

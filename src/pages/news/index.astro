@@ -1,0 +1,72 @@
+---
+import Base from '../../layouts/Base.astro';
+import PageHero from '../../components/PageHero.astro';
+import NewsCard from '../../components/NewsCard.astro';
+import Img from '../../components/Img.astro';
+import { getNews, formatDate } from '../../lib/site';
+
+const news = await getNews();
+const [lead, ...rest] = news;
+const topics = [...new Set(news.map((n) => n.data.topic))];
+---
+
+<Base title="News & Media" description="Project updates, press coverage and community news from LCH Developments.">
+  <PageHero eyebrow="News & media" heading="Updates from the field." />
+
+  <section style="padding-bottom: clamp(72px, 10vw, 144px)">
+    <div class="container">
+      {lead && (
+        <a class="lead reveal" href={`/news/${lead.id}/`}>
+          <div class="lead__media">{lead.data.image && <Img src={lead.data.image} alt="" sizes="(max-width: 900px) 100vw, 60vw" loading="eager" />}</div>
+          <div class="lead__body">
+            <p class="lead__meta"><span>{lead.data.topic}</span> · {formatDate(lead.data.date)}</p>
+            <h2>{lead.data.title}</h2>
+            {lead.data.excerpt && <p class="lede">{lead.data.excerpt}</p>}
+            <span class="link-arrow">Read more →</span>
+          </div>
+        </a>
+      )}
+
+      <div class="filters" role="group" aria-label="Filter news">
+        <button class="chip" aria-pressed="true" data-filter="all">All</button>
+        {topics.map((t) => <button class="chip" aria-pressed="false" data-filter={t}>{t}</button>)}
+      </div>
+
+      <div class="ngrid">
+        {rest.map((n) => <div data-topic-item={n.data.topic}><NewsCard post={n} /></div>)}
+      </div>
+    </div>
+  </section>
+</Base>
+
+<script>
+  const chips = document.querySelectorAll<HTMLButtonElement>('[data-filter]');
+  const items = document.querySelectorAll<HTMLElement>('[data-topic-item]');
+  chips.forEach((chip) =>
+    chip.addEventListener('click', () => {
+      const f = chip.dataset.filter;
+      chips.forEach((c) => c.setAttribute('aria-pressed', String(c === chip)));
+      items.forEach((it) => (it.hidden = f !== 'all' && it.dataset.topicItem !== f));
+    }),
+  );
+</script>
+
+<style>
+  .lead { display: grid; grid-template-columns: 3fr 2fr; gap: clamp(32px, 5vw, 72px); align-items: center; text-decoration: none; color: inherit; padding-bottom: clamp(56px, 7vw, 96px); margin-bottom: 40px; border-bottom: 1px solid var(--line); }
+  .lead__media { aspect-ratio: 3 / 2; overflow: hidden; border-radius: var(--radius); background: var(--paper-2); }
+  .lead__media :global(img) { width: 100%; height: 100%; object-fit: cover; transition: transform 1s var(--ease); }
+  .lead:hover .lead__media :global(img) { transform: scale(1.03); }
+  .lead h2 { font-size: clamp(32px, 3.4vw, 48px); margin-bottom: 20px; }
+  .lead:hover h2 { color: var(--accent); }
+  .lead .lede { font-size: 17px; margin-bottom: 24px; }
+  .lead__meta { font-size: 14px; color: var(--muted); }
+  .lead__meta span { color: var(--accent); font-weight: 600; }
+  .filters { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 48px; }
+  .chip { min-height: 42px; padding: 0 18px; border-radius: 999px; border: 1px solid var(--line); background: transparent; color: var(--ink); font-size: 15px; font-weight: 500; cursor: pointer; }
+  .chip:hover { border-color: var(--ink); }
+  .chip[aria-pressed='true'] { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+  .ngrid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 56px clamp(24px, 3vw, 44px); }
+  .ngrid > [hidden] { display: none; }
+  @media (max-width: 900px) { .lead { grid-template-columns: 1fr; } .ngrid { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 600px) { .ngrid { grid-template-columns: 1fr; } }
+</style>

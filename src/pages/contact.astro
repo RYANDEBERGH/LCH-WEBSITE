@@ -1,0 +1,65 @@
+---
+import Base from '../layouts/Base.astro';
+import { settings, contact, telHref } from '../lib/site';
+const mapSrc = `https://maps.google.com/maps?q=${encodeURIComponent(settings.address)}&z=15&output=embed`;
+---
+
+<Base title="Contact" description={`Get in touch with ${settings.siteName}. ${settings.address}.`}>
+  <section class="section contact">
+    <div class="container contact__grid">
+      <div class="contact__info">
+        <p class="eyebrow">{contact.eyebrow}</p>
+        <h1>{contact.heading}</h1>
+        <p class="lede">{contact.intro}</p>
+        <dl class="contact__list">
+          <div><dt>Email</dt><dd><a href={`mailto:${settings.email}`}>{settings.email}</a></dd></div>
+          <div><dt>Office</dt><dd><a href={telHref(settings.phone)}>{settings.phone}</a></dd></div>
+          <div><dt>Visit</dt><dd><a href={settings.mapsUrl} target="_blank" rel="noopener">{settings.address}</a></dd></div>
+        </dl>
+      </div>
+
+      {contact.formEnabled && (
+        <form class="contact__form" name="contact" method="POST" action="/thank-you/" data-netlify="true" netlify-honeypot="company">
+          <input type="hidden" name="form-name" value="contact" />
+          <p class="hidden-field"><label>Leave this field empty: <input name="company" tabindex="-1" autocomplete="off" /></label></p>
+          <div class="row">
+            <div class="field"><label for="c-name">Name</label><input id="c-name" name="name" autocomplete="name" required /></div>
+            <div class="field"><label for="c-email">Email</label><input id="c-email" type="email" name="email" autocomplete="email" required /></div>
+          </div>
+          <div class="row">
+            <div class="field"><label for="c-phone">Phone <span class="opt">(optional)</span></label><input id="c-phone" type="tel" name="phone" autocomplete="tel" /></div>
+            <div class="field">
+              <label for="c-type">I’m interested in</label>
+              <select id="c-type" name="inquiry">
+                {contact.inquiryTypes.map((t) => <option>{t}</option>)}
+              </select>
+            </div>
+          </div>
+          <div class="field"><label for="c-msg">Message</label><textarea id="c-msg" name="message" required></textarea></div>
+          <button class="btn" type="submit">Send message <span class="arrow" aria-hidden="true">→</span></button>
+        </form>
+      )}
+    </div>
+  </section>
+  <div class="map">
+    <iframe title={`Map of ${settings.address}`} src={mapSrc} loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+  </div>
+</Base>
+
+<style>
+  .contact__grid { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(40px, 7vw, 112px); align-items: start; }
+  .contact h1 { font-size: clamp(44px, 5.6vw, 80px); margin-bottom: 24px; }
+  .contact__list { margin: 48px 0 0; }
+  .contact__list > div { display: grid; grid-template-columns: 100px 1fr; gap: 16px; padding: 18px 0; border-top: 1px solid var(--line); }
+  .contact__list dt { font-size: 12px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); padding-top: 4px; }
+  .contact__list dd { margin: 0; font-size: 18px; }
+  .contact__list a { text-decoration: none; }
+  .contact__list a:hover { color: var(--accent); }
+  .contact__form { display: grid; gap: 20px; background: var(--white); border: 1px solid var(--line); border-radius: var(--radius); padding: clamp(24px, 3.5vw, 48px); }
+  .contact__form .btn { justify-self: start; }
+  .row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .opt { font-weight: 400; color: var(--muted); }
+  .map iframe { display: block; width: 100%; height: 440px; border: 0; filter: grayscale(1) contrast(1.05); }
+  @media (max-width: 900px) { .contact__grid { grid-template-columns: 1fr; } }
+  @media (max-width: 520px) { .row { grid-template-columns: 1fr; } }
+</style>

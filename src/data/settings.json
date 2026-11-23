@@ -1,0 +1,30 @@
+{
+  "siteName": "LCH Developments",
+  "metaDescription": "LCH Developments is a Toronto-based real estate developer creating purpose-built rental homes, workspaces and communities across the Greater Toronto Area.",
+  "siteUrl": "https://lchdevelopments.com",
+  "logo": "/uploads/brand/lch-logo-dark.png",
+  "logoLight": "/uploads/brand/lch-logo-light.png",
+  "accentColor": "#b5532e",
+  "email": "info@lch.to",
+  "phone": "647 478 7987",
+  "address": "2229 Kingston Road, Scarborough, Ontario M1N 1T8",
+  "mapsUrl": "https://maps.google.com/?q=2229+Kingston+Road+Scarborough+ON+M1N+1T8",
+  "social": {
+    "instagram": "https://www.instagram.com/lch.to/",
+    "facebook": "https://www.facebook.com/lchdevelopments/",
+    "linkedin": "https://www.linkedin.com/company/lch-developments-to/"
+  },
+  "announcement": {
+    "enabled": true,
+    "text": "Everston is now pre-leasing — apartments by the Campus Valley",
+    "linkLabel": "Explore Everston",
+    "url": "https://everston.ca"
+  },
+  "newsletter": {
+    "enabled": true,
+    "heading": "Register for updates",
+    "text": "Stay up to date with our latest news on our upcoming communities.",
+    "consent": "I consent to receive future communications from LCH Developments. I understand I can unsubscribe at any time.",
+    "mailchimpUrl": ""
+  }
+}
