@@ -163,6 +163,7 @@ collections:
       - { label: Account, name: account, widget: string, hint: 'Exactly as named in Site Settings → Social accounts, e.g. LCH Developments' }
       - { label: Network, name: network, widget: select, options: [linkedin, instagram, facebook] }
       - { label: Date posted, name: date, widget: datetime, format: 'YYYY-MM-DD', date_format: 'YYYY-MM-DD', time_format: false }
+      - { label: Related project (optional), name: project, widget: relation, collection: projects, search_fields: [title], value_field: '{{slug}}', display_fields: [title], required: false, hint: 'Also shows the post on that project’s page.' }
       - { label: Link to the post, name: url, widget: string, hint: 'On LinkedIn: ••• → Copy link to post. On Instagram: ••• → Copy link.' }
       - { label: Excerpt, name: text, widget: text, required: false }
       - { label: Image, name: image, widget: image, required: false, hint: 'Square works best.' }

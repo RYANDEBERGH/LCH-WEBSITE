@@ -109,6 +109,7 @@ const social = defineCollection({
     network: z.enum(['linkedin', 'instagram', 'facebook']),
     date: z.coerce.date(),
     url: z.string(),
+    project: z.string().nullish(),
     text: z.string().nullish(),
     image: z.string().nullish(),
     hidden: z.boolean().default(false),

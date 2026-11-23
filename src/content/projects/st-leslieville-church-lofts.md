@@ -25,7 +25,11 @@ leasing:
   status: ""
   url: ""
   label: ""
-milestones: []
+milestones:
+  - date: "2019"
+    label: "Completed; residents moved in from early 2019"
+    source: "LCH Developments"
+    sourceUrl: ""
 ---
 
 Located in the heart of Toronto’s most pursued neighbourhood, St. Leslieville (formerly St. Clements) was built in 1913 and has graced Leslieville’s epicentre for over a century. 100 years later, de Cartier Development Corporation and LCH Developments created a stunning vision for the new St. Leslieville Lofts by embarking on a beautiful gothic revival that preserve the majestic nature of the building in its entirety.

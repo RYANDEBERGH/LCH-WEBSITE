@@ -3,6 +3,7 @@ import Base from '../../layouts/Base.astro';
 import PageHero from '../../components/PageHero.astro';
 import NewsCard from '../../components/NewsCard.astro';
 import Img from '../../components/Img.astro';
+import SocialFeed from '../../components/SocialFeed.astro';
 import { getNews, formatDate } from '../../lib/site';
 
 const news = await getNews();
@@ -37,6 +38,13 @@ const topics = [...new Set(news.map((n) => n.data.topic))];
       </div>
     </div>
   </section>
+  <SocialFeed
+    alt
+    count={9}
+    eyebrow="On our channels"
+    heading="Construction updates from site."
+    intro="We share regular progress from our sites on Instagram and LinkedIn. Follow LCH, Elevate, Everston and Merge Spaces for the latest."
+  />
 </Base>
 
 <script>
@@ -58,7 +66,7 @@ const topics = [...new Set(news.map((n) => n.data.topic))];
   .lead:hover .lead__media :global(img) { transform: scale(1.03); }
   .lead__media.is-contain { background: #1f3a5c; }
   .lead__media.is-contain :global(img) { object-fit: contain; }
-  .lead h2 { font-size: clamp(32px, 3.4vw, 48px); margin-bottom: 20px; }
+  .lead h2 { font-size: clamp(26px, 2.6vw, 36px); margin-bottom: 20px; }
   .lead:hover h2 { color: var(--accent); }
   .lead .lede { font-size: 17px; margin-bottom: 24px; }
   .lead__meta { font-size: 14px; color: var(--muted); }

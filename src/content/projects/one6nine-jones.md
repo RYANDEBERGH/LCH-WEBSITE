@@ -31,6 +31,10 @@ leasing:
   url: ""
   label: ""
 milestones:
+  - date: "2019"
+    label: "Completed; residents moved in from early 2019"
+    source: "LCH Developments"
+    sourceUrl: ""
   - date: "2015-10-06"
     label: "Sales launch reported"
     source: "UrbanToronto"

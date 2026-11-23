@@ -34,34 +34,40 @@ const e = home.elevate;
     <div class="container">
       <p class="eyebrow">{story.timelineHeading.eyebrow}</p>
       <h2 class="sec-h">{story.timelineHeading.heading}</h2>
-      <ol class="chapters">
-        {story.timeline.map((c) => (
-          <li class:list={['chapter reveal', { 'chapter--media': c.images.length > 0 }]}>
-            <div class="chapter__text">
-              <p class="chapter__label">{c.label}</p>
-              <h3>{c.title}</h3>
-              <p>{c.text}</p>
-              {c.projects.length > 0 && (
-                <p class="chapter__links">
-                  {c.projects.map((id) => projectsById[id]).filter(Boolean).map((p) => (
-                    <a href={`/projects/${p.id}/`} style={`--brand: ${brandInk(p)}`}>{p.data.title}</a>
-                  ))}
-                </p>
-              )}
-            </div>
-            {c.images.length > 0 && (
-              <div class:list={['chapter__imgs', `chapter__imgs--${Math.min(c.images.length, 4)}`]}>
-                {c.images.map((im) => (
-                  <figure>
-                    <Img src={im.image} alt={im.alt} sizes="(max-width: 900px) 100vw, 30vw" />
-                    {im.caption && <figcaption>{im.caption}</figcaption>}
-                  </figure>
-                ))}
-              </div>
-            )}
-          </li>
-        ))}
-      </ol>
+      <div class="tl" data-tl>
+        <div class="tl__controls" aria-label="Scroll the timeline">
+          <button type="button" class="tl__btn" data-tl-prev aria-label="Earlier">←</button>
+          <button type="button" class="tl__btn" data-tl-next aria-label="Later">→</button>
+        </div>
+        <ol class="tl__track" data-tl-track tabindex="0" aria-label="Company timeline, scroll sideways">
+          {story.timeline.map((c) => {
+            const im = c.images[0];
+            return (
+              <li class="tl__card">
+                <p class="tl__label">{c.label}</p>
+                <div class="tl__media">
+                  {im ? (
+                    <figure>
+                      <Img src={im.image} alt={im.alt} sizes="340px" />
+                      {im.caption && <figcaption>{im.caption}</figcaption>}
+                      {c.images.length > 1 && <span class="tl__more">+{c.images.length - 1}</span>}
+                    </figure>
+                  ) : <div class="tl__noimg" aria-hidden="true"><span>{c.label}</span></div>}
+                </div>
+                <h3>{c.title}</h3>
+                <p class="tl__text">{c.text}</p>
+                {c.projects.length > 0 && (
+                  <p class="tl__links">
+                    {c.projects.map((id) => projectsById[id]).filter(Boolean).map((p) => (
+                      <a href={`/projects/${p.id}/`} style={`--brand: ${brandInk(p)}`}>{p.data.title}</a>
+                    ))}
+                  </p>
+                )}
+              </li>
+            );
+          })}
+        </ol>
+      </div>
     </div>
   </section>
 
@@ -166,6 +172,22 @@ const e = home.elevate;
 </Base>
 
 <script>
+  document.querySelectorAll<HTMLElement>('[data-tl]').forEach((tl) => {
+    const track = tl.querySelector<HTMLElement>('[data-tl-track]')!;
+    const prev = tl.querySelector<HTMLButtonElement>('[data-tl-prev]')!;
+    const next = tl.querySelector<HTMLButtonElement>('[data-tl-next]')!;
+    const step = () => (track.querySelector<HTMLElement>('.tl__card')?.offsetWidth ?? 300) + 20;
+    const update = () => {
+      prev.disabled = track.scrollLeft < 4;
+      next.disabled = track.scrollLeft + track.clientWidth > track.scrollWidth - 4;
+    };
+    prev.addEventListener('click', () => track.scrollBy({ left: -step(), behavior: 'smooth' }));
+    next.addEventListener('click', () => track.scrollBy({ left: step(), behavior: 'smooth' }));
+    track.addEventListener('scroll', update, { passive: true });
+    addEventListener('resize', update);
+    update();
+  });
+
   document.querySelectorAll<HTMLButtonElement>('[data-member]').forEach((b) => {
     const dlg = document.getElementById(`bio-${b.dataset.member}`) as HTMLDialogElement;
     b.addEventListener('click', () => dlg.showModal());
@@ -188,25 +210,29 @@ const e = home.elevate;
 
   .sec-h { margin-bottom: clamp(32px, 4vw, 56px); max-width: 22ch; }
   .history { border-top: 1px solid var(--line); }
-  .chapters { list-style: none; margin: 0; padding: 0; position: relative; }
-  .chapters::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 1px; background: var(--line); }
-  .chapter { position: relative; display: grid; grid-template-columns: minmax(0, 1fr); gap: 20px; padding: 0 0 clamp(36px, 4vw, 56px) clamp(24px, 3vw, 40px); }
-  .chapter::before { content: ''; position: absolute; left: -5px; top: 6px; width: 11px; height: 11px; background: var(--ink); border-radius: 2px; }
-  .chapter--media { grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); align-items: start; }
-  .chapter__label { font-size: 13px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); margin-bottom: 6px; }
-  .chapter h3 { font-size: clamp(22px, 2vw, 28px); margin-bottom: 8px; }
-  .chapter__text > p:not(.chapter__label):not(.chapter__links) { color: var(--ink-2); max-width: 52ch; margin: 0; }
-  .chapter__links { display: flex; flex-wrap: wrap; gap: 6px 16px; margin: 12px 0 0; font-size: 14px; }
-  .chapter__links a { color: var(--brand); font-weight: 600; text-decoration: none; }
-  .chapter__links a:hover { text-decoration: underline; }
-  .chapter__imgs { display: grid; gap: 10px; }
-  .chapter__imgs--2 { grid-template-columns: 1fr 1fr; }
-  .chapter__imgs--3, .chapter__imgs--4 { grid-template-columns: 1fr 1fr; }
-  .chapter__imgs figure { margin: 0; position: relative; }
-  .chapter__imgs :global(img) { width: 100%; aspect-ratio: 3 / 2; object-fit: cover; border-radius: var(--radius); }
-  .chapter__imgs--1 :global(img) { aspect-ratio: auto; height: auto; max-height: 420px; }
-  .chapter__imgs figcaption { position: absolute; left: 8px; bottom: 8px; font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; background: rgba(255, 255, 255, 0.92); color: var(--ink); padding: 3px 7px; border-radius: 2px; }
-
+  .history { border-top: 1px solid var(--line); }
+  .tl { position: relative; }
+  .tl__controls { position: absolute; right: 0; top: -76px; display: flex; gap: 8px; }
+  .tl__btn { width: 44px; height: 44px; border: 1px solid var(--line); border-radius: 3px; background: var(--white); color: var(--ink); font-size: 18px; cursor: pointer; }
+  .tl__btn:hover:not(:disabled) { border-color: var(--ink); }
+  .tl__btn:disabled { opacity: 0.35; cursor: default; }
+  .tl__track { list-style: none; margin: 0; padding: 0 0 18px; display: grid; grid-auto-flow: column; grid-auto-columns: minmax(280px, 320px); gap: 20px; overflow-x: auto; scroll-snap-type: x mandatory; scroll-behavior: smooth; overscroll-behavior-x: contain; scrollbar-width: thin; position: relative; }
+  .tl__track:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
+  .tl__track::before { content: ''; position: absolute; left: 0; right: 0; top: 9px; height: 1px; background: var(--line); }
+  .tl__card { scroll-snap-align: start; position: relative; display: flex; flex-direction: column; gap: 10px; padding-top: 30px; }
+  .tl__card::before { content: ''; position: absolute; left: 0; top: 4px; width: 11px; height: 11px; background: var(--ink); border-radius: 2px; }
+  .tl__label { position: absolute; left: 20px; top: 0; margin: 0; font-size: 13px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); }
+  .tl__media figure { margin: 0; position: relative; }
+  .tl__media :global(img), .tl__noimg { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; border-radius: var(--radius); display: block; }
+  .tl__noimg { display: flex; align-items: flex-end; padding: 18px; background: var(--paper-2); border: 1px solid var(--line); color: var(--ink); font-size: 44px; font-weight: 700; letter-spacing: -0.03em; }
+  .tl__media figcaption, .tl__more { position: absolute; bottom: 8px; font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; background: rgba(255, 255, 255, 0.92); color: var(--ink); padding: 3px 7px; border-radius: 2px; }
+  .tl__media figcaption { left: 8px; }
+  .tl__more { right: 8px; }
+  .tl__card h3 { font-size: 19px; margin-top: 6px; }
+  .tl__text { margin: 0; font-size: 15px; color: var(--ink-2); }
+  .tl__links { display: flex; flex-wrap: wrap; gap: 4px 14px; margin: 0; font-size: 13px; }
+  .tl__links a { color: var(--brand); font-weight: 600; text-decoration: none; }
+  .tl__links a:hover { text-decoration: underline; }
   .expertise { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0 clamp(24px, 3vw, 48px); }
   .xp { padding: 24px 0 36px; border-top: 1px solid var(--line); }
   .xp__num { font-size: 12px; font-weight: 700; letter-spacing: 0.12em; color: var(--accent); }
@@ -241,13 +267,13 @@ const e = home.elevate;
   .acta__btns { display: flex; flex-wrap: wrap; gap: 10px; }
 
   .team-h { margin-bottom: 48px; }
-  .team { display: grid; grid-template-columns: repeat(4, 1fr); gap: 48px 28px; }
+  .team { display: grid; grid-template-columns: repeat(3, 1fr); gap: 56px clamp(24px, 3vw, 40px); }
   .member__btn { all: unset; cursor: pointer; display: block; width: 100%; }
   .member__btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 6px; }
   .member__photo { aspect-ratio: 4 / 5; overflow: hidden; border-radius: var(--radius); background: var(--paper-2); margin-bottom: 18px; }
   .member__photo :global(img) { width: 100%; height: 100%; object-fit: cover; object-position: center 20%; filter: grayscale(1); transition: filter 0.5s, transform 1s var(--ease); }
   .member__btn:hover .member__photo :global(img) { filter: grayscale(0); transform: scale(1.03); }
-  .member h3 { font-size: 19px; }
+  .member h3 { font-size: 21px; }
   .member__cred { color: var(--muted); font-weight: 400; font-size: 0.85em; }
   .member__role { font-size: 15px; color: var(--muted); margin: 4px 0 10px; }
   .member__more { font-size: 13px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--accent); }
@@ -255,23 +281,20 @@ const e = home.elevate;
   .bio::backdrop { background: rgba(10, 10, 9, 0.6); backdrop-filter: blur(4px); }
   .bio__grid { display: grid; grid-template-columns: 260px 1fr; gap: 40px; align-items: start; }
   .bio__grid :global(.bio__photo) { border-radius: var(--radius); width: 100%; aspect-ratio: 4 / 5; object-fit: cover; }
-  .bio h2 { font-size: clamp(36px, 4vw, 52px); margin-bottom: 8px; }
+  .bio h2 { font-size: clamp(30px, 3vw, 40px); margin-bottom: 8px; }
   .bio .eyebrow { margin-bottom: 12px; }
   .bio .prose { margin-top: 20px; font-size: 16px; }
   .bio__close { position: absolute; top: 12px; right: 16px; border: 0; background: none; font-size: 36px; cursor: pointer; color: var(--ink); line-height: 1; }
-    .team { grid-template-columns: repeat(2, 1fr); gap: 36px 16px; }
-    .bio__grid { grid-template-columns: 1fr; }
-    .bio__grid :global(.bio__photo) { max-width: 200px; }
 
-  @media (max-width: 1000px) { .team { grid-template-columns: repeat(3, 1fr); } .cases { grid-template-columns: 1fr 1fr; } .expertise { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 1000px) { .team { grid-template-columns: repeat(2, 1fr); } .cases { grid-template-columns: 1fr 1fr; } .expertise { grid-template-columns: 1fr 1fr; } }
   @media (max-width: 900px) {
-    .ahead__grid, .le__top, .chapter--media { grid-template-columns: 1fr; }
+    .ahead__grid, .le__top { grid-template-columns: 1fr; }
+    .tl__controls { position: static; justify-content: flex-end; margin-bottom: 12px; }
   }
   @media (max-width: 680px) {
     .values, .le__roles, .cases, .expertise { grid-template-columns: 1fr; }
     .team { grid-template-columns: repeat(2, 1fr); gap: 36px 16px; }
     .bio__grid { grid-template-columns: 1fr; }
     .bio__grid :global(.bio__photo) { max-width: 200px; }
-    .chapter__imgs--2, .chapter__imgs--3, .chapter__imgs--4 { grid-template-columns: 1fr 1fr; }
   }
 </style>

@@ -4,6 +4,7 @@ import Base from '../../layouts/Base.astro';
 import Img from '../../components/Img.astro';
 import NewsCard from '../../components/NewsCard.astro';
 import ProjectCard from '../../components/ProjectCard.astro';
+import SocialFeed from '../../components/SocialFeed.astro';
 import { getProjects, getNews, stageTone, STAGE_ORDER, formatMilestoneDate, brandInk, isClientWork } from '../../lib/site';
 
 export async function getStaticPaths() {
@@ -162,6 +163,8 @@ const facts = [
     </section>
   )}
 
+  <SocialFeed project={project.id} count={6} showFollow={false} eyebrow="On our channels" heading={`${p.title} on social`} />
+
   {next && next.id !== project.id && (
     <section class="section section--alt">
       <div class="container next">
@@ -210,7 +213,7 @@ const facts = [
   .phead::after { content: ''; position: absolute; inset: 0; z-index: -1; background: linear-gradient(180deg, rgba(10, 10, 9, 0.45), rgba(10, 10, 9, 0.05) 35%, rgba(10, 10, 9, 0.75)); }
   :global(.phead__bg) { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: -2; }
   .phead__content { display: flex; flex-direction: column; align-items: flex-start; gap: 18px; }
-  .phead h1 { font-size: clamp(46px, 7vw, 104px); line-height: 1; }
+  .phead h1 { font-size: clamp(40px, 5.4vw, 76px); line-height: 1; }
   .phead__loc { font-size: 18px; color: rgba(246, 244, 239, 0.85); margin: 0; }
   .back { font-size: 14px; text-decoration: none; color: rgba(246, 244, 239, 0.8); margin-bottom: 12px; }
   .back:hover { color: #fff; }

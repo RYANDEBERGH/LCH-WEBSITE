@@ -47,8 +47,8 @@ button { font: inherit; }
 
 h1, h2, h3, h4 { margin: 0; font-weight: 600; line-height: 1.06; letter-spacing: -0.02em; text-wrap: balance; }
 .display, h1, h2 { font-family: var(--font-display); font-weight: 600; letter-spacing: -0.035em; line-height: 1.04; }
-h1 { font-size: clamp(40px, 6.2vw, 88px); }
-h2 { font-size: clamp(30px, 3.8vw, 54px); }
+h1 { font-size: clamp(36px, 5vw, 72px); }
+h2 { font-size: clamp(28px, 3vw, 42px); }
 h3 { font-family: var(--font-sans); font-size: 21px; font-weight: 600; letter-spacing: -0.01em; line-height: 1.25; }
 p { margin: 0 0 1em; text-wrap: pretty; }
 
@@ -71,7 +71,7 @@ p { margin: 0 0 1em; text-wrap: pretty; }
 .prose { max-width: 68ch; }
 .prose p, .prose li { color: var(--ink-2); }
 .prose a { color: var(--accent); text-underline-offset: 3px; }
-.prose h2 { font-size: clamp(28px, 3vw, 40px); margin: 1.4em 0 0.5em; }
+.prose h2 { font-size: clamp(24px, 2.4vw, 32px); margin: 1.4em 0 0.5em; }
 .prose h3 { margin: 1.6em 0 0.6em; }
 .prose ul { padding-left: 1.2em; margin: 0 0 1.2em; }
 .prose li { margin-bottom: 0.4em; }

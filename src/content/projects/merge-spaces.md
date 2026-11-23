@@ -10,7 +10,7 @@ intersection: ""
 partners: []
 architect: ""
 summary: "Private offices, coworking, meeting rooms and event space for Cliffside Village’s creatives and entrepreneurs."
-brandColor: "#c7238b"
+brandColor: "#cb3378"
 logo: "/uploads/ms-primary-black-resized-for-email.png"
 heroImage: "/uploads/am2-1941.jpg"
 gallery:

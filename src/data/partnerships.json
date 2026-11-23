@@ -24,7 +24,7 @@
     "heading": "Ways to work with us",
     "groups": [
       {
-        "label": "How we partner",
+        "label": "",
         "items": [
           {
             "title": "Joint development",
@@ -51,29 +51,6 @@
             "type": "Landowner or community institution"
           }
         ]
-      },
-      {
-        "label": "Project partners",
-        "items": [
-          {
-            "title": "Architects & consultants",
-            "body": "Planners, architects, engineers and specialists who want an owner that engages early, decides clearly and builds what gets designed.",
-            "cta": "Introduce your firm",
-            "type": "Architect or consultant"
-          },
-          {
-            "title": "Trades & suppliers",
-            "body": "Through Elevate, we build long-term relationships with trades and suppliers who bring early input and deliver on schedule.",
-            "cta": "Work on our sites",
-            "type": "Trade or supplier"
-          },
-          {
-            "title": "Property management & leasing",
-            "body": "As our rental portfolio grows, we work with operators, leasing teams and service providers who care about residents.",
-            "cta": "Get in touch",
-            "type": "Property management or leasing"
-          }
-        ]
       }
     ]
   },
@@ -82,39 +59,27 @@
     "items": [
       {
         "title": "Development and construction, working together",
-        "body": "LCH leads feasibility, approvals, design coordination and owner oversight. Elevate leads preconstruction and construction management. Working together early lets cost, trade input and sequencing inform the design.",
-        "proof": "Elevate managed preconstruction and construction at Merge Spaces.",
-        "link": "/projects/merge-spaces/"
+        "body": "LCH leads feasibility, approvals, design coordination and owner oversight. Elevate leads preconstruction and construction management. Working together early lets cost, trade input and sequencing inform the design."
       },
       {
         "title": "Full-cycle experience",
-        "body": "We have carried a development through approvals, design, construction, occupancy and closeout.",
-        "proof": "Merge Condos: 190 homes, completed in 2023.",
-        "link": "/projects/merge-condos/"
+        "body": "We have carried a development through approvals, design, construction, occupancy and closeout."
       },
       {
         "title": "We take on complex sites",
-        "body": "Heritage buildings and constrained infill sites are where coordinated development and construction thinking matter most.",
-        "proof": "St. Leslieville restored a 1913 church as 14 lofts; 415 Broadview pairs heritage restoration with new rental housing.",
-        "link": "/projects/st-leslieville-church-lofts/"
+        "body": "Heritage buildings and constrained infill sites are where coordinated development and construction thinking matter most."
       },
       {
         "title": "We rethink the plan when the market moves",
-        "body": "We would rather redesign a project than force it, testing unit mix and building systems against cost and long-term operation.",
-        "proof": "Cliffside launched as condominiums in 2024 and is now under construction as 209 rental homes.",
-        "link": "/projects/cliffside/"
+        "body": "We would rather redesign a project than force it, testing unit mix and building systems against cost and long-term operation."
       },
       {
         "title": "Project recovery",
-        "body": "We help owners, lenders and receivers restore budget and schedule visibility and find a practical route to completion.",
-        "proof": "Jefferson Heights (receiver: Albert Gelman) and Eaglebay Towns (KPMG and RBC).",
-        "link": "/about/#experience"
+        "body": "We help owners, lenders and receivers restore budget and schedule visibility and find a practical route to completion."
       },
       {
         "title": "Transparent by default",
-        "body": "Clear reporting, open conversations and visible responsibilities support informed decisions throughout a project.",
-        "proof": "Transparency is one of our three company values.",
-        "link": "/about/"
+        "body": "Clear reporting, open conversations and visible responsibilities support informed decisions throughout a project."
       }
     ]
   },
@@ -166,6 +131,151 @@
       "Trade or supplier",
       "Property management or leasing",
       "Other"
+    ]
+  },
+  "worked": {
+    "eyebrow": "Partners",
+    "heading": "Partners we’ve worked with.",
+    "intro": "Our projects bring together capital partners, clients, design teams, trades and community organizations.",
+    "groups": [
+      {
+        "label": "Capital and development partners",
+        "items": [
+          {
+            "name": "Fiera Real Estate",
+            "note": "Capital partner",
+            "projects": [
+              "retreat"
+            ]
+          },
+          {
+            "name": "Cogir Real Estate",
+            "note": "Development partner",
+            "projects": [
+              "everston",
+              "cliffside"
+            ]
+          },
+          {
+            "name": "deCartier Developments",
+            "note": "Co-developer",
+            "projects": [
+              "st-leslieville-church-lofts",
+              "415-broadview"
+            ]
+          }
+        ]
+      },
+      {
+        "label": "Client work",
+        "items": [
+          {
+            "name": "Albert Gelman",
+            "note": "Receiver",
+            "projects": [
+              "jefferson-heights"
+            ]
+          },
+          {
+            "name": "Cameron Stephens",
+            "note": "Lender",
+            "projects": [
+              "jefferson-heights"
+            ]
+          },
+          {
+            "name": "KPMG",
+            "note": "Receiver",
+            "projects": [
+              "eaglebay-towns"
+            ]
+          },
+          {
+            "name": "RBC",
+            "note": "Lender",
+            "projects": [
+              "eaglebay-towns"
+            ]
+          },
+          {
+            "name": "Akelius",
+            "note": "Feasibility study, 150 The Donway West",
+            "projects": []
+          }
+        ]
+      },
+      {
+        "label": "Design and planning",
+        "items": [
+          {
+            "name": "Turner Fleischer Architects",
+            "note": "Architect",
+            "projects": [
+              "everston"
+            ]
+          },
+          {
+            "name": "RAW Design",
+            "note": "Architect",
+            "projects": [
+              "cliffside",
+              "merge-condos"
+            ]
+          },
+          {
+            "name": "MHBC Planning",
+            "note": "Planning",
+            "projects": [
+              "everston"
+            ]
+          }
+        ]
+      },
+      {
+        "label": "Construction",
+        "items": [
+          {
+            "name": "Elevate Construction Management",
+            "note": "Affiliated construction manager",
+            "projects": [
+              "everston",
+              "cliffside",
+              "merge-spaces"
+            ]
+          },
+          {
+            "name": "Pro Caissons",
+            "note": "Shoring",
+            "projects": [
+              "everston"
+            ]
+          },
+          {
+            "name": "Delsan",
+            "note": "Demolition",
+            "projects": [
+              "everston"
+            ]
+          }
+        ]
+      },
+      {
+        "label": "Community",
+        "items": [
+          {
+            "name": "St. John’s Presbyterian Church",
+            "note": "Heritage and community partner",
+            "projects": [
+              "415-broadview"
+            ]
+          },
+          {
+            "name": "Scarborough Food Security Initiative",
+            "note": "Community partner",
+            "projects": []
+          }
+        ]
+      }
     ]
   }
 }
