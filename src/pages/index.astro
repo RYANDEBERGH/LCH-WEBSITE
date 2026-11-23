@@ -33,6 +33,22 @@ const ext = (url: string) => url?.startsWith('http');
     </div>
   </section>
 
+  {home.stats?.length > 0 && (
+    <section class="stats" aria-label="LCH at a glance">
+      <div class="container">
+        <dl class="stats__grid">
+          {home.stats.map((st) => (
+            <div class="stat">
+              <dt class="stat__label">{st.label}</dt>
+              <dd class="stat__value" data-count={st.value}>{st.value}</dd>
+            </div>
+          ))}
+        </dl>
+        {home.statsNote && <p class="stats__note">{home.statsNote}</p>}
+      </div>
+    </section>
+  )}
+
   <section class="section overview">
     <div class="container overview__grid">
       <div class="reveal">
@@ -46,18 +62,6 @@ const ext = (url: string) => url?.startsWith('http');
     </div>
   </section>
 
-  {home.stats?.length > 0 && (
-    <section class="stats">
-      <div class="container stats__grid">
-        {home.stats.map((s) => (
-          <div class="stat reveal">
-            <p class="stat__value display">{s.value}</p>
-            <p class="stat__label">{s.label}</p>
-          </div>
-        ))}
-      </div>
-    </section>
-  )}
 
   {home.process?.steps?.length > 0 && (
     <section class="section process">
@@ -233,6 +237,28 @@ const ext = (url: string) => url?.startsWith('http');
   <SocialFeed />
 </Base>
 
+<script>
+  // Count the stats up from zero when they scroll into view (instant for reduced-motion visitors)
+  const countUp = (el: HTMLElement) => {
+    const raw = el.dataset.count ?? '';
+    const target = Number(raw.replace(/,/g, ''));
+    if (!Number.isFinite(target) || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    const fmt = (n: number) => (raw.includes(',') ? Math.round(n).toLocaleString('en-CA') : String(Math.round(n)));
+    const t0 = performance.now(), dur = 1400;
+    const tick = (now: number) => {
+      const t = Math.min(1, (now - t0) / dur), e = 1 - Math.pow(1 - t, 3);
+      el.textContent = fmt(target * e);
+      if (t < 1) requestAnimationFrame(tick); else el.textContent = raw;
+    };
+    el.textContent = fmt(0);
+    requestAnimationFrame(tick);
+  };
+  const statIO = new IntersectionObserver((entries) => entries.forEach((e) => {
+    if (e.isIntersecting) { countUp(e.target as HTMLElement); statIO.unobserve(e.target); }
+  }), { threshold: 0.6 });
+  document.querySelectorAll<HTMLElement>('[data-count]').forEach((el) => statIO.observe(el));
+</script>
+
 <style>
   .hero { position: relative; overflow: hidden; height: calc(100svh - var(--announce-h)); min-height: 520px; display: flex; align-items: flex-end; color: var(--paper); isolation: isolate; padding-block: calc(var(--header-h) + 32px) clamp(40px, 8vh, 96px); }
   .hero::after { content: ''; position: absolute; inset: 0; z-index: -1; background: linear-gradient(180deg, rgba(10, 10, 9, 0.5) 0%, rgba(10, 10, 9, 0.08) 38%, rgba(10, 10, 9, 0.72) 100%); }
@@ -242,12 +268,13 @@ const ext = (url: string) => url?.startsWith('http');
   .hero__sub { font-size: clamp(18px, 1.6vw, 22px); max-width: 52ch; margin-top: 24px; color: rgba(246, 244, 239, 0.86); }
   .hero__ctas { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 36px; }
 
-  .stats { border-bottom: 1px solid var(--line); }
-  .stats__grid { display: grid; grid-template-columns: repeat(4, 1fr); }
-  .stat { padding: 40px 24px 36px 0; }
-  .stat + .stat { padding-left: 24px; border-left: 1px solid var(--line); }
-  .stat__value { font-size: clamp(30px, 3vw, 44px); line-height: 1; margin: 0 0 10px; }
-  .stat__label { font-size: 14px; color: var(--muted); margin: 0; }
+  .stats { background: var(--ink); color: var(--paper); padding-block: clamp(36px, 4.5vw, 56px) clamp(24px, 3vw, 36px); }
+  .stats__grid { display: grid; grid-template-columns: repeat(4, 1fr); margin: 0; }
+  .stat { display: flex; flex-direction: column-reverse; justify-content: flex-end; gap: 10px; padding: 4px clamp(16px, 2.5vw, 36px); border-left: 1px solid rgba(246, 244, 239, 0.18); }
+  .stat:first-child { padding-left: 0; border-left: 0; }
+  .stat__value { margin: 0; font-size: clamp(44px, 5.4vw, 80px); font-weight: 600; letter-spacing: -0.045em; line-height: 0.95; font-variant-numeric: tabular-nums; }
+  .stat__label { font-size: 14px; font-weight: 600; letter-spacing: 0.02em; color: rgba(246, 244, 239, 0.7); max-width: 18ch; }
+  .stats__note { margin: clamp(22px, 2.6vw, 32px) 0 0; padding-top: 14px; border-top: 1px solid rgba(246, 244, 239, 0.14); font-size: 12.5px; color: rgba(246, 244, 239, 0.5); }
 
   .section-head { margin-bottom: clamp(40px, 5vw, 72px); }
   .section-head h2 { max-width: 20ch; }
@@ -283,16 +310,12 @@ const ext = (url: string) => url?.startsWith('http');
   @media (max-width: 900px) {
     .feature, .philosophy__grid { grid-template-columns: 1fr; }
     .feature--flip .feature__media { order: 0; }
-    .stats__grid { grid-template-columns: repeat(2, 1fr); }
+    .stats__grid { grid-template-columns: repeat(2, 1fr); row-gap: 28px; }
     .stat:nth-child(3) { padding-left: 0; border-left: 0; }
-    .stat:nth-child(n + 3) { border-top: 1px solid var(--line); }
     .grid-3 { grid-template-columns: 1fr 1fr; }
   }
   @media (max-width: 600px) {
     .grid-3, .grid-4 { grid-template-columns: 1fr; }
-    .stat { padding: 28px 12px 24px 0; }
-    .stat + .stat { padding-left: 12px; }
-    .stat:nth-child(3) { padding-left: 0; }
     .feature__facts { grid-template-columns: 1fr; }
   }
   .feature__pills { position: absolute; top: 20px; left: 20px; right: 20px; display: flex; flex-wrap: wrap; gap: 6px; }

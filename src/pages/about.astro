@@ -186,6 +186,33 @@ const e = home.elevate;
     track.addEventListener('scroll', update, { passive: true });
     addEventListener('resize', update);
     update();
+
+    // On first view, slide from the beginning to the most recent chapter; visitors can then click or swipe back.
+    let raf = 0, cancelled = false;
+    const stop = () => { cancelled = true; cancelAnimationFrame(raf); track.classList.remove('is-sliding'); };
+    ['pointerdown', 'wheel', 'touchstart', 'keydown'].forEach((ev) => track.addEventListener(ev, stop, { passive: true }));
+    prev.addEventListener('click', stop);
+    next.addEventListener('click', stop);
+    const slideToEnd = () => {
+      const end = track.scrollWidth - track.clientWidth;
+      if (end <= 0 || cancelled) return;
+      if (matchMedia('(prefers-reduced-motion: reduce)').matches) { track.scrollLeft = end; return; }
+      track.classList.add('is-sliding');
+      const t0 = performance.now(), dur = Math.min(2600, 700 + end * 0.9);
+      const tick = (now: number) => {
+        if (cancelled) return;
+        const t = Math.min(1, (now - t0) / dur);
+        const e = t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2; // ease in-out
+        track.scrollLeft = end * e;
+        if (t < 1) raf = requestAnimationFrame(tick);
+        else track.classList.remove('is-sliding');
+      };
+      raf = requestAnimationFrame(tick);
+    };
+    const io = new IntersectionObserver((entries) => {
+      if (entries.some((e) => e.isIntersecting)) { io.disconnect(); setTimeout(slideToEnd, 350); }
+    }, { threshold: 0.45 });
+    io.observe(track);
   });
 
   document.querySelectorAll<HTMLButtonElement>('[data-member]').forEach((b) => {
@@ -217,6 +244,7 @@ const e = home.elevate;
   .tl__btn:hover:not(:disabled) { border-color: var(--ink); }
   .tl__btn:disabled { opacity: 0.35; cursor: default; }
   .tl__track { list-style: none; margin: 0; padding: 0 0 18px; display: grid; grid-auto-flow: column; grid-auto-columns: minmax(280px, 320px); gap: 20px; overflow-x: auto; scroll-snap-type: x mandatory; scroll-behavior: smooth; overscroll-behavior-x: contain; scrollbar-width: thin; position: relative; }
+  .tl__track.is-sliding { scroll-snap-type: none; scroll-behavior: auto; }
   .tl__track:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
   .tl__track::before { content: ''; position: absolute; left: 0; right: 0; top: 9px; height: 1px; background: var(--line); }
   .tl__card { scroll-snap-align: start; position: relative; display: flex; flex-direction: column; gap: 10px; padding-top: 30px; }

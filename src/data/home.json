@@ -22,20 +22,20 @@
   },
   "stats": [
     {
-      "value": "2007",
-      "label": "Building in the GTA since"
+      "value": "19",
+      "label": "Years building in Toronto"
     },
     {
       "value": "1,095",
-      "label": "Rental homes under construction or planned at Everston, Cliffside and Retreat"
+      "label": "Rental homes in progress"
     },
     {
-      "value": "190",
-      "label": "Homes at Merge Condos, completed in 2023"
+      "value": "10",
+      "label": "Developments and client projects"
     },
     {
-      "value": "Elevate",
-      "label": "Affiliated preconstruction and construction management"
+      "value": "4",
+      "label": "Rental communities in progress"
     }
   ],
   "process": {
@@ -126,5 +126,6 @@
     "eyebrow": "News & media",
     "heading": "Latest from LCH",
     "count": 3
-  }
+  },
+  "statsNote": "Rental homes at Everston, Cliffside and Retreat, under construction or planned. Rental communities: Everston, Cliffside, Retreat and 415 Broadview. As of November 2026."
 }
