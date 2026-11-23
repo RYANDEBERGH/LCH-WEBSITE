@@ -2,11 +2,13 @@
 title: "Merge Condos"
 order: 5
 featured: false
+approach: "Merge carried LCH through the full development cycle: approvals, design, construction, occupancy and closeout. It was completed in 2023."
 stage: "Complete"
 type: "Condominium"
 address: "2201 Kingston Road"
 neighbourhood: "Cliffside, Scarborough"
 intersection: "Kingston Road & Danforth Avenue"
+units: 190
 storeys: 11
 partners: []
 architect: ""
@@ -47,6 +49,10 @@ milestones:
     label: "Exterior cladding reported"
     source: "UrbanToronto"
     sourceUrl: "https://urbantoronto.ca/news/2022/06/merge-condos-boasts-multi-tonal-cladding-articulate-exterior.48151"
+  - date: "2023"
+    label: "Completed"
+    source: "LCH Developments"
+    sourceUrl: ""
 ---
 
 A stunning new gateway into Scarborough’s Cliffside Village. A place that draws people in, suited to all lifestyles. A coming together of all walks of life at one point. An 11-storey development boasting over 3,000 square feet of retail, and an outdoor rooftop to take in views of Toronto's waterfront. Live where Kingston Rd & Danforth meet, Merge Condos.

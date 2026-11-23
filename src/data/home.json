@@ -9,9 +9,16 @@
       "url": "/projects/"
     },
     "secondaryCta": {
-      "label": "Our story",
-      "url": "/story/"
+      "label": "About us",
+      "url": "/about/"
     }
+  },
+  "overview": {
+    "eyebrow": "About LCH",
+    "heading": "Development experience, connected to construction.",
+    "body": "LCH Developments is a Toronto-based real estate development company working across purpose-built rental housing, mixed-use communities and heritage redevelopment. We develop our own projects and provide development management for owners and partners, bringing together feasibility, planning approvals, project economics and design coordination.\n\nThrough our affiliated construction manager, Elevate, construction expertise informs decisions from early planning through delivery. Our experience also includes helping owners, lenders and receivers move challenging projects toward completion.",
+    "ctaLabel": "About LCH",
+    "ctaUrl": "/about/"
   },
   "stats": [
     {
@@ -19,52 +26,51 @@
       "label": "Building in the GTA since"
     },
     {
-      "value": "1,145",
-      "label": "Rental homes in our pipeline"
+      "value": "1,095",
+      "label": "Rental homes under construction or planned at Everston, Cliffside and Retreat"
     },
     {
-      "value": "5 of 8",
-      "label": "Communities on Kingston Road"
+      "value": "190",
+      "label": "Homes at Merge Condos, completed in 2023"
     },
     {
-      "value": "In-house",
-      "label": "Construction through Elevate CM"
+      "value": "Elevate",
+      "label": "Affiliated preconstruction and construction management"
     }
   ],
   "process": {
     "eyebrow": "How we make it happen",
-    "heading": "From a site others overlook to homes people move into.",
+    "heading": "From project potential to a coordinated plan for delivery.",
+    "intro": "We connect development strategy with the practical work of approvals, design, financing coordination and construction. These workstreams progress together, with decisions tested against cost, schedule and the needs of the finished building.",
     "steps": [
       {
-        "title": "Identify",
-        "body": "We look for neighbourhoods with high growth and untapped potential, and sites others may overlook."
+        "title": "Understand the opportunity",
+        "body": "We assess the site, planning context, market and ownership objectives. Feasibility studies, development budgets and schedules establish what the project can achieve and what needs to be resolved."
       },
       {
-        "title": "Approve",
-        "body": "We take each site through planning with the City and the community, from application to permit."
+        "title": "Optimize the development",
+        "body": "We test building form, floorplates, unit mix, parking and major systems against rentable area, construction cost and long-term operation. We translate those decisions into coordinated direction for the design team."
       },
       {
-        "title": "Partner",
-        "body": "We bring together capital partners, co-developers, designers and trades. Retreat is advancing with Fiera Real Estate."
+        "title": "Coordinate the path to construction",
+        "body": "We manage consultants, municipal submissions and responses, while tracking servicing, agreements and permit requirements. Design and preconstruction advance together so approvals and construction planning remain aligned."
       },
       {
-        "title": "Adapt",
-        "body": "Plans change as markets do. Cliffside launched as condominiums in 2024 and is now being built as 209 rental homes."
+        "title": "Plan and build with Elevate",
+        "body": "Elevate brings estimating, trade input, constructability reviews, tendering and procurement into the process early. During construction, its project and site teams manage delivery while LCH continues development and owner oversight."
       },
       {
-        "title": "Deliver",
-        "body": "Through Elevate Construction Management, the team that plans a project is the team that builds it."
+        "title": "Carry it through occupancy",
+        "body": "We coordinate occupancy approvals, outstanding municipal obligations and the transition to building operations. Working with Elevate and the wider project team, we support turnover, deficiencies and project closeout."
       }
-    ]
+    ],
+    "footnote": "Budgets, cash flow, schedules and owner reporting connect each stage. Partnership and a willingness to rethink the plan shape how we work throughout.",
+    "ctaLabel": "Explore our expertise",
+    "ctaUrl": "/about/#expertise"
   },
   "featured": {
     "eyebrow": "Current communities",
     "heading": "Purpose-built rentals, shaped by their neighbourhoods."
-  },
-  "map": {
-    "eyebrow": "Where we build",
-    "heading": "Five of our eight communities are on Kingston Road.",
-    "body": "From Merge Condos at Danforth Avenue to Everston near U of T Scarborough, Kingston Road is where our work is most concentrated, close to the Bluffs, the ravines and GO transit. Our projects also reach Leslieville and Riverdale, and we continue to look for opportunities across the GTA."
   },
   "leasingBand": {
     "enabled": true,
@@ -76,16 +82,45 @@
     "ctaUrl": "https://everston.ca",
     "image": "/uploads/int-everston-lobby-cam-001-1.jpg"
   },
+  "map": {
+    "eyebrow": "Portfolio",
+    "heading": "Explore our projects.",
+    "body": "Explore our developments and selected client assignments, from completed homes to communities taking shape."
+  },
   "elevate": {
-    "eyebrow": "Elevate Construction Management",
-    "heading": "Development and construction, under one roof.",
-    "body": "Elevate Construction Management is LCH’s affiliated construction manager. Working together from early planning through delivery helps us make informed decisions about design, cost, quality and schedule, and how each community will serve its residents.",
-    "ctaLabel": "Visit elevatecm.com",
-    "ctaUrl": "https://elevatecm.com"
+    "eyebrow": "LCH and Elevate",
+    "heading": "Development and construction, working together.",
+    "body": "LCH leads the development work: feasibility, approvals, design coordination and owner oversight. Elevate leads preconstruction and construction management. Working together early allows construction costs, trade input and sequencing to inform the design before decisions become difficult to change.\n\nThat coordination continues through tendering, construction and turnover, with responsibilities clearly assigned across the team.",
+    "lch": [
+      "Feasibility and development strategy",
+      "Approvals and consultant coordination",
+      "Design coordination and optimization",
+      "Budgets, cash flow and owner reporting"
+    ],
+    "elevateList": [
+      "Estimating and constructability reviews",
+      "Trade input, tendering and procurement",
+      "Construction and site management",
+      "Turnover, deficiencies and closeout"
+    ],
+    "image": "/uploads/adobe-express-file-3-1.jpg",
+    "imageAlt": "Everston under construction, with both tower cranes up",
+    "ctaLabel": "About LCH and Elevate",
+    "ctaUrl": "/about/#lch-elevate",
+    "extLabel": "Visit elevatecm.com",
+    "extUrl": "https://elevatecm.com"
   },
   "press": {
     "eyebrow": "In the press",
     "heading": "Covered by"
+  },
+  "business": {
+    "heading": "Planning a project, or working through a challenging one?",
+    "body": "We work with owners, partners, lenders and receivers on development, development management and project recovery.",
+    "ctaLabel": "Discuss a project",
+    "ctaUrl": "/partnerships/#partner-form",
+    "secondaryLabel": "Ways to work with us",
+    "secondaryUrl": "/partnerships/"
   },
   "news": {
     "eyebrow": "News & media",

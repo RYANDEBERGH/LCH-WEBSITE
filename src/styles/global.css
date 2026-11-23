@@ -112,6 +112,8 @@ p { margin: 0 0 1em; text-wrap: pretty; }
 }
 .pill::before { content: ''; width: 7px; height: 7px; border-radius: 50%; background: var(--dot, #8a8680); }
 .pill--leasing { background: var(--accent); color: #fff; }
+.pill--client { background: var(--ink); color: var(--paper); }
+.pill--client::before { display: none; }
 .pill--leasing::before { background: #fff; }
 .pill[data-tone='build'] { --dot: #4f7cac; }
 .pill[data-tone='soon'] { --dot: var(--accent); }

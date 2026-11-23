@@ -1,7 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
 import Img from '../components/Img.astro';
-import { partnerships as P, getProjects, stageTone, brandInk } from '../lib/site';
+import { partnerships as P, getProjects, stageTone, brandInk, isClientWork } from '../lib/site';
 
 const projects = await getProjects();
 ---
@@ -71,17 +71,17 @@ const projects = await getProjects();
     <div class="container track">
       <div class="track__head">
         <p class="eyebrow">Track record</p>
-        <h2>Eight communities, from heritage lofts to 566 rental homes.</h2>
+        <h2>Our developments and selected client work.</h2>
       </div>
       <ul class="track__list">
         {projects.map((p) => (
           <li>
             <a href={`/projects/${p.id}/`} class="tp" style={`--brand: ${brandInk(p)}`}>
-              <Img src={p.data.heroImage} alt="" sizes="(max-width: 700px) 50vw, 25vw" />
+              {p.data.heroImage ? <Img src={p.data.heroImage} alt="" sizes="(max-width: 700px) 50vw, 25vw" /> : <span class="tp__ph" aria-hidden="true">{p.data.neighbourhood}</span>}
               <span class="tp__body">
                 <strong>{p.data.title}</strong>
-                <em>{p.data.type}{p.data.units ? ` · ${p.data.units.toLocaleString()} homes` : ''}</em>
-                <span class="pill" data-tone={stageTone(p.data.stage)}>{p.data.stage}</span>
+                <em>{isClientWork(p) ? p.data.roleLabel : p.data.type}{p.data.units ? ` · ${p.data.units.toLocaleString()} homes` : ''}</em>
+                {isClientWork(p) ? <span class="pill pill--client-dark">Selected client work</span> : p.data.stage && <span class="pill" data-tone={stageTone(p.data.stage)}>{p.data.stage}</span>}
               </span>
             </a>
           </li>
@@ -189,6 +189,9 @@ const projects = await getProjects();
   .tp { display: block; text-decoration: none; color: inherit; }
   .tp :global(img) { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; border-radius: var(--radius); margin-bottom: 12px; transition: opacity 0.2s; }
   .tp:hover :global(img) { opacity: 0.85; }
+  .tp__ph { display: flex; align-items: flex-end; aspect-ratio: 4 / 3; padding: 14px; margin-bottom: 12px; border-radius: var(--radius); background: linear-gradient(160deg, #2b3a44, #0f0f0e); color: rgba(246, 244, 239, 0.7); font-size: 13px; font-weight: 600; }
+  .pill--client-dark { background: rgba(246, 244, 239, 0.14); color: var(--paper); }
+  .pill--client-dark::before { display: none; }
   .tp__body { display: grid; gap: 4px; justify-items: start; padding-left: 12px; border-left: 3px solid var(--brand); }
   .tp strong { font-size: 17px; font-weight: 600; }
   .tp em { font-style: normal; font-size: 13px; color: rgba(246, 244, 239, 0.65); }

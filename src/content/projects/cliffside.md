@@ -2,6 +2,7 @@
 title: "Cliffside"
 order: 2
 featured: true
+approach: "Originally planned as a condominium, Cliffside was redesigned as a 209-home purpose-built rental building. LCH coordinated the change across unit mix, building systems and approvals with its partner, Cogir Real Estate, before construction began."
 stage: "Under Construction"
 type: "Purpose-Built Rental"
 address: "2328–2350 Kingston Road"

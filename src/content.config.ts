@@ -10,8 +10,8 @@ const optNum = z.preprocess((v) => (v === '' ? null : v), z.number().nullish());
 // Construction stage and leasing are tracked separately: a building can be under construction and pre-leasing at once.
 const STAGES = ['In Development', 'Under Construction', 'Complete'] as const;
 const LEASING = ['', 'Now Pre-Leasing', 'Now Leasing', 'Join the Waitlist', 'Fully Leased'] as const;
-// Milestone dates can be a full date (2026-10-30) or just a month (2026-08) when that's all that was reported.
-const milestoneDate = z.union([z.string().regex(/^\d{4}-\d{2}(-\d{2})?$/), z.date().transform((d) => d.toISOString().slice(0, 10))]);
+// Milestone dates can be a full date (2026-10-30), a month (2026-08) or a year (2023) — whatever was actually reported.
+const milestoneDate = z.union([z.string().regex(/^\d{4}(-\d{2}(-\d{2})?)?$/), z.date().transform((d) => d.toISOString().slice(0, 10))]);
 
 const projects = defineCollection({
   loader: glob({ pattern: '**/*.md', base: './src/content/projects' }),
@@ -20,7 +20,12 @@ const projects = defineCollection({
     order: z.number().default(99),
     featured: z.boolean().default(false),
     hidden: z.boolean().default(false),
-    stage: z.enum(STAGES),
+    // 'development' = LCH's own project; 'client' = selected client work (development/construction management for an owner, lender or receiver)
+    assignment: z.enum(['development', 'client']).default('development'),
+    roleLabel: z.string().nullish(),
+    client: z.string().nullish(),
+    approach: z.string().nullish(),
+    stage: z.enum(STAGES).nullish(),
     type: z.string(),
     address: z.string().optional().default(''),
     neighbourhood: z.string().optional().default(''),
@@ -32,7 +37,7 @@ const projects = defineCollection({
     summary: z.string(),
     brandColor: z.string().regex(/^#[0-9a-fA-F]{6}$/).nullish(),
     logo: z.string().nullish(),
-    heroImage: z.string(),
+    heroImage: z.string().nullish(),
     gallery: z
       .array(z.object({ image: z.string(), caption: z.string().nullish() }))
       .nullish()

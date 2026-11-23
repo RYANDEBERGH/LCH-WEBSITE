@@ -1,0 +1,277 @@
+---
+import Base from '../layouts/Base.astro';
+import Img from '../components/Img.astro';
+import { render } from 'astro:content';
+import { story, home, getTeam, getProjects, md, brandInk } from '../lib/site';
+
+const team = await Promise.all((await getTeam()).map(async (t) => ({ ...t, Content: (await render(t)).Content })));
+const projectsById = Object.fromEntries((await getProjects()).map((p) => [p.id, p]));
+const e = home.elevate;
+---
+
+<Base title="About Us" description="LCH Developments: development, development management and, through affiliated Elevate, construction management. Our history, expertise and team.">
+  <section class="ahead">
+    <div class="container ahead__grid">
+      <div>
+        <p class="eyebrow">{story.hero.eyebrow}</p>
+        <h1>{story.hero.heading}</h1>
+        <div class="ahead__body" set:html={md(story.overview.body)} />
+      </div>
+      <figure class="ahead__photo">
+        <Img src={story.overview.image} alt={story.overview.imageAlt} sizes="(max-width: 900px) 100vw, 45vw" loading="eager" />
+      </figure>
+    </div>
+    <div class="container">
+      <ul class="values">
+        {story.values.map((v) => (
+          <li><h3>{v.title}</h3><p>{v.body}</p></li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <section class="section history" id="history">
+    <div class="container">
+      <p class="eyebrow">{story.timelineHeading.eyebrow}</p>
+      <h2 class="sec-h">{story.timelineHeading.heading}</h2>
+      <ol class="chapters">
+        {story.timeline.map((c) => (
+          <li class:list={['chapter reveal', { 'chapter--media': c.images.length > 0 }]}>
+            <div class="chapter__text">
+              <p class="chapter__label">{c.label}</p>
+              <h3>{c.title}</h3>
+              <p>{c.text}</p>
+              {c.projects.length > 0 && (
+                <p class="chapter__links">
+                  {c.projects.map((id) => projectsById[id]).filter(Boolean).map((p) => (
+                    <a href={`/projects/${p.id}/`} style={`--brand: ${brandInk(p)}`}>{p.data.title}</a>
+                  ))}
+                </p>
+              )}
+            </div>
+            {c.images.length > 0 && (
+              <div class:list={['chapter__imgs', `chapter__imgs--${Math.min(c.images.length, 4)}`]}>
+                {c.images.map((im) => (
+                  <figure>
+                    <Img src={im.image} alt={im.alt} sizes="(max-width: 900px) 100vw, 30vw" />
+                    {im.caption && <figcaption>{im.caption}</figcaption>}
+                  </figure>
+                ))}
+              </div>
+            )}
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  <section class="section section--alt" id="expertise">
+    <div class="container">
+      <p class="eyebrow">{story.expertise.eyebrow}</p>
+      <h2 class="sec-h">{story.expertise.heading}</h2>
+      <div class="expertise">
+        {story.expertise.items.map((x, i) => (
+          <article class="xp reveal">
+            <span class="xp__num">{String(i + 1).padStart(2, '0')}</span>
+            <h3>{x.title}</h3>
+            <p>{x.body}</p>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--dark" id="lch-elevate">
+    <div class="container">
+      <div class="le__top">
+        <div>
+          <p class="eyebrow">{e.eyebrow}</p>
+          <h2>{e.heading}</h2>
+          <div class="le__body" set:html={md(e.body)} />
+          <a class="btn btn--ghost-light" href={e.extUrl} target="_blank" rel="noopener">{e.extLabel} <span class="arrow" aria-hidden="true">↗</span></a>
+        </div>
+        <figure class="le__photo"><Img src={e.image} alt={e.imageAlt} sizes="(max-width: 900px) 100vw, 45vw" /></figure>
+      </div>
+      <div class="le__roles">
+        <div><p class="le__who">LCH leads</p><ul>{e.lch.map((x) => <li>{x}</li>)}</ul></div>
+        <div><p class="le__who">Elevate leads</p><ul>{e.elevateList.map((x) => <li>{x}</li>)}</ul></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="experience">
+    <div class="container">
+      <p class="eyebrow">{story.experience.eyebrow}</p>
+      <h2 class="sec-h">{story.experience.heading}</h2>
+      <div class="cases">
+        {story.experience.items.map((c) => (
+          <article class="case reveal">
+            <p class="case__role">Selected client work · {c.role}</p>
+            <h3>{c.title}</h3>
+            <p class="case__lead">{c.heading}</p>
+            <p>{c.body}</p>
+            {c.project && <a class="link-arrow" href={`/projects/${c.project}/`}>View {c.title} →</a>}
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--alt" id="team">
+    <div class="container">
+      <p class="eyebrow">{story.team.eyebrow}</p>
+      <h2 class="sec-h">{story.team.heading}</h2>
+      <div class="team">
+        {team.map((t) => (
+          <article class="member reveal">
+            <button class="member__btn" data-member={t.id} aria-haspopup="dialog">
+              <div class="member__photo">
+                {t.data.photo && <Img src={t.data.photo} alt={t.data.name} sizes="(max-width: 600px) 50vw, 25vw" />}
+              </div>
+              <h3>{t.data.name}{t.data.credentials && <span class="member__cred">, {t.data.credentials}</span>}</h3>
+              <p class="member__role">{t.data.role}</p>
+              <span class="member__more">Read bio +</span>
+            </button>
+            <dialog class="bio" id={`bio-${t.id}`} aria-label={`${t.data.name} biography`}>
+              <button class="bio__close" data-close aria-label="Close">×</button>
+              <div class="bio__grid">
+                {t.data.photo && <Img src={t.data.photo} alt={t.data.name} sizes="300px" class="bio__photo" />}
+                <div>
+                  <p class="eyebrow">{t.data.role}</p>
+                  <h2>{t.data.name}</h2>
+                  {t.data.credentials && <p class="member__cred">{t.data.credentials}</p>}
+                  <div class="prose"><t.Content /></div>
+                  {t.data.linkedin && <a class="link-arrow" href={t.data.linkedin} target="_blank" rel="noopener">{t.data.name.split(' ')[0]} on LinkedIn ↗</a>}
+                </div>
+              </div>
+            </dialog>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section acta">
+    <div class="container acta__inner">
+      <div>
+        <h2>{story.cta.heading}</h2>
+        <p class="lede">{story.cta.body}</p>
+      </div>
+      <div class="acta__btns">
+        <a class="btn" href={story.cta.ctaUrl}>{story.cta.ctaLabel} <span class="arrow" aria-hidden="true">→</span></a>
+        <a class="btn btn--ghost" href={story.cta.secondaryUrl}>{story.cta.secondaryLabel}</a>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<script>
+  document.querySelectorAll<HTMLButtonElement>('[data-member]').forEach((b) => {
+    const dlg = document.getElementById(`bio-${b.dataset.member}`) as HTMLDialogElement;
+    b.addEventListener('click', () => dlg.showModal());
+    dlg.querySelector('[data-close]')!.addEventListener('click', () => dlg.close());
+    dlg.addEventListener('click', (e) => { if (e.target === dlg) dlg.close(); });
+  });
+</script>
+
+<style>
+  .ahead { padding-block: clamp(56px, 8vw, 112px) clamp(48px, 6vw, 80px); }
+  .ahead__grid { display: grid; grid-template-columns: minmax(0, 6fr) minmax(0, 5fr); gap: clamp(32px, 6vw, 96px); align-items: center; }
+  .ahead h1 { font-size: clamp(40px, 5.4vw, 76px); margin-bottom: 24px; max-width: 14ch; }
+  .ahead__body :global(p) { font-size: 18px; color: var(--ink-2); }
+  .ahead__photo { margin: 0; }
+  .ahead__photo :global(img) { width: 100%; height: auto; border-radius: var(--radius); }
+  .values { list-style: none; margin: clamp(40px, 5vw, 64px) 0 0; padding: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(20px, 3vw, 40px); }
+  .values li { border-top: 2px solid var(--ink); padding-top: 16px; }
+  .values h3 { font-size: 19px; margin-bottom: 6px; }
+  .values p { margin: 0; color: var(--muted); font-size: 15.5px; }
+
+  .sec-h { margin-bottom: clamp(32px, 4vw, 56px); max-width: 22ch; }
+  .history { border-top: 1px solid var(--line); }
+  .chapters { list-style: none; margin: 0; padding: 0; position: relative; }
+  .chapters::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 1px; background: var(--line); }
+  .chapter { position: relative; display: grid; grid-template-columns: minmax(0, 1fr); gap: 20px; padding: 0 0 clamp(36px, 4vw, 56px) clamp(24px, 3vw, 40px); }
+  .chapter::before { content: ''; position: absolute; left: -5px; top: 6px; width: 11px; height: 11px; background: var(--ink); border-radius: 2px; }
+  .chapter--media { grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); align-items: start; }
+  .chapter__label { font-size: 13px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); margin-bottom: 6px; }
+  .chapter h3 { font-size: clamp(22px, 2vw, 28px); margin-bottom: 8px; }
+  .chapter__text > p:not(.chapter__label):not(.chapter__links) { color: var(--ink-2); max-width: 52ch; margin: 0; }
+  .chapter__links { display: flex; flex-wrap: wrap; gap: 6px 16px; margin: 12px 0 0; font-size: 14px; }
+  .chapter__links a { color: var(--brand); font-weight: 600; text-decoration: none; }
+  .chapter__links a:hover { text-decoration: underline; }
+  .chapter__imgs { display: grid; gap: 10px; }
+  .chapter__imgs--2 { grid-template-columns: 1fr 1fr; }
+  .chapter__imgs--3, .chapter__imgs--4 { grid-template-columns: 1fr 1fr; }
+  .chapter__imgs figure { margin: 0; position: relative; }
+  .chapter__imgs :global(img) { width: 100%; aspect-ratio: 3 / 2; object-fit: cover; border-radius: var(--radius); }
+  .chapter__imgs--1 :global(img) { aspect-ratio: auto; height: auto; max-height: 420px; }
+  .chapter__imgs figcaption { position: absolute; left: 8px; bottom: 8px; font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; background: rgba(255, 255, 255, 0.92); color: var(--ink); padding: 3px 7px; border-radius: 2px; }
+
+  .expertise { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0 clamp(24px, 3vw, 48px); }
+  .xp { padding: 24px 0 36px; border-top: 1px solid var(--line); }
+  .xp__num { font-size: 12px; font-weight: 700; letter-spacing: 0.12em; color: var(--accent); }
+  .xp h3 { font-size: 20px; margin: 10px 0 10px; }
+  .xp p { margin: 0; color: var(--ink-2); font-size: 15.5px; }
+
+  .le__top { display: grid; grid-template-columns: minmax(0, 6fr) minmax(0, 5fr); gap: clamp(32px, 5vw, 80px); align-items: center; }
+  .le__top h2 { margin-bottom: 20px; }
+  .le__body :global(p) { color: rgba(246, 244, 239, 0.78); font-size: 17px; }
+  .le__top .btn { margin-top: 12px; }
+  .le__photo { margin: 0; }
+  .le__photo :global(img) { width: 100%; height: auto; border-radius: var(--radius); }
+  .le__roles { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(20px, 3vw, 40px); margin-top: clamp(40px, 5vw, 64px); }
+  .le__roles > div { border-top: 1px solid rgba(246, 244, 239, 0.2); padding-top: 20px; }
+  .le__who { font-size: 12px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(246, 244, 239, 0.6); margin-bottom: 12px; }
+  .le__roles ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+  .le__roles li { font-size: 17px; padding-left: 18px; position: relative; }
+  .le__roles li::before { content: ''; position: absolute; left: 0; top: 10px; width: 6px; height: 6px; background: rgba(246, 244, 239, 0.6); }
+
+  .cases { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(20px, 2.5vw, 32px); }
+  .case { background: var(--white); border: 1px solid var(--line); border-radius: var(--radius); padding: 28px 26px; display: flex; flex-direction: column; gap: 10px; }
+  .case__role { font-size: 11.5px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin: 0; }
+  .case h3 { font-size: 24px; }
+  .case__lead { font-weight: 600; margin: 0; }
+  .case p:not(.case__role):not(.case__lead) { color: var(--ink-2); font-size: 15.5px; margin: 0; flex: 1; }
+  .case .link-arrow { align-self: flex-start; font-size: 14px; margin-top: 8px; }
+
+  .acta { border-top: 1px solid var(--line); }
+  .acta__inner { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 24px 48px; }
+  .acta h2 { font-size: clamp(28px, 3vw, 42px); margin-bottom: 10px; }
+  .acta .lede { margin: 0; }
+  .acta__btns { display: flex; flex-wrap: wrap; gap: 10px; }
+
+  .team-h { margin-bottom: 48px; }
+  .team { display: grid; grid-template-columns: repeat(4, 1fr); gap: 48px 28px; }
+  .member__btn { all: unset; cursor: pointer; display: block; width: 100%; }
+  .member__btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 6px; }
+  .member__photo { aspect-ratio: 4 / 5; overflow: hidden; border-radius: var(--radius); background: var(--paper-2); margin-bottom: 18px; }
+  .member__photo :global(img) { width: 100%; height: 100%; object-fit: cover; object-position: center 20%; filter: grayscale(1); transition: filter 0.5s, transform 1s var(--ease); }
+  .member__btn:hover .member__photo :global(img) { filter: grayscale(0); transform: scale(1.03); }
+  .member h3 { font-size: 19px; }
+  .member__cred { color: var(--muted); font-weight: 400; font-size: 0.85em; }
+  .member__role { font-size: 15px; color: var(--muted); margin: 4px 0 10px; }
+  .member__more { font-size: 13px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--accent); }
+  .bio { width: min(960px, calc(100vw - 32px)); max-height: calc(100dvh - 48px); border: 0; border-radius: 8px; padding: clamp(24px, 4vw, 56px); background: var(--paper); color: var(--ink); }
+  .bio::backdrop { background: rgba(10, 10, 9, 0.6); backdrop-filter: blur(4px); }
+  .bio__grid { display: grid; grid-template-columns: 260px 1fr; gap: 40px; align-items: start; }
+  .bio__grid :global(.bio__photo) { border-radius: var(--radius); width: 100%; aspect-ratio: 4 / 5; object-fit: cover; }
+  .bio h2 { font-size: clamp(36px, 4vw, 52px); margin-bottom: 8px; }
+  .bio .eyebrow { margin-bottom: 12px; }
+  .bio .prose { margin-top: 20px; font-size: 16px; }
+  .bio__close { position: absolute; top: 12px; right: 16px; border: 0; background: none; font-size: 36px; cursor: pointer; color: var(--ink); line-height: 1; }
+    .team { grid-template-columns: repeat(2, 1fr); gap: 36px 16px; }
+    .bio__grid { grid-template-columns: 1fr; }
+    .bio__grid :global(.bio__photo) { max-width: 200px; }
+
+  @media (max-width: 1000px) { .team { grid-template-columns: repeat(3, 1fr); } .cases { grid-template-columns: 1fr 1fr; } .expertise { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 900px) {
+    .ahead__grid, .le__top, .chapter--media { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 680px) {
+    .values, .le__roles, .cases, .expertise { grid-template-columns: 1fr; }
+    .team { grid-template-columns: repeat(2, 1fr); gap: 36px 16px; }
+    .bio__grid { grid-template-columns: 1fr; }
+    .bio__grid :global(.bio__photo) { max-width: 200px; }
+    .chapter__imgs--2, .chapter__imgs--3, .chapter__imgs--4 { grid-template-columns: 1fr 1fr; }
+  }
+</style>

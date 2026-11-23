@@ -2,6 +2,7 @@
 title: "Everston"
 order: 1
 featured: true
+approach: "LCH repositioned Everston as a purpose-built rental community, coordinating the redesign with approvals and a phased permitting strategy so construction could proceed while later permits advanced. Elevate manages preconstruction and construction, while LCH maintains development and owner oversight through leasing."
 stage: "Under Construction"
 type: "Purpose-Built Rental"
 address: "4630 Kingston Road"

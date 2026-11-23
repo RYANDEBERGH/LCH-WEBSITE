@@ -13,12 +13,14 @@ export { settings, home, story, contact, corporate, partnerships, mapData };
 export const md = (text?: string | null) => (text ? (marked.parse(text, { async: false }) as string) : '');
 
 export const STAGE_ORDER = ['In Development', 'Under Construction', 'Complete'] as const;
-export const isCurrent = (p: CollectionEntry<'projects'>) => p.data.stage !== 'Complete';
+export const isClientWork = (p: CollectionEntry<'projects'>) => p.data.assignment === 'client';
+export const isCurrent = (p: CollectionEntry<'projects'>) => !isClientWork(p) && p.data.stage !== 'Complete';
 export const isKingstonRoad = (p: CollectionEntry<'projects'>) => /kingston road/i.test(`${p.data.address} ${p.data.intersection}`);
 
 /** "2026-10-30" → "Oct 30, 2026"; "2026-08" → "Aug 2026" */
 export const formatMilestoneDate = (d: string) => {
   const [y, m, day] = d.split('-').map(Number);
+  if (!m) return String(y);
   const dt = new Date(Date.UTC(y, (m || 1) - 1, day || 1));
   return dt.toLocaleDateString('en-CA', { year: 'numeric', month: 'short', ...(day ? { day: 'numeric' } : {}), timeZone: 'UTC' });
 };

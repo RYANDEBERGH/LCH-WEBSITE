@@ -1,145 +1,217 @@
 {
   "hero": {
-    "eyebrow": "Our story",
-    "heading": "A true start-up development company.",
-    "image": "/uploads/team-photo-compressed.jpg"
+    "eyebrow": "About Us",
+    "heading": "Built through hands-on experience."
   },
-  "intro": {
-    "heading": "We see residential spaces differently.",
-    "body": "This focus on the big picture—the greater purpose—is at the core of our design philosophy. For each of our select communities, we start by taking a bird’s-eye view of unique neighbourhoods with high growth and untapped potential. This allows us to understand the needs of renters and envision a community where people can put down roots. We carry this vision through every decision, from functional suite layouts and beautiful, durable finishes to shared spaces that bring neighbours together. It’s how we create thoughtfully designed rental homes that support everyday living and reflect the character of their communities."
+  "overview": {
+    "body": "Founded by brothers Michal and Lukasz Wywrot, LCH has grown from a property investment business into a development and construction management platform. Experience in rental properties, custom homes, townhomes and heritage conversions laid the foundation for larger residential communities and client development mandates.\n\nToday, our work brings together the perspective of an owner, the coordination of a development manager and construction expertise through Elevate. We use that combination to test ideas, resolve constraints and keep projects moving toward delivery.",
+    "image": "/uploads/mike-and-luke-sales-center.png",
+    "imageAlt": "LCH founders Michal and Lukasz Wywrot with a model of Everston"
   },
   "values": [
     {
-      "title": "Purpose",
-      "body": "At the end of the day, we are a company that puts purpose over profit. We want to drive our organization forward not because of the paycheque at the end of a project, but because of the quality establishments and sustainable communities that we help to build. Our team tackles any problems and challenges that come with the job because we are passionate about repurposing properties to their fullest potential while doing so in an honourable and compassionate manner. We are making a positive impact in the community throughout the entire development chain – from influencing decisions made in our pre-construction development teams, all the way towards building properties for the public to enjoy."
-    },
-    {
       "title": "Transparency",
-      "body": "Communication is key, which is why our team goes above and beyond to communicate with all stakeholders in a timely and effective manner. Customers, investors and lenders will have full transparency in our business practices, meaning LCH Developments will communicate both positive and negative information that arises. Our investors and lenders will be provided with industry leading reporting standards across all of our projects. This level of transparency builds trust, and trust is the foundation of any thriving organization. Our pledge to you is that we treat your money the way we would treat our own, which is possible by working effectively with a great deal of caution and care."
+      "body": "Clear reporting, open conversations and visible responsibilities support informed decisions throughout a project."
     },
     {
       "title": "Efficiency",
-      "body": "We are always looking for innovative solutions in order to remain as competitive as possible in the ever-changing real-estate industry. When developing our project action plans, our goal is to move pre-construction and construction ready projects forward as fast as possible and in the most cost-effective way. Our team is equipped with the right people, tools, experience, and training in order to achieve this objective. We strive to under-promise and over-deliver by meeting timelines and exceeding expectations across all projects."
+      "body": "Early planning and coordinated decisions help the team manage cost, schedule and the work required for delivery."
+    },
+    {
+      "title": "Purpose",
+      "body": "We aim to create lasting value through homes and places that work for residents, partners and their surroundings."
     }
   ],
-  "history": {
-    "eyebrow": "Since 2007",
-    "heading": "From modest beginnings to a new generation of rental housing.",
-    "image": "/uploads/mike-and-luke-sales-center.png",
-    "body": "Founded by brothers Michal and Lukasz Wywrot, first-generation Polish immigrants, LCH Developments is a Toronto-based real estate developer creating homes, workspaces and communities across the Greater Toronto Area.\n\nLCH’s story began in 2007, when the brothers built a property investment business from modest beginnings. Their early experience spanned student rentals, rent-to-own housing, multifamily properties and residential conversions. In 2013, they expanded into custom homes and townhouses, before turning their focus to higher-density, mid-rise development in 2017.\n\nThat entrepreneurial spirit continues to shape how LCH approaches development. We look for opportunities others may overlook and remain willing to rethink our plans as neighbourhoods, markets and housing needs evolve. Our growing focus on purpose-built rentals reflects this approach: recognizing the need for quality rental homes and adapting our projects to create communities where residents can put down roots. We bring the curiosity and flexibility of a startup to a business grounded in hands-on development experience.\n\nToday, LCH’s portfolio includes completed condominium communities, purpose-built rental apartments and adaptive reuse projects. The completion of Merge Condos marked a major milestone for the company, establishing a new residential community at the meeting point of Kingston Road and Danforth Avenue. Nearby, Merge Spaces brings private offices, coworking, meeting rooms and event space to Cliffside Village, putting LCH’s vision for live-work-play communities into practice.\n\nBuilding on this foundation, LCH is advancing a new generation of rental housing in Scarborough. Everston is now pre-leasing, offering apartments near the University of Toronto Scarborough and Highland Creek Valley. Cliffside Apartments is under construction, continuing LCH’s investment in Cliffside Village through new rental homes and commercial space. Retreat Apartments, developed in partnership with Fiera Real Estate, will further expand the company’s rental portfolio near the Scarborough Bluffs. At 415 Broadview, heritage restoration and mass-timber design will come together with new rental housing.\n\nAs LCH grows, its focus remains on thoughtful development that responds to the needs of each neighbourhood—creating places where people can live, work and build lasting connections."
+  "timelineHeading": {
+    "eyebrow": "Our history",
+    "heading": "How LCH grew."
   },
   "timeline": [
     {
-      "date": "2007",
-      "title": "The beginning",
-      "text": "Brothers Michal and Lukasz Wywrot start a property investment business: student rentals, rent-to-own homes, multifamily properties and conversions.",
-      "project": "",
-      "sourceUrl": ""
+      "label": "2007",
+      "title": "Starting with property investment",
+      "text": "The brothers began building a property investment business, gaining experience in student rentals, rent-to-own housing and residential properties.",
+      "images": [],
+      "projects": []
     },
     {
-      "date": "2013",
-      "title": "Custom homes and townhouses",
-      "text": "LCH expands from investing into building, starting with custom homes and townhouses.",
-      "project": "",
-      "sourceUrl": ""
+      "label": "2013",
+      "title": "Custom homes and townhomes",
+      "text": "The business expanded into residential construction, building hands-on experience in design decisions, procurement and site delivery.",
+      "images": [],
+      "projects": []
     },
     {
-      "date": "2015-10",
-      "title": "One6Nine Jones launches",
-      "text": "Twelve modern townhomes in Leslieville go to market.",
-      "project": "one6nine-jones",
-      "sourceUrl": "https://urbantoronto.ca/news/2015/10/one6nine-jones-townhomes-launch-october-7th.17770"
+      "label": "Townhomes and heritage reuse",
+      "title": "One6Nine Jones and St. Leslieville",
+      "text": "New townhomes alongside the adaptation of an existing church for residential use demonstrate the growing range of the business.",
+      "images": [
+        {
+          "image": "/uploads/00-st-leslieville-church-lofts-1200.jpg",
+          "alt": "One6Nine Jones townhomes in Leslieville",
+          "caption": ""
+        },
+        {
+          "image": "/uploads/st-leslieville-completed-1.jpg",
+          "alt": "St. Leslieville Church Lofts",
+          "caption": ""
+        }
+      ],
+      "projects": [
+        "one6nine-jones",
+        "st-leslieville-church-lofts"
+      ]
     },
     {
-      "date": "2017",
-      "title": "Into mid-rise development",
-      "text": "The focus shifts to higher-density, mid-rise communities.",
-      "project": "",
-      "sourceUrl": ""
+      "label": "2017",
+      "title": "Moving into mid-rise development",
+      "text": "The company turned its focus to higher-density projects, taking on a broader range of development, design and construction responsibilities.",
+      "images": [],
+      "projects": []
     },
     {
-      "date": "2018-04",
-      "title": "First Kingston Road proposal",
-      "text": "An 11-storey building is proposed where Kingston Road meets Danforth Avenue. It becomes Merge Condos.",
-      "project": "merge-condos",
-      "sourceUrl": "https://urbantoronto.ca/news/2018/04/11-storey-development-proposed-kingston-road-birch-cliff.32125"
+      "label": "2022",
+      "title": "Merge Spaces",
+      "text": "The coworking and event-space project brought a different type of place-making to the portfolio, with Elevate managing preconstruction and construction.",
+      "images": [
+        {
+          "image": "/uploads/am2-1941.jpg",
+          "alt": "Reception at Merge Spaces",
+          "caption": ""
+        }
+      ],
+      "projects": [
+        "merge-spaces"
+      ]
     },
     {
-      "date": "2019-09",
-      "title": "Merge Condos approved",
-      "text": "Final planning approvals clear the way for Merge Condos.",
-      "project": "merge-condos",
-      "sourceUrl": "https://urbantoronto.ca/news/2019/09/approved-merge-condos-mid-rise-coming-kingston-and-danforth.38752"
+      "label": "2023",
+      "title": "Merge Condos completed",
+      "text": "Merge marked a step in the company’s growth, carrying a larger condominium development through approvals, construction, occupancy and closeout.",
+      "images": [
+        {
+          "image": "/uploads/merge-1-fall.png",
+          "alt": "Completed Merge Condos at Kingston Road and Danforth Avenue",
+          "caption": ""
+        }
+      ],
+      "projects": [
+        "merge-condos"
+      ]
     },
     {
-      "date": "2020-10",
-      "title": "Merge Condos breaks ground",
-      "text": "Construction begins at 2201 Kingston Road.",
-      "project": "merge-condos",
-      "sourceUrl": "/news/merge-condos-breaks-ground/"
+      "label": "Expanding client work",
+      "title": "Jefferson Heights and Eaglebay Towns",
+      "text": "The team’s experience also supports owners, lenders and receivers. Jefferson Heights and Eaglebay Towns demonstrate coordinated development and construction work on partially completed residential projects.",
+      "images": [],
+      "projects": [
+        "jefferson-heights",
+        "eaglebay-towns"
+      ]
     },
     {
-      "date": "2022-01",
-      "title": "Everston proposed",
-      "text": "An application for a mid-rise building at 4630 Kingston Road in West Hill is reported.",
-      "project": "everston",
-      "sourceUrl": "https://urbantoronto.ca/news/2022/01/textured-mid-rise-condo-proposed-kingston-road-west-hill.47051"
-    },
-    {
-      "date": "2022-02",
-      "title": "Retreat proposed",
-      "text": "An application for Kingston Road in Scarborough Village, steps from Gates Gully, is reported.",
-      "project": "retreat",
-      "sourceUrl": "https://urbantoronto.ca/news/2022/02/lch-proposes-development-kingston-road-scarborough-village.47226"
-    },
-    {
-      "date": "2024-05",
-      "title": "Cliffside launches",
-      "text": "Cliffside is launched as a condominium in Cliffside Village.",
-      "project": "cliffside",
-      "sourceUrl": "https://urbantoronto.ca/news/2024/05/lch-developments-launching-cliffside-condos-above-scarborough-bluffs.55918"
-    },
-    {
-      "date": "2025-03",
-      "title": "Everston breaks ground",
-      "text": "Demolition starts at 4630 Kingston Road; construction follows in July.",
-      "project": "everston",
-      "sourceUrl": "/news/4630-kingston-road-demolition-has-begun/"
-    },
-    {
-      "date": "2026-06",
-      "title": "Partnership on Retreat",
-      "text": "A strategic partnership with an institutional real estate fund is announced for Retreat, a 320-home rental community.",
-      "project": "retreat",
-      "sourceUrl": "/news/lch-developments-and-fiera-real-estate-announce-strategic-partnership/"
-    },
-    {
-      "date": "2026-10",
-      "title": "Everston tops off",
-      "text": "Everston is reported topped off, with its tower crane removed. Pre-leasing is underway.",
-      "project": "everston",
-      "sourceUrl": "https://urbantoronto.ca/news/2026/10/everston-sheds-crane-angled-balconies-define-kingston-road-frontage.62077"
-    },
-    {
-      "date": "2026-11",
-      "title": "Cliffside rises as rentals",
-      "text": "Now 209 purpose-built rental homes, Cliffside has its tower crane up.",
-      "project": "cliffside",
-      "sourceUrl": "https://urbantoronto.ca/news/2026/11/crane-rises-high-cliffside-site-scarborough.62110"
+      "label": "Today",
+      "title": "A growing rental portfolio",
+      "text": "Everston, Cliffside and Retreat reflect LCH’s focus on purpose-built rental housing. At Broadview, the team is bringing heritage restoration together with new rental homes and the church’s continuing use.",
+      "images": [
+        {
+          "image": "/uploads/dji-fly-20261024-174610-177-1793113753722-photo.jpg",
+          "alt": "Aerial view of Everston during construction",
+          "caption": ""
+        },
+        {
+          "image": "/uploads/crane-1-web.jpg",
+          "alt": "Tower crane and excavation at Cliffside",
+          "caption": ""
+        },
+        {
+          "image": "/uploads/ext-kingston-road-cam-dji-0457-5-1-gigapixel.jpg",
+          "alt": "Proposed Retreat rental community",
+          "caption": "Rendering"
+        },
+        {
+          "image": "/uploads/415-broadview-rendering.jpg",
+          "alt": "Proposed new building alongside the retained church at 415 Broadview",
+          "caption": "Rendering"
+        }
+      ],
+      "projects": [
+        "everston",
+        "cliffside",
+        "retreat",
+        "415-broadview"
+      ]
     }
   ],
-  "elevate": {
-    "heading": "Development and construction, under one roof.",
-    "body": "Through Elevate Construction Management, LCH combines its development experience with construction expertise, supporting projects from early planning through delivery. This close connection helps the team make informed decisions about design, cost, quality and how each community will serve its residents.",
-    "ctaLabel": "Visit elevatecm.com",
-    "ctaUrl": "https://elevatecm.com"
+  "expertise": {
+    "eyebrow": "Our expertise",
+    "heading": "What we bring to a project.",
+    "items": [
+      {
+        "title": "Development strategy and feasibility",
+        "body": "We test development options against planning constraints, market requirements, construction cost and the project’s financial objectives. The work can range from reviewing an initial concept to rethinking an existing scheme."
+      },
+      {
+        "title": "Planning and approvals",
+        "body": "We coordinate consultants, applications and municipal responses, tracking the technical studies, agreements and clearances needed to advance a project."
+      },
+      {
+        "title": "Design and development optimization",
+        "body": "We connect architecture, structure, building systems and interior direction with project economics. Floorplates, unit mix, parking and materials are considered together for functionality, buildability and long-term performance."
+      },
+      {
+        "title": "Financial management and owner oversight",
+        "body": "Development budgets, cash-flow forecasts, project accounting and cost reporting support informed decisions. We coordinate with ownership, lenders and financing advisers to keep project requirements aligned."
+      },
+      {
+        "title": "Construction coordination through Elevate",
+        "body": "Elevate leads preconstruction and construction management, including estimating, trade coordination, tendering, procurement and site delivery. LCH maintains oversight of the development business plan, approvals and material changes."
+      },
+      {
+        "title": "Project recovery and repositioning",
+        "body": "We help owners, lenders and receivers assess incomplete projects, restore budget and schedule visibility, coordinate outstanding work and establish a practical route toward occupancy, sale or operation."
+      }
+    ]
+  },
+  "experience": {
+    "eyebrow": "Selected experience",
+    "heading": "Selected client work.",
+    "items": [
+      {
+        "project": "jefferson-heights",
+        "title": "Jefferson Heights",
+        "role": "Development and construction management",
+        "heading": "Bringing an incomplete project toward delivery.",
+        "body": "At Jefferson Heights in Richmond Hill, LCH and Elevate worked on a partially completed residential development for receiver Albert Gelman, with Cameron Stephens. The assignment brought together development management and construction delivery: re-establishing budget and schedule control, coordinating consultants and trades, and advancing occupancy, registration, sales and closing requirements."
+      },
+      {
+        "project": "eaglebay-towns",
+        "title": "Eaglebay Towns",
+        "role": "Project recovery and construction completion",
+        "heading": "Coordinating construction and closeout.",
+        "body": "For KPMG and RBC, LCH and Elevate were engaged on a 29-home townhouse receivership in Newcastle, Clarington. The mandate combined construction stabilization and completion with coordination of purchaser, warranty and closeout requirements."
+      },
+      {
+        "project": "",
+        "title": "150 The Donway West",
+        "role": "Development feasibility study",
+        "heading": "Testing a more efficient development approach.",
+        "body": "For Akelius, LCH and Elevate studied an infill opportunity between occupied residential buildings. The work combined design review, construction costing and financial analysis, testing ways to simplify the building, make use of existing underground space and increase rentable area."
+      }
+    ]
   },
   "team": {
     "eyebrow": "Our team",
-    "heading": "The people behind the projects."
+    "heading": "The people behind the projects.",
+    "image": "/uploads/team-photo-compressed.jpg",
+    "imageAlt": "The LCH and Elevate team on site"
   },
-  "timelineHeading": {
-    "eyebrow": "Our journey",
-    "heading": "From modest beginnings to over a thousand rental homes in the pipeline."
+  "cta": {
+    "heading": "Have a project in mind?",
+    "body": "Talk to us about development, development management or a project that needs a path to completion.",
+    "ctaLabel": "Discuss a project",
+    "ctaUrl": "/partnerships/#partner-form",
+    "secondaryLabel": "Ways to work with us",
+    "secondaryUrl": "/partnerships/"
   }
 }

@@ -5,7 +5,7 @@
 // Project pins: each project's lat/lng (editable in /admin).
 import Img from './Img.astro';
 import geo from '../data/map-geo.json';
-import { mapData, getProjects, isKingstonRoad, latestMilestone, formatMilestoneDate, brandInk } from '../lib/site';
+import { mapData, getProjects, isClientWork, latestMilestone, formatMilestoneDate, brandInk } from '../lib/site';
 
 interface Props { heading?: string; eyebrow?: string; body?: string; id?: string }
 const { heading, eyebrow, body, id = 'map' } = Astro.props;
@@ -36,10 +36,12 @@ const lineBadges = [
 const wantedLabels = new Set(mapData.roadLabels ?? []);
 const roadLabels = geo.roadLabels.filter((l) => wantedLabels.has(l.name)).map((l) => ({ ...l, name: l.name.replace(' Express', '') }));
 
-const all = (await getProjects()).filter((p) => p.data.lat != null && p.data.lng != null);
-const kingston = all.filter(isKingstonRoad);
-const elsewhere = all.filter((p) => !isKingstonRoad(p));
-const ordered = [...kingston.sort((a, b) => (a.data.lng ?? 0) - (b.data.lng ?? 0)), ...elsewhere];
+const everything = await getProjects();
+const all = everything.filter((p) => p.data.lat != null && p.data.lng != null);
+// Number pins west to east along the map so the list reads in map order
+const ordered = all.slice().sort((a, b) => (a.data.lng ?? 0) - (b.data.lng ?? 0));
+// Client work without a verified address is listed but not pinned
+const unpinned = everything.filter((p) => p.data.lat == null || p.data.lng == null);
 const pins = ordered.map((p, i) => ({ p, num: i + 1, x: X(p.data.lng!), y: Y(p.data.lat!), dx: 0, dy: 0, tight: false, color: brandInk(p) }));
 
 // Pins within 80 map units of each other (they overlap at the full view on phones) (e.g. Merge Condos, Merge Spaces, Cliffside) fan out on short leader lines.
@@ -81,7 +83,7 @@ const L = geo.layers as Record<string, string>;
       <figure class="cmap__figure">
         <div class="cmap__frame" data-frame>
           <svg viewBox={`0 0 ${W} ${H}`} data-w={W} data-h={H} data-km={kmPx.toFixed(2)} role="img" aria-labelledby={`${id}-title`} class="cmap__svg" data-svg style="--k: 1">
-            <title id={`${id}-title`}>Map of LCH Developments projects in east Toronto: five on Kingston Road in Scarborough, and three in Leslieville and Riverdale</title>
+            <title id={`${id}-title`}>Map of LCH Developments projects in east Toronto</title>
             <defs>
               {roadLabels.map((l, i) => <path id={`${id}-rl-${i}`} d={l.d} />)}
             </defs>
@@ -188,32 +190,41 @@ const L = geo.layers as Record<string, string>;
       </figure>
 
       <div class="cmap__list">
-        {[['On Kingston Road', pins.filter((x) => isKingstonRoad(x.p))], ['Elsewhere in Toronto', pins.filter((x) => !isKingstonRoad(x.p))]].map(([label, list]) => (
-          <div class="cmap__group">
-            <p class="cmap__group-label">{label} <span>{(list as typeof pins).length}</span></p>
-            <ol>
-              {(list as typeof pins).map(({ p, num, color }) => {
-                const m = latestMilestone(p);
-                return (
-                  <li class="cmap__item" data-item={p.id}>
-                    <button class="cmap__btn" data-select={p.id} aria-expanded="false">
-                      <span class="cmap__num" style={`background: ${color}`}>{num}</span>
-                      <span class="cmap__name">{p.data.title}</span>
-                      <span class="cmap__stage">{p.data.stage}</span>
-                    </button>
-                    <div class="cmap__detail" hidden>
-                      <Img src={p.data.heroImage} alt="" sizes="320px" />
-                      <p class="cmap__addr">{p.data.address}<br />{p.data.neighbourhood}</p>
-                      {p.data.leasing?.status && <p class="cmap__leasing" style={`color: ${color}`}>Leasing: {p.data.leasing.status}</p>}
-                      {m && <p class="cmap__latest"><strong>{formatMilestoneDate(m.date)}</strong> {m.label}</p>}
-                      <a class="link-arrow" href={`/projects/${p.id}/`}>View {p.data.title} →</a>
-                    </div>
-                  </li>
-                );
-              })}
-            </ol>
-          </div>
-        ))}
+        <div class="cmap__filters" role="group" aria-label="Filter projects">
+          <button type="button" class="cmap__chip" aria-pressed="true" data-filter="all">All projects</button>
+          <button type="button" class="cmap__chip" aria-pressed="false" data-filter="development">LCH developments</button>
+          <button type="button" class="cmap__chip" aria-pressed="false" data-filter="client">Selected client work</button>
+        </div>
+        <ol class="cmap__items">
+          {pins.map(({ p, num, color }) => {
+            const m = latestMilestone(p);
+            return (
+              <li class="cmap__item" data-item={p.id} data-kind={isClientWork(p) ? 'client' : 'development'}>
+                <button class="cmap__btn" data-select={p.id} aria-expanded="false">
+                  <span class="cmap__num" style={`background: ${color}`}>{num}</span>
+                  <span class="cmap__name">{p.data.title}</span>
+                  <span class="cmap__stage">{isClientWork(p) ? 'Client work' : p.data.stage}</span>
+                </button>
+                <div class="cmap__detail" hidden>
+                  {p.data.heroImage && <Img src={p.data.heroImage} alt="" sizes="320px" />}
+                  <p class="cmap__addr">{p.data.address}<br />{p.data.neighbourhood}</p>
+                  {p.data.leasing?.status && <p class="cmap__leasing" style={`color: ${color}`}>Leasing: {p.data.leasing.status}</p>}
+                  {m && <p class="cmap__latest"><strong>{formatMilestoneDate(m.date)}</strong> {m.label}</p>}
+                  <a class="link-arrow" href={`/projects/${p.id}/`}>View {p.data.title} →</a>
+                </div>
+              </li>
+            );
+          })}
+          {unpinned.map((p) => (
+            <li class="cmap__item cmap__item--unpinned" data-item={p.id} data-kind={isClientWork(p) ? 'client' : 'development'}>
+              <a class="cmap__btn cmap__btn--link" href={`/projects/${p.id}/`}>
+                <span class="cmap__num cmap__num--off" aria-hidden="true"></span>
+                <span class="cmap__name">{p.data.title}<em>{p.data.neighbourhood} · outside this map</em></span>
+                <span class="cmap__stage">{isClientWork(p) ? 'Client work' : p.data.stage}</span>
+              </a>
+            </li>
+          ))}
+        </ol>
       </div>
     </div>
   </div>
@@ -310,8 +321,8 @@ const L = geo.layers as Record<string, string>;
       root.querySelectorAll<HTMLElement>('[data-item]').forEach((li) => {
         const on = li.dataset.item === id;
         li.classList.toggle('is-active', on);
-        li.querySelector('.cmap__detail')!.toggleAttribute('hidden', !on);
-        li.querySelector('.cmap__btn')!.setAttribute('aria-expanded', String(on));
+        li.querySelector('.cmap__detail')?.toggleAttribute('hidden', !on);
+        li.querySelector('button.cmap__btn')?.setAttribute('aria-expanded', String(on));
         if (on && scroll && matchMedia('(max-width: 960px)').matches) li.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
       });
       root.querySelectorAll<SVGGElement>('[data-pin]').forEach((g) => {
@@ -333,6 +344,18 @@ const L = geo.layers as Record<string, string>;
       b.addEventListener('mouseenter', () => root.querySelector(`[data-pin="${b.dataset.select}"]`)?.classList.add('is-hover'));
       b.addEventListener('mouseleave', () => root.querySelector(`[data-pin="${b.dataset.select}"]`)?.classList.remove('is-hover'));
     });
+    // Filters: All projects / LCH developments / Selected client work
+    root.querySelectorAll<HTMLButtonElement>('[data-filter]').forEach((chip) =>
+      chip.addEventListener('click', () => {
+        const f = chip.dataset.filter!;
+        root.querySelectorAll<HTMLButtonElement>('[data-filter]').forEach((c) => c.setAttribute('aria-pressed', String(c === chip)));
+        root.querySelectorAll<HTMLElement>('[data-kind]').forEach((li) => (li.hidden = f !== 'all' && li.dataset.kind !== f));
+        root.querySelectorAll<SVGGElement>('[data-pin]').forEach((g) => {
+          const li = root.querySelector<HTMLElement>(`[data-item="${g.dataset.pin}"]`);
+          g.classList.toggle('is-filtered', !!li?.hidden);
+        });
+      }),
+    );
     const first = root.querySelector<HTMLElement>('[data-item]');
     if (first) select(first.dataset.item!);
     apply();
@@ -372,18 +395,18 @@ const L = geo.layers as Record<string, string>;
   /* TTC lines: 2 and 5 bold solid; 3 (Ontario Line, under construction) dashed */
   .m-line2 { fill: none; stroke: #00923f; stroke-width: 4; stroke-linecap: round; stroke-linejoin: round; }
   .m-line5 { fill: none; stroke: #f8991d; stroke-width: 4; stroke-linecap: round; stroke-linejoin: round; }
-  .m-line3 { fill: none; stroke: #1c6fb7; stroke-width: 3.5; stroke-linecap: butt; stroke-dasharray: 9 6; }
+  .m-line3 { fill: none; stroke: #3fa9dd; stroke-width: 3.5; stroke-linecap: butt; stroke-dasharray: 9 6; }
   .is-zoomed .m-line2, .is-zoomed .m-line5 { stroke-width: 5.5; }
   .is-zoomed .m-line3 { stroke-width: 4.5; }
   .m-linebadge circle { stroke: #fff; stroke-width: 2; }
   .m-linebadge--l2 circle { fill: #00923f; }
   .m-linebadge--l5 circle { fill: #f8991d; }
-  .m-linebadge--l3 circle { fill: #1c6fb7; }
+  .m-linebadge--l3 circle { fill: #3fa9dd; }
   .m-linebadge__n { fill: #fff; font-size: 11px; font-weight: 800; }
   .m-linebadge__name { font-size: 11.5px; font-weight: 700; paint-order: stroke; stroke: #f1eee7; stroke-width: 3px; stroke-linejoin: round; }
   .m-linebadge--l2 .m-linebadge__name { fill: #006b2e; }
   .m-linebadge--l5 .m-linebadge__name { fill: #a15c00; }
-  .m-linebadge--l3 .m-linebadge__name { fill: #155a96; }
+  .m-linebadge--l3 .m-linebadge__name { fill: #1878a8; }
   .m-kingston-casing { fill: none; stroke: #fff; stroke-width: 8; stroke-linecap: round; stroke-linejoin: round; }
   .m-kingston { fill: none; stroke: var(--accent); stroke-width: 4.5; stroke-linecap: round; stroke-linejoin: round; }
   .is-zoomed .m-kingston-casing { stroke-width: 11; }
@@ -431,15 +454,24 @@ const L = geo.layers as Record<string, string>;
   .lg--road { width: 22px; height: 4px; background: var(--accent); border-radius: 2px; }
   .lg--l2 { width: 22px; height: 4px; background: #00923f; border-radius: 2px; }
   .lg--l5 { width: 22px; height: 4px; background: #f8991d; border-radius: 2px; }
-  .lg--l3 { width: 24px; height: 0; border-top: 3.5px dashed #1c6fb7; }
+  .lg--l3 { width: 24px; height: 0; border-top: 3.5px dashed #3fa9dd; }
   .lg--rail { width: 22px; height: 0; border-top: 2px dashed #8f897e; position: relative; }
   .lg--rail::after { content: ''; position: absolute; right: -4px; top: -6px; width: 9px; height: 9px; background: #2f7d5a; border-radius: 2px; }
   .lg--park { width: 14px; height: 10px; background: #c8d9b8; border-radius: 2px; }
   .cmap__attr { flex-basis: 100%; font-size: 12px; }
 
-  .cmap__list { display: grid; gap: 28px; }
-  .cmap__group-label { font-size: 12px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); margin: 0 0 8px; display: flex; justify-content: space-between; }
-  .cmap__group ol { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--line); }
+  .cmap__list { display: grid; gap: 16px; align-content: start; }
+  .cmap__filters { display: flex; flex-wrap: wrap; gap: 6px; }
+  .cmap__chip { min-height: 36px; padding: 0 12px; border-radius: 3px; border: 1px solid var(--line); background: transparent; color: var(--ink); font: inherit; font-size: 13px; font-weight: 600; cursor: pointer; }
+  .cmap__chip:hover { border-color: var(--ink); }
+  .cmap__chip[aria-pressed='true'] { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+  .cmap__items { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--line); }
+  .cmap__item[hidden] { display: none; }
+  .cmap__btn--link { text-decoration: none; color: inherit; }
+  .cmap__btn--link:hover .cmap__name { color: var(--accent); }
+  .cmap__num--off { background: transparent !important; border: 1.5px dashed var(--muted); }
+  .cmap__name em { display: block; font-style: normal; font-size: 12.5px; font-weight: 400; color: var(--muted); }
+  .m-pin.is-filtered { opacity: 0.18; pointer-events: none; }
   .cmap__item { border-bottom: 1px solid var(--line); }
   .cmap__btn { all: unset; box-sizing: border-box; cursor: pointer; display: grid; grid-template-columns: 28px 1fr auto; gap: 12px; align-items: center; width: 100%; padding: 12px 4px; }
   .cmap__btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
@@ -458,12 +490,12 @@ const L = geo.layers as Record<string, string>;
 
   @media (max-width: 960px) {
     .cmap__grid { grid-template-columns: 1fr; }
-    .cmap__list { grid-template-columns: 1fr 1fr; gap: 24px; }
+    .cmap__list { gap: 14px; }
   }
   @media (max-width: 640px) {
     .cmap__svg { --ps: 0.7; }
     .cmap__svg.is-zoomed { --ps: 0.85; }
-    .cmap__list { grid-template-columns: 1fr; }
+
     .m-poi text, .m-hood, .m-station--go text, .m-roadlabel, .m-linebadge__name { display: none; }
     .is-zoomed .m-poi text, .is-zoomed .m-hood, .is-zoomed .m-station--go text, .is-zoomed .m-roadlabel, .is-zoomed .m-linebadge__name { display: block; }
     .cmap__hint { display: none; }

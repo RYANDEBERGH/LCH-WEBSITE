@@ -2,6 +2,7 @@
 title: "Retreat"
 order: 3
 featured: true
+approach: "Retreat's design was refined for purpose-built rental, testing the unit mix and building systems against construction cost and long-term operation. The project is advancing with Fiera Real Estate as capital partner."
 stage: "In Development"
 type: "Purpose-Built Rental"
 address: "3301 Kingston Road (2–4 Windy Ridge Drive)"

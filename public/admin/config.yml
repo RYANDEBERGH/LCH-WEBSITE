@@ -44,7 +44,11 @@ collections:
       - { label: Construction stage, field: stage }
     fields:
       - { label: Project name, name: title, widget: string }
-      - { label: Construction stage, name: stage, widget: select, options: ['In Development', 'Under Construction', 'Complete'] }
+      - { label: Assignment, name: assignment, widget: select, default: development, options: [{ label: LCH development, value: development }, { label: Selected client work, value: client }], hint: 'Client work = development/construction management for an owner, lender or receiver. Do not imply LCH owned or originally developed it.' }
+      - { label: Role (client work), name: roleLabel, widget: string, required: false, hint: 'e.g. Development and construction management' }
+      - { label: Client (client work), name: client, widget: string, required: false }
+      - { label: LCH's role and approach, name: approach, widget: text, required: false, hint: 'Short case-study paragraph shown on the project page.' }
+      - { label: Construction stage, name: stage, widget: select, required: false, options: ['In Development', 'Under Construction', 'Complete'], hint: 'Leave blank for client work if the stage isn’t public.' }
       - label: Leasing (kept separate from construction)
         name: leasing
         widget: object
@@ -75,13 +79,13 @@ collections:
         summary: '{{fields.date}} — {{fields.label}}'
         hint: 'Only verified, dated updates. Use the date it was reported; YYYY-MM is fine when only the month is known.'
         fields:
-          - { label: Date (YYYY-MM-DD or YYYY-MM), name: date, widget: string, pattern: ['^\d{4}-\d{2}(-\d{2})?$', 'Use YYYY-MM-DD or YYYY-MM'] }
+          - { label: Date (YYYY-MM-DD, YYYY-MM or YYYY), name: date, widget: string, pattern: ['^\d{4}(-\d{2}(-\d{2})?)?$', 'Use YYYY-MM-DD, YYYY-MM or YYYY'] }
           - { label: What happened, name: label, widget: string, hint: 'Say what was reported, e.g. “Reported nearing top-off”, not a confirmed event you can’t date.' }
           - { label: Source, name: source, widget: string, required: false, hint: 'e.g. UrbanToronto, LCH Developments' }
           - { label: Source link, name: sourceUrl, widget: string, required: false }
       - { label: Brand colour, name: brandColor, widget: color, required: false, hint: 'The development’s own colour (from its logo). Used on its project page and map pin; darkened automatically when needed for readable text.' }
       - { label: Project logo, name: logo, widget: image, required: false, hint: 'Transparent PNG or SVG works best.' }
-      - { label: Main image, name: heroImage, widget: image, hint: 'Large landscape image, at least 2000px wide.' }
+      - { label: Main image, name: heroImage, widget: image, required: false, hint: 'Large landscape image, at least 2000px wide. Label renderings as proposed designs in the caption.' }
       - label: Gallery
         name: gallery
         widget: list
@@ -267,13 +271,26 @@ collections:
             fields:
               - { label: Small text, name: eyebrow, widget: string }
               - { label: Heading, name: heading, widget: string }
-          - label: How we make it happen (steps)
+          - label: Company overview (below the hero)
+            name: overview
+            widget: object
+            fields:
+              - { label: Small text, name: eyebrow, widget: string }
+              - { label: Heading, name: heading, widget: string }
+              - { label: Text, name: body, widget: markdown }
+              - { label: Link label, name: ctaLabel, widget: string }
+              - { label: Link, name: ctaUrl, widget: string }
+          - label: How we make it happen
             name: process
             widget: object
             fields:
               - { label: Small text, name: eyebrow, widget: string }
               - { label: Heading, name: heading, widget: string }
-              - { label: Steps, name: steps, widget: list, summary: '{{fields.title}}', fields: [{ label: Title, name: title, widget: string }, { label: Text, name: body, widget: text }] }
+              - { label: Introduction, name: intro, widget: text }
+              - { label: Stages, name: steps, widget: list, summary: '{{fields.title}}', fields: [{ label: Title, name: title, widget: string }, { label: Text, name: body, widget: text }] }
+              - { label: Supporting line, name: footnote, widget: text }
+              - { label: Button label, name: ctaLabel, widget: string }
+              - { label: Button link, name: ctaUrl, widget: string }
           - label: Map section
             name: map
             widget: object
@@ -293,15 +310,31 @@ collections:
               - { label: Button label, name: ctaLabel, widget: string }
               - { label: Button link, name: ctaUrl, widget: string }
               - { label: Background image, name: image, widget: image }
-          - label: Elevate section
+          - label: LCH and Elevate (also shown on About Us)
             name: elevate
             widget: object
             fields:
               - { label: Small text, name: eyebrow, widget: string }
               - { label: Heading, name: heading, widget: string }
+              - { label: Text, name: body, widget: markdown }
+              - { label: LCH leads, name: lch, widget: list }
+              - { label: Elevate leads, name: elevateList, widget: list }
+              - { label: Photo, name: image, widget: image }
+              - { label: Photo description (alt text), name: imageAlt, widget: string }
+              - { label: Button label, name: ctaLabel, widget: string }
+              - { label: Button link, name: ctaUrl, widget: string }
+              - { label: Elevate link label, name: extLabel, widget: string }
+              - { label: Elevate link, name: extUrl, widget: string }
+          - label: Business enquiry band
+            name: business
+            widget: object
+            fields:
+              - { label: Heading, name: heading, widget: string }
               - { label: Text, name: body, widget: text }
               - { label: Button label, name: ctaLabel, widget: string }
               - { label: Button link, name: ctaUrl, widget: string }
+              - { label: Second button label, name: secondaryLabel, widget: string }
+              - { label: Second button link, name: secondaryUrl, widget: string }
           - label: Press strip
             name: press
             widget: object
@@ -317,40 +350,56 @@ collections:
               - { label: Number of articles, name: count, widget: number, value_type: int, min: 0, max: 9 }
 
       - name: story
-        label: Story page
+        label: About Us page
         file: src/data/story.json
         fields:
-          - { label: Hero, name: hero, widget: object, fields: [{ label: Small text, name: eyebrow, widget: string }, { label: Heading, name: heading, widget: string }, { label: Image, name: image, widget: image }] }
-          - { label: Intro, name: intro, widget: object, fields: [{ label: Heading, name: heading, widget: string }, { label: Body, name: body, widget: text }] }
-          - label: Values
-            name: values
+          - { label: Hero, name: hero, widget: object, fields: [{ label: Small text, name: eyebrow, widget: string }, { label: Heading, name: heading, widget: string }] }
+          - { label: Overview, name: overview, widget: object, fields: [{ label: Text, name: body, widget: markdown }, { label: Founders photo, name: image, widget: image }, { label: Photo description (alt text), name: imageAlt, widget: string }] }
+          - { label: Values, name: values, widget: list, summary: '{{fields.title}}', fields: [{ label: Title, name: title, widget: string }, { label: Text, name: body, widget: text }] }
+          - { label: Timeline heading, name: timelineHeading, widget: object, fields: [{ label: Small text, name: eyebrow, widget: string }, { label: Heading, name: heading, widget: string }] }
+          - label: Timeline chapters
+            name: timeline
             widget: list
-            summary: '{{fields.title}}'
+            summary: '{{fields.label}} — {{fields.title}}'
+            hint: 'Use a year only where it is confirmed; otherwise use a descriptive label (e.g. “Townhomes and heritage reuse”). Never TBD or question marks.'
             fields:
+              - { label: Year or chapter label, name: label, widget: string }
               - { label: Title, name: title, widget: string }
-              - { label: Text, name: body, widget: text }
-          - label: History
-            name: history
+              - { label: Text (1–2 sentences), name: text, widget: text }
+              - label: Photos
+                name: images
+                widget: list
+                required: false
+                fields:
+                  - { label: Image, name: image, widget: image }
+                  - { label: Description (alt text), name: alt, widget: string }
+                  - { label: Label (e.g. Rendering), name: caption, widget: string, required: false }
+              - { label: Related projects, name: projects, widget: relation, collection: projects, search_fields: [title], value_field: '{{slug}}', display_fields: [title], multiple: true, required: false }
+          - label: Our expertise
+            name: expertise
             widget: object
             fields:
               - { label: Small text, name: eyebrow, widget: string }
               - { label: Heading, name: heading, widget: string }
-              - { label: Image, name: image, widget: image }
-              - { label: Story, name: body, widget: markdown }
-          - { label: Timeline heading, name: timelineHeading, widget: object, fields: [{ label: Small text, name: eyebrow, widget: string }, { label: Heading, name: heading, widget: string }] }
-          - label: Company timeline
-            name: timeline
-            widget: list
-            summary: '{{fields.date}} — {{fields.title}}'
-            hint: 'Oldest first. Only verified, dated milestones.'
+              - { label: Areas, name: items, widget: list, summary: '{{fields.title}}', fields: [{ label: Title, name: title, widget: string }, { label: Text, name: body, widget: text }] }
+          - label: Selected experience
+            name: experience
+            widget: object
             fields:
-              - { label: Date (YYYY, YYYY-MM or YYYY-MM-DD), name: date, widget: string, pattern: ['^\d{4}(-\d{2}(-\d{2})?)?$', 'Use YYYY, YYYY-MM or YYYY-MM-DD'] }
-              - { label: Title, name: title, widget: string }
-              - { label: Text, name: text, widget: text }
-              - { label: Related project, name: project, widget: relation, collection: projects, search_fields: [title], value_field: '{{slug}}', display_fields: [title], required: false }
-              - { label: Source link, name: sourceUrl, widget: string, required: false }
-          - { label: Elevate section, name: elevate, widget: object, fields: [{ label: Heading, name: heading, widget: string }, { label: Text, name: body, widget: text }, { label: Button label, name: ctaLabel, widget: string }, { label: Button link, name: ctaUrl, widget: string }] }
-          - { label: Team section, name: team, widget: object, fields: [{ label: Small text, name: eyebrow, widget: string }, { label: Heading, name: heading, widget: string }] }
+              - { label: Small text, name: eyebrow, widget: string }
+              - { label: Heading, name: heading, widget: string }
+              - label: Case studies
+                name: items
+                widget: list
+                summary: '{{fields.title}}'
+                fields:
+                  - { label: Linked project page, name: project, widget: string, required: false, hint: 'Project page slug, e.g. jefferson-heights. Leave blank if there is no project page.' }
+                  - { label: Title, name: title, widget: string }
+                  - { label: Role, name: role, widget: string }
+                  - { label: Lead sentence, name: heading, widget: string }
+                  - { label: Text, name: body, widget: text }
+          - { label: Team section, name: team, widget: object, fields: [{ label: Small text, name: eyebrow, widget: string }, { label: Heading, name: heading, widget: string }, { label: Team photo, name: image, widget: image }, { label: Photo description, name: imageAlt, widget: string }] }
+          - { label: Closing call to action, name: cta, widget: object, fields: [{ label: Heading, name: heading, widget: string }, { label: Text, name: body, widget: text }, { label: Button label, name: ctaLabel, widget: string }, { label: Button link, name: ctaUrl, widget: string }, { label: Second button label, name: secondaryLabel, widget: string }, { label: Second button link, name: secondaryUrl, widget: string }] }
 
       - name: contact
         label: Contact page
@@ -364,7 +413,7 @@ collections:
           - { label: Inquiry types (dropdown), name: inquiryTypes, widget: list }
 
       - name: partnerships
-        label: Partner with us page
+        label: Partnerships page
         file: src/data/partnerships.json
         fields:
           - { label: Small text, name: eyebrow, widget: string }

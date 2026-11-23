@@ -6,7 +6,7 @@ import ProjectCard from '../components/ProjectCard.astro';
 import CorridorMap from '../components/CorridorMap.astro';
 import PressStrip from '../components/PressStrip.astro';
 import SocialFeed from '../components/SocialFeed.astro';
-import { home, getProjects, getNews, stageTone, latestMilestone, formatMilestoneDate, brandInk } from '../lib/site';
+import { home, getProjects, getNews, stageTone, latestMilestone, formatMilestoneDate, brandInk, md } from '../lib/site';
 
 const projects = await getProjects();
 const featured = projects.filter((p) => p.data.featured);
@@ -33,6 +33,19 @@ const ext = (url: string) => url?.startsWith('http');
     </div>
   </section>
 
+  <section class="section overview">
+    <div class="container overview__grid">
+      <div class="reveal">
+        <p class="eyebrow">{home.overview.eyebrow}</p>
+        <h2>{home.overview.heading}</h2>
+      </div>
+      <div class="reveal">
+        <div class="overview__body" set:html={md(home.overview.body)} />
+        <a class="link-arrow" href={home.overview.ctaUrl}>{home.overview.ctaLabel} →</a>
+      </div>
+    </div>
+  </section>
+
   {home.stats?.length > 0 && (
     <section class="stats">
       <div class="container stats__grid">
@@ -48,17 +61,22 @@ const ext = (url: string) => url?.startsWith('http');
 
   {home.process?.steps?.length > 0 && (
     <section class="section process">
-      <div class="container">
-        <div class="section-head reveal">
+      <div class="container process__grid">
+        <div class="process__intro reveal">
           <p class="eyebrow">{home.process.eyebrow}</p>
           <h2>{home.process.heading}</h2>
+          <p class="lede">{home.process.intro}</p>
+          <p class="process__note">{home.process.footnote}</p>
+          <a class="btn btn--ghost" href={home.process.ctaUrl}>{home.process.ctaLabel} <span class="arrow" aria-hidden="true">→</span></a>
         </div>
-        <ol class="steps">
+        <ol class="stages-list">
           {home.process.steps.map((st, i) => (
-            <li class="step reveal">
-              <span class="step__num">{String(i + 1).padStart(2, '0')}</span>
-              <h3 class="step__title display">{st.title}</h3>
-              <p>{st.body}</p>
+            <li class="stage reveal">
+              <span class="stage__num">{String(i + 1).padStart(2, '0')}</span>
+              <div>
+                <h3>{st.title}</h3>
+                <p>{st.body}</p>
+              </div>
             </li>
           ))}
         </ol>
@@ -131,15 +149,31 @@ const ext = (url: string) => url?.startsWith('http');
   <CorridorMap eyebrow={home.map.eyebrow} heading={home.map.heading} body={home.map.body} />
 
   {home.elevate && (
-    <section class="section section--dark elevate">
-      <div class="container elevate__grid">
-        <div class="reveal">
-          <p class="eyebrow">{home.elevate.eyebrow}</p>
-          <h2>{home.elevate.heading}</h2>
+    <section class="section section--dark elevate" id="lch-elevate">
+      <div class="container">
+        <div class="elevate__top">
+          <div class="reveal">
+            <p class="eyebrow">{home.elevate.eyebrow}</p>
+            <h2>{home.elevate.heading}</h2>
+            <div class="elevate__body" set:html={md(home.elevate.body)} />
+            <div class="elevate__ctas">
+              <a class="btn btn--light" href={home.elevate.ctaUrl}>{home.elevate.ctaLabel} <span class="arrow" aria-hidden="true">→</span></a>
+              <a class="btn btn--ghost-light" href={home.elevate.extUrl} target="_blank" rel="noopener">{home.elevate.extLabel} <span class="arrow" aria-hidden="true">↗</span></a>
+            </div>
+          </div>
+          <div class="elevate__media reveal">
+            <Img src={home.elevate.image} alt={home.elevate.imageAlt} sizes="(max-width: 900px) 100vw, 45vw" />
+          </div>
         </div>
-        <div class="reveal">
-          <p class="lede">{home.elevate.body}</p>
-          <a class="btn btn--ghost-light" href={home.elevate.ctaUrl} target="_blank" rel="noopener">{home.elevate.ctaLabel} <span class="arrow" aria-hidden="true">↗</span></a>
+        <div class="roles">
+          <div class="role reveal">
+            <p class="role__who">LCH leads</p>
+            <ul>{home.elevate.lch.map((x) => <li>{x}</li>)}</ul>
+          </div>
+          <div class="role reveal">
+            <p class="role__who">Elevate leads</p>
+            <ul>{home.elevate.elevateList.map((x) => <li>{x}</li>)}</ul>
+          </div>
         </div>
       </div>
     </section>
@@ -159,6 +193,21 @@ const ext = (url: string) => url?.startsWith('http');
         </div>
         <div class="grid-4">
           {others.map((p) => <ProjectCard project={p} sizes="(max-width: 760px) 100vw, 25vw" />)}
+        </div>
+      </div>
+    </section>
+  )}
+
+  {home.business && (
+    <section class="business">
+      <div class="container business__inner">
+        <div>
+          <h2>{home.business.heading}</h2>
+          <p class="lede">{home.business.body}</p>
+        </div>
+        <div class="business__ctas">
+          <a class="btn" href={home.business.ctaUrl}>{home.business.ctaLabel} <span class="arrow" aria-hidden="true">→</span></a>
+          <a class="btn btn--ghost" href={home.business.secondaryUrl}>{home.business.secondaryLabel}</a>
         </div>
       </div>
     </section>
@@ -246,13 +295,6 @@ const ext = (url: string) => url?.startsWith('http');
     .stat:nth-child(3) { padding-left: 0; }
     .feature__facts { grid-template-columns: 1fr; }
   }
-  .steps { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(5, 1fr); gap: 0; border-top: 1px solid var(--line); }
-  .step { padding: 28px 24px 8px 0; }
-  .step + .step { padding-left: 24px; border-left: 1px solid var(--line); }
-  .step__num { font-size: 12px; font-weight: 700; letter-spacing: 0.12em; color: var(--accent); }
-  .step__title { font-size: clamp(24px, 2vw, 30px); margin: 12px 0 14px; }
-  .step p { font-size: 15px; color: var(--muted); margin: 0; }
-
   .feature__pills { position: absolute; top: 20px; left: 20px; right: 20px; display: flex; flex-wrap: wrap; gap: 6px; }
   .feature__latest { font-size: 15px; line-height: 1.5; margin: 0; padding: 14px 16px; background: var(--paper); border-left: 2px solid var(--accent); }
   .section--alt .feature__latest { background: var(--white); }
@@ -268,18 +310,50 @@ const ext = (url: string) => url?.startsWith('http');
   .leasing__body { font-size: 19px; color: rgba(246, 244, 239, 0.85); margin: 0; }
   .leasing .eyebrow::before { background: currentColor; }
 
-  .elevate__grid { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(32px, 6vw, 96px); align-items: end; }
-  .elevate .lede { margin-bottom: 28px; }
 
-  @media (max-width: 1100px) {
-    .steps { grid-template-columns: repeat(3, 1fr); }
-    .step:nth-child(4) { padding-left: 0; border-left: 0; }
-    .step:nth-child(n + 4) { border-top: 1px solid var(--line); margin-top: 24px; }
+
+  .overview__grid { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: clamp(32px, 6vw, 96px); align-items: start; }
+  .overview h2 { font-size: clamp(30px, 3.4vw, 48px); }
+  .overview__body :global(p) { font-size: 18px; color: var(--ink-2); }
+  .overview .link-arrow { margin-top: 8px; }
+
+  .process { border-top: 1px solid var(--line); }
+  .process__grid { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: clamp(40px, 6vw, 96px); align-items: start; }
+  .process__intro { position: sticky; top: calc(var(--header-h) + 24px); }
+  .process__intro h2 { margin-bottom: 20px; }
+  .process__intro .lede { margin-bottom: 16px; }
+  .process__note { font-size: 15px; color: var(--muted); padding-left: 14px; border-left: 2px solid var(--accent); margin-bottom: 28px; }
+  .stages-list { list-style: none; margin: 0; padding: 0; }
+  .stage { display: grid; grid-template-columns: 56px 1fr; gap: 16px; padding: 26px 0; border-top: 1px solid var(--line); }
+  .stage:last-child { border-bottom: 1px solid var(--line); }
+  .stage__num { font-size: 14px; font-weight: 700; color: var(--accent); padding-top: 3px; }
+  .stage h3 { font-size: 21px; margin-bottom: 8px; }
+  .stage p { margin: 0; color: var(--ink-2); font-size: 16px; }
+
+  .elevate__top { display: grid; grid-template-columns: minmax(0, 6fr) minmax(0, 5fr); gap: clamp(32px, 5vw, 80px); align-items: center; }
+  .elevate h2 { margin-bottom: 20px; }
+  .elevate__body :global(p) { color: rgba(246, 244, 239, 0.78); font-size: 17px; }
+  .elevate__ctas { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 24px; }
+  .elevate__media :global(img) { width: 100%; height: auto; border-radius: var(--radius); }
+  .roles { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(20px, 3vw, 40px); margin-top: clamp(40px, 5vw, 64px); }
+  .role { border-top: 1px solid rgba(246, 244, 239, 0.2); padding-top: 20px; }
+  .role__who { font-size: 12px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(246, 244, 239, 0.6); margin-bottom: 12px; }
+  .role ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+  .role li { font-size: 17px; padding-left: 18px; position: relative; }
+  .role li::before { content: ''; position: absolute; left: 0; top: 10px; width: 6px; height: 6px; background: rgba(246, 244, 239, 0.6); }
+
+  .business { padding-block: clamp(48px, 6vw, 80px); background: var(--paper-2); border-block: 1px solid var(--line); }
+  .business__inner { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 24px 48px; }
+  .business h2 { font-size: clamp(26px, 2.8vw, 38px); max-width: 24ch; margin-bottom: 10px; }
+  .business .lede { margin: 0; font-size: 17px; }
+  .business__ctas { display: flex; flex-wrap: wrap; gap: 10px; }
+
+  @media (max-width: 900px) {
+    .overview__grid, .process__grid, .elevate__top { grid-template-columns: 1fr; }
+    .process__intro { position: static; }
   }
-  @media (max-width: 700px) {
-    .steps { grid-template-columns: 1fr; }
-    .step, .step + .step { padding: 22px 0 18px; border-left: 0; border-top: 1px solid var(--line); margin-top: 0; }
-    .step:first-child { border-top: 0; }
-    .elevate__grid { grid-template-columns: 1fr; }
+  @media (max-width: 600px) {
+    .roles { grid-template-columns: 1fr; }
+    .stage { grid-template-columns: 40px 1fr; }
   }
 </style>

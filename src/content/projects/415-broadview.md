@@ -2,6 +2,7 @@
 title: "415 Broadview"
 order: 4
 featured: false
+approach: "LCH is working with deCartier Developments and St. John’s Presbyterian Church on a plan that restores the historic church, keeps the congregation at its home, and adds new rental housing."
 stage: "In Development"
 type: "Purpose-Built Rental & Heritage Restoration"
 address: "415 Broadview Avenue"
