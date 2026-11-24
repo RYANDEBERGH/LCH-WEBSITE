@@ -47,6 +47,12 @@ collections:
       - { label: Assignment, name: assignment, widget: select, default: development, options: [{ label: LCH development, value: development }, { label: Selected client work, value: client }], hint: 'Client work = development/construction management for an owner, lender or receiver. Do not imply LCH owned or originally developed it.' }
       - { label: Role (client work), name: roleLabel, widget: string, required: false, hint: 'e.g. Development and construction management' }
       - { label: Client (client work), name: client, widget: string, required: false }
+      - { label: Years (client work), name: years, widget: string, required: false, hint: 'e.g. 2024–25' }
+      - { label: Home page tile framing (advanced), name: tileCrop, widget: string, required: false, hint: 'e.g. --tile-h: 140%; --tile-top: -40%; --tile-x: 47% (zoom, shift up, shift sideways)' }
+      - { label: Estimated delivery, name: delivery, widget: string, required: false, hint: 'Season and year, e.g. Spring 2028. Shown on the home page tile and project page.' }
+      - { label: Construction milestones (target schedule), name: schedule, widget: list, required: false, summary: '{{fields.name}}', fields: [{ label: Phase, name: name, widget: string }, { label: Start (YYYY-MM-DD), name: start, widget: string }, { label: End (YYYY-MM-DD), name: end, widget: string }] }
+      - { label: Construction updates site, name: construction, widget: object, required: false, fields: [{ label: Link, name: url, widget: string, required: false }, { label: Button label, name: label, widget: string, required: false }] }
+      - { label: Owned and operated by LCH, name: operating, widget: boolean, default: false, required: false, hint: 'For places LCH runs after completion, such as Merge Spaces.' }
       - { label: LCH's role and approach, name: approach, widget: text, required: false, hint: 'Short case-study paragraph shown on the project page.' }
       - { label: Construction stage, name: stage, widget: select, required: false, options: ['In Development', 'Under Construction', 'Complete'], hint: 'Leave blank for client work if the stage isn’t public.' }
       - label: Leasing (kept separate from construction)
@@ -55,7 +61,7 @@ collections:
         collapsed: true
         required: false
         fields:
-          - { label: Leasing status, name: status, widget: select, required: false, options: ['', 'Now Pre-Leasing', 'Now Leasing', 'Join the Waitlist', 'Fully Leased'] }
+          - { label: Leasing status, name: status, widget: select, required: false, options: ['', 'Now Pre-Leasing', 'Now Leasing', 'Join the Waitlist', 'Fully Leased', 'Memberships Available'] }
           - { label: Leasing website, name: url, widget: string, required: false, hint: 'e.g. https://everston.ca — floor plans and pricing stay there.' }
           - { label: What visitors will find there, name: label, widget: string, required: false, hint: 'e.g. Floor plans, pricing, amenities and tours' }
       - { label: Order (1 = first), name: order, widget: number, value_type: int, default: 10 }
@@ -121,6 +127,7 @@ collections:
       - { label: Date, name: date, widget: datetime, format: 'YYYY-MM-DD', date_format: 'YYYY-MM-DD', time_format: false }
       - { label: Topic, name: topic, widget: select, options: ['Project Update', 'In the Press', 'Company News', 'Community'] }
       - { label: Related project, name: project, widget: relation, collection: projects, search_fields: [title], value_field: '{{slug}}', display_fields: [title], required: false }
+      - { label: Other projects mentioned, name: projects, widget: relation, collection: projects, search_fields: [title], value_field: '{{slug}}', display_fields: [title], multiple: true, required: false, hint: 'The article also appears on each of these project pages.' }
       - { label: Image, name: image, widget: image, required: false }
       - { label: Image fit, name: imageFit, widget: select, required: false, options: [{ label: 'Fill (crop to fit) — photos', value: cover }, { label: 'Show whole image — graphics with text', value: contain }] }
       - { label: Publisher, name: publisher, widget: string, required: false, hint: 'For press coverage, e.g. UrbanToronto. Shown in the “In the press” strip.' }
@@ -154,7 +161,7 @@ collections:
   - name: social
     label: Social Posts
     label_singular: Social post
-    description: Curated posts from LCH, Elevate, Merge Spaces, Everston and the team. Paste the post's link, pick the account, add the image and a short excerpt.
+    description: Curated posts from LCH, Elevate, Merge Spaces, Everston and the team. Paste the post's link and pick the account. LinkedIn and Instagram posts are shown as the real embedded post. Image and excerpt are only used if a post can't be embedded.
     folder: src/content/social
     create: true
     slug: '{{year}}-{{month}}-{{day}}-{{fields.account}}'
@@ -168,6 +175,7 @@ collections:
       - { label: Link to the post, name: url, widget: string, hint: 'On LinkedIn: ••• → Copy link to post. On Instagram: ••• → Copy link.' }
       - { label: Excerpt, name: text, widget: text, required: false }
       - { label: Image, name: image, widget: image, required: false, hint: 'Square works best.' }
+      - { label: Show as embedded post, name: embed, widget: boolean, default: true, required: false, hint: 'Turn off to show a simple card with the image and excerpt instead.' }
       - { label: Hide, name: hidden, widget: boolean, default: false, required: false }
 
   # ── SIMPLE PAGES (legal etc.) ─────────────────────────────────────────────
@@ -227,6 +235,14 @@ collections:
               - { label: Network, name: network, widget: select, options: [linkedin, instagram, facebook] }
               - { label: Link, name: url, widget: string, required: false }
               - { label: Type, name: kind, widget: select, options: [company, person] }
+          - label: Publisher logos (press strip)
+            name: publisherLogos
+            widget: list
+            summary: '{{fields.name}}'
+            hint: 'Name must match the Publisher field on news articles exactly. Without a logo the name is shown.'
+            fields:
+              - { label: Publisher name, name: name, widget: string }
+              - { label: Logo, name: logo, widget: image, required: false }
           - label: Social feed section
             name: socialFeed
             widget: object
@@ -235,6 +251,7 @@ collections:
               - { label: Small text, name: eyebrow, widget: string }
               - { label: Heading, name: heading, widget: string }
               - { label: Number of posts, name: count, widget: number, value_type: int, min: 0, max: 12 }
+              - { label: Live feed widget code (optional), name: widget, widget: code, default_language: html, output_code_only: true, required: false, hint: 'Paste the embed code from a feed service such as Curator.io, Juicer or Elfsight, connected to the LCH and Elevate LinkedIn and Instagram pages. It updates automatically and replaces the hand-added posts on the homepage and News page.' }
           - label: Announcement banner (top of every page)
             name: announcement
             widget: object
@@ -266,15 +283,21 @@ collections:
               - { label: Heading, name: heading, widget: string }
               - { label: Sub-heading, name: subheading, widget: text }
               - { label: Background image, name: image, widget: image }
+              - { label: Background video (desktop), name: video, widget: file, required: false, hint: 'MP4, about 1920px wide, under 10 MB, no sound. Loops behind the hero; the background image shows while it loads.' }
+              - { label: Background video (phones), name: videoMobile, widget: file, required: false, hint: 'Smaller MP4, about 1280px wide, for phones.' }
+              - { label: Video poster frame, name: videoPoster, widget: image, required: false }
               - { label: Main button, name: primaryCta, widget: object, fields: [{ label: Label, name: label, widget: string }, { label: Link, name: url, widget: string }] }
               - { label: Second button, name: secondaryCta, widget: object, fields: [{ label: Label, name: label, widget: string, required: false }, { label: Link, name: url, widget: string, required: false }] }
           - label: Key numbers
             name: stats
             widget: list
             summary: '{{fields.value}} — {{fields.label}}'
+            hint: 'Type {years} as the number to show years in operation since 2012 (updates automatically), or {team} for the team headcount.'
             fields:
               - { label: Number / word, name: value, widget: string }
               - { label: Label, name: label, widget: string }
+              - { label: Projects listed under the number (optional), name: projects, widget: relation, collection: projects, search_fields: [title], value_field: '{{slug}}', display_fields: [title], multiple: true, required: false }
+              - { label: Other lines (optional), name: extra, widget: list, required: false }
           - label: Featured projects section
             name: featured
             widget: object
@@ -290,6 +313,7 @@ collections:
               - { label: Text, name: body, widget: markdown }
               - { label: Link label, name: ctaLabel, widget: string }
               - { label: Link, name: ctaUrl, widget: string }
+              - { label: Photos (shown in a row of three), name: images, widget: list, required: false, summary: '{{fields.caption}}', fields: [{ label: Photo, name: image, widget: image }, { label: Photo description (alt text), name: alt, widget: string }, { label: Caption, name: caption, widget: string, required: false }, { label: Link (optional), name: url, widget: string, required: false }] }
           - label: How we make it happen
             name: process
             widget: object
@@ -301,6 +325,19 @@ collections:
               - { label: Supporting line, name: footnote, widget: text }
               - { label: Button label, name: ctaLabel, widget: string }
               - { label: Button link, name: ctaUrl, widget: string }
+              - { label: Photo, name: image, widget: image, required: false }
+              - { label: Photo description (alt text), name: imageAlt, widget: string, required: false }
+              - { label: Photo caption, name: imageCaption, widget: string, required: false }
+          - label: Partners and clients band
+            name: clients
+            widget: object
+            required: false
+            fields:
+              - { label: Small text, name: eyebrow, widget: string }
+              - { label: Heading, name: heading, widget: string }
+              - { label: Partners to show (names exactly as on the Partnerships page), name: names, widget: list, hint: 'Logos come from Partnerships → Partners we have worked with. Without a logo the name is shown.' }
+              - { label: Link label, name: ctaLabel, widget: string, required: false }
+              - { label: Link, name: ctaUrl, widget: string, required: false }
           - label: Map section
             name: map
             widget: object
@@ -320,6 +357,7 @@ collections:
               - { label: Button label, name: ctaLabel, widget: string }
               - { label: Button link, name: ctaUrl, widget: string }
               - { label: Background image, name: image, widget: image }
+              - { label: Rotating background photos (optional), name: images, widget: list, required: false, field: { label: Photo, name: image, widget: image }, hint: 'Two or more photos crossfade behind the colour overlay. Leave empty to use the single image.' }
           - label: LCH and Elevate (also shown on About Us)
             name: elevate
             widget: object
@@ -351,6 +389,7 @@ collections:
             fields:
               - { label: Small text, name: eyebrow, widget: string }
               - { label: Heading (screen readers), name: heading, widget: string }
+              - { label: Featured articles (in order), name: picks, widget: relation, collection: news, search_fields: [title], value_field: '{{slug}}', display_fields: [title], multiple: true, required: false, hint: 'Pick a mix of recent and standout coverage. Empty slots fill with the latest press.' }
           - label: Latest news section
             name: news
             widget: object
@@ -392,7 +431,7 @@ collections:
               - { label: Small text, name: eyebrow, widget: string }
               - { label: Heading, name: heading, widget: string }
               - { label: Areas, name: items, widget: list, summary: '{{fields.title}}', fields: [{ label: Title, name: title, widget: string }, { label: Text, name: body, widget: text }] }
-          - label: Selected experience
+          - label: Selected client work (shown on Work With Us)
             name: experience
             widget: object
             fields:
@@ -405,6 +444,7 @@ collections:
                 fields:
                   - { label: Photo, name: image, widget: image, required: false }
                   - { label: Photo description (alt text), name: imageAlt, widget: string, required: false }
+                  - { label: Key points (optional), name: points, widget: list, required: false }
                   - { label: Linked project page, name: project, widget: string, required: false, hint: 'Project page slug, e.g. jefferson-heights. Leave blank if there is no project page.' }
                   - { label: Title, name: title, widget: string }
                   - { label: Role, name: role, widget: string }
@@ -431,7 +471,7 @@ collections:
           - { label: Small text, name: eyebrow, widget: string }
           - { label: Heading, name: heading, widget: string }
           - { label: Intro, name: intro, widget: text }
-          - { label: Proof points, name: proof, widget: list, summary: '{{fields.value}} — {{fields.label}}', fields: [{ label: Number / word, name: value, widget: string }, { label: Label, name: label, widget: string }] }
+          - { label: Proof points, name: proof, widget: list, summary: '{{fields.value}} — {{fields.label}}', fields: [{ label: Number / word, name: value, widget: string, hint: 'Use {team} for the live team count' }, { label: Label, name: label, widget: string }, { label: Logo instead of number (optional), name: logo, widget: image, required: false }] }
           - label: Who we work with
             name: audiences
             widget: object
@@ -451,7 +491,35 @@ collections:
               - { label: Heading, name: heading, widget: string }
               - { label: Reasons, name: items, widget: list, summary: '{{fields.title}}', fields: [{ label: Title, name: title, widget: string }, { label: Text, name: body, widget: text }, { label: Proof (a real example), name: proof, widget: string }, { label: Proof link, name: link, widget: string, required: false }] }
           - { label: What we look for, name: criteria, widget: object, fields: [{ label: Heading, name: heading, widget: string }, { label: Items, name: items, widget: list }] }
-          - { label: How a partnership works, name: process, widget: object, fields: [{ label: Heading, name: heading, widget: string }, { label: Steps, name: steps, widget: list, summary: '{{fields.title}}', fields: [{ label: Title, name: title, widget: string }, { label: Text, name: body, widget: text }] }] }
+          - label: Scope of services
+            name: scope
+            widget: object
+            fields:
+              - { label: Small text, name: eyebrow, widget: string }
+              - { label: Heading, name: heading, widget: string }
+              - { label: Intro, name: intro, widget: text }
+              - { label: Development management label, name: dmLabel, widget: string }
+              - { label: Development management intro, name: dmIntro, widget: string, required: false }
+              - { label: Development management stages, name: dmGroups, widget: list, required: false, hint: 'Groups the workstreams below into stages, in order. Count = how many workstreams fall in that stage.', summary: '{{fields.title}} ({{fields.count}})', fields: [{ label: Stage, name: title, widget: string }, { label: Number of workstreams, name: count, widget: number, value_type: int }] }
+              - { label: Development management workstreams, name: dm, widget: list, summary: '{{fields.title}}', fields: [{ label: Workstream, name: title, widget: string }, { label: Included services, name: body, widget: text }] }
+              - { label: Construction management label, name: cmLabel, widget: string }
+              - { label: Construction management intro, name: cmIntro, widget: string, required: false }
+              - { label: Construction management phases, name: cm, widget: list, summary: '{{fields.title}}', fields: [{ label: Phase, name: title, widget: string }, { label: Scope items, name: items, widget: list }] }
+              - { label: Closing line, name: cmNote, widget: string, required: false }
+          - label: Partners we've worked with
+            name: worked
+            widget: object
+            fields:
+              - { label: Small text, name: eyebrow, widget: string }
+              - { label: Heading, name: heading, widget: string }
+              - { label: Intro, name: intro, widget: text }
+              - label: Groups
+                name: groups
+                widget: list
+                summary: '{{fields.label}}'
+                fields:
+                  - { label: Group name, name: label, widget: string }
+                  - { label: Partners, name: items, widget: list, summary: '{{fields.name}}', fields: [{ label: Name, name: name, widget: string }, { label: Role, name: note, widget: string, required: false }, { label: Logo (optional), name: logo, widget: image, required: false, hint: 'Used in the homepage partners and clients band. Transparent PNG or SVG works best.' }, { label: Projects, name: projects, widget: relation, collection: projects, search_fields: [title], value_field: '{{slug}}', display_fields: [title], multiple: true, required: false }] }
           - { label: Enquiry form, name: form, widget: object, fields: [{ label: Heading, name: heading, widget: string }, { label: Intro, name: intro, widget: text }, { label: Partner types (dropdown), name: types, widget: list }] }
 
       - name: map
@@ -472,10 +540,3 @@ collections:
               - { label: Label position, name: labelPos, widget: select, required: false, options: [right, left, top, bottom] }
           - { label: Road names shown on the map, name: roadLabels, widget: list, hint: 'Exact OpenStreetMap names, e.g. Eglinton Avenue East.' }
 
-      - name: corporate
-        label: Corporate page
-        file: src/data/corporate.json
-        fields:
-          - { label: Heading, name: heading, widget: string }
-          - { label: Intro, name: intro, widget: text }
-          - { label: Corporations, name: entities, widget: list }

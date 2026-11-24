@@ -49,8 +49,7 @@ const socials = [
   <div class="container footer__main">
     <div class="footer__brand">
       <img src={settings.logoLight} alt={settings.siteName} width="140" height="63" loading="lazy" />
-      <a class="footer__elevate" href={settings.elevate.url} target="_blank" rel="noopener">
-        <span>Construction management by</span>
+      <a class="footer__elevate" href={settings.elevate.url} target="_blank" rel="noopener" aria-label="Elevate Construction Management website (opens in a new tab)">
         <img src={settings.elevate.logoLight} alt="Elevate Construction Management" width="120" height="59" loading="lazy" />
       </a>
       <address>
@@ -64,8 +63,8 @@ const socials = [
     </div>
     <div class="footer__col">
       <p class="footer__label">Explore</p>
+      <a href="/about/">About</a>
       <a href="/projects/">Projects</a>
-      <a href="/about/">About Us</a>
       <a href="/partnerships/">Partnerships</a>
       <a href="/news/">News & Media</a>
       <a href="/contact/">Contact</a>
@@ -84,13 +83,13 @@ const socials = [
 
   <div class="container footer__legal">
     <span>© {year} {settings.siteName}. All rights reserved.</span>
-    <span class="footer__legal-links"><a href="/legal/privacy-policy/">Legal</a><a href="/corporate/">Corporate</a></span>
+    <span class="footer__legal-links"><a href="/legal/privacy-policy/">Privacy &amp; Terms</a></span>
   </div>
 </footer>
 
 <style>
-  .footer { padding-top: clamp(64px, 8vw, 112px); }
-  .footer__newsletter { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(32px, 6vw, 96px); padding-bottom: clamp(56px, 7vw, 96px); border-bottom: 1px solid rgba(246, 244, 239, 0.14); }
+  .footer { padding-top: clamp(48px, 6vw, 80px); }
+  .footer__newsletter { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(32px, 6vw, 96px); padding-bottom: clamp(40px, 5vw, 64px); border-bottom: 1px solid rgba(246, 244, 239, 0.14); }
   .footer__newsletter h2 { margin-bottom: 16px; }
   .newsletter-form { display: grid; gap: 18px; align-content: start; }
   .newsletter-form__row { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
@@ -101,7 +100,7 @@ const socials = [
   .footer__main { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 40px; padding-block: 56px; }
   .footer__brand img { height: 48px; width: auto; margin-bottom: 20px; }
   .footer__elevate { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; color: rgba(246, 244, 239, 0.6); font-size: 12px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; text-decoration: none; }
-  .footer__elevate img { height: 34px; width: auto; opacity: 0.9; transition: opacity 0.2s; }
+  .footer__elevate img { height: 48px; width: auto; opacity: 0.9; transition: opacity 0.2s; }
   .footer__elevate:hover img { opacity: 1; }
   .footer__brand address { font-style: normal; color: rgba(246, 244, 239, 0.7); max-width: 26ch; }
   .footer a { text-decoration: none; }

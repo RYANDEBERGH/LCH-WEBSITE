@@ -4,10 +4,11 @@ order: 21
 featured: false
 assignment: "client"
 roleLabel: "Project recovery and construction completion"
+years: "2026"
 client: "KPMG and RBC"
 type: "Townhomes"
 units: 29
-address: ""
+address: "355 North Street"
 neighbourhood: "Newcastle, Clarington"
 intersection: ""
 partners: []

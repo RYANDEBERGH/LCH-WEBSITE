@@ -7,6 +7,7 @@ import { settings, story, home, getTeam, getProjects, md, brandInk } from '../li
 const team = await Promise.all((await getTeam()).map(async (t) => ({ ...t, Content: (await render(t)).Content })));
 const projectsById = Object.fromEntries((await getProjects()).map((p) => [p.id, p]));
 const e = home.elevate;
+const L = story.lchElevate;
 ---
 
 <Base title="About Us" description="LCH Developments: development, development management and, through affiliated Elevate, construction management. Our history, expertise and team.">
@@ -87,52 +88,15 @@ const e = home.elevate;
     </div>
   </section>
 
-  <section class="section section--dark" id="lch-elevate">
-    <div class="container">
-      <div class="le__top">
-        <div>
-          <a class="le__logo" href={settings.elevate.url} target="_blank" rel="noopener" aria-label="Elevate Construction Management website"><img src={settings.elevate.logoLight} alt="Elevate Construction Management" width="200" height="98" loading="lazy" /></a>
-          <p class="eyebrow">{e.eyebrow}</p>
-          <h2>{e.heading}</h2>
-          <div class="le__body" set:html={md(e.body)} />
-          <a class="btn btn--ghost-light" href={e.extUrl} target="_blank" rel="noopener">{e.extLabel} <span class="arrow" aria-hidden="true">↗</span></a>
-        </div>
-        <figure class="le__photo"><Img src={e.image} alt={e.imageAlt} sizes="(max-width: 900px) 100vw, 45vw" /></figure>
-      </div>
-      <div class="le__roles">
-        <div><p class="le__who">LCH leads</p><ul>{e.lch.map((x) => <li>{x}</li>)}</ul></div>
-        <div><p class="le__who">Elevate leads</p><ul>{e.elevateList.map((x) => <li>{x}</li>)}</ul></div>
-      </div>
-    </div>
-  </section>
-
-  <section class="section" id="experience">
-    <div class="container">
-      <p class="eyebrow">{story.experience.eyebrow}</p>
-      <h2 class="sec-h">{story.experience.heading}</h2>
-      <div class="cases">
-        {story.experience.items.map((c) => (
-          <article class="case reveal">
-            {c.image && <div class="case__img"><Img src={c.image} alt={c.imageAlt ?? ''} sizes="(max-width: 680px) 100vw, 33vw" /></div>}
-            <p class="case__role">Selected client work · {c.role}</p>
-            <h3>{c.title}</h3>
-            <p class="case__lead">{c.heading}</p>
-            <p>{c.body}</p>
-            {c.project && <a class="link-arrow" href={`/projects/${c.project}/`}>View {c.title} →</a>}
-          </article>
-        ))}
-      </div>
-    </div>
-  </section>
 
   <section class="section section--alt" id="team">
     <div class="container">
       <p class="eyebrow">{story.team.eyebrow}</p>
       <h2 class="sec-h">{story.team.heading}</h2>
       <div class="team-filters" role="group" aria-label="Filter the team">
-        <button type="button" class="tchip" aria-pressed="true" data-team-filter="all">All <span>{team.length}</span></button>
-        <button type="button" class="tchip" aria-pressed="false" data-team-filter="lch">LCH Developments <span>{team.filter((t) => t.data.companies.includes('lch')).length}</span></button>
-        <button type="button" class="tchip" aria-pressed="false" data-team-filter="elevate">Elevate <span>{team.filter((t) => t.data.companies.includes('elevate')).length}</span></button>
+        <button type="button" class="tchip" aria-pressed="true" data-team-filter="all">All</button>
+        <button type="button" class="tchip" aria-pressed="false" data-team-filter="lch">LCH Developments</button>
+        <button type="button" class="tchip" aria-pressed="false" data-team-filter="elevate">Elevate</button>
       </div>
       <div class="team">
         {team.map((t) => (
@@ -141,7 +105,7 @@ const e = home.elevate;
               <div class="member__photo">
                 {t.data.photo && <Img src={t.data.photo} alt={t.data.name} sizes="(max-width: 600px) 50vw, 25vw" />}
               </div>
-              <h3>{t.data.name}{t.data.credentials && <span class="member__cred">, {t.data.credentials}</span>}</h3>
+              <h3>{t.data.name}{t.data.credentials && <span class="member__cred">{t.data.credentials}</span>}</h3>
               <p class="member__role">{t.data.role}</p>
               <p class="member__cos">{t.data.companies.map((c) => <span class={`member__co member__co--${c}`}>{c === 'lch' ? 'LCH' : 'Elevate'}</span>)}</p>
               <span class="member__more">Read bio +</span>
@@ -162,6 +126,80 @@ const e = home.elevate;
           </article>
         ))}
       </div>
+    </div>
+  </section>
+
+  <section class="section section--dark le2" id="lch-elevate">
+    <div class="container">
+      <div class="le2__head">
+        <div>
+          <p class="eyebrow">{L.eyebrow}</p>
+          <h2>{L.heading}</h2>
+        </div>
+        <p class="le2__intro">{L.intro}</p>
+      </div>
+
+      <div class="le2__cos">
+        {L.companies.map((c) => {
+          const people = team.filter((t) => t.data.companies.includes(c.key));
+          const leaders = (c.leaders ?? []).map((id) => team.find((t) => t.id === id)).filter(Boolean);
+          const ext = c.cta?.url?.startsWith('http');
+          return (
+            <article class:list={['le2__co reveal', `le2__co--${c.key}`]}>
+              <div class="le2__img">
+                <Img src={c.image} alt={c.imageAlt} sizes="(max-width: 900px) 100vw, 50vw" />
+                <div class="le2__badge"><img src={c.key === 'lch' ? settings.logo : settings.elevate.logo} alt={c.name} loading="lazy" /></div>
+              </div>
+              <div class="le2__cobody">
+                <p class="le2__tag">{c.tagline}</p>
+                <h3>{c.name}</h3>
+                {c.values && <p class="le2__values">{c.values.map((v) => <span>{v}</span>)}</p>}
+                <p class="le2__desc">{c.body}</p>
+                <div class="le2__foot">
+                  <div class="le2__people">
+                  <div class="le2__leaders">
+                    <span class="le2__faces">{leaders.map((t) => t!.data.photo && <button type="button" class="le2__face" data-member={t!.id} aria-haspopup="dialog" title={`Read ${t!.data.name}'s bio`}><Img src={t!.data.photo} alt={t!.data.name} sizes="48px" /></button>)}</span>
+                    <span><strong>{leaders.map((t, i) => <>{i > 0 && ' & '}<button type="button" class="le2__name" data-member={t!.id} aria-haspopup="dialog">{t!.data.name}</button></>)}</strong><em>{leaders[0]?.data.role.replace(/, Elevate.*$/, '')}{leaders.length > 1 ? 's' : ''}</em></span>
+                  </div>
+                    {(c.partners ?? []).length > 0 && (() => {
+                      const ps = c.partners.map((id) => team.find((t) => t.id === id)).filter(Boolean);
+                      return (
+                        <div class="le2__leaders le2__leaders--sub">
+                          <span class="le2__faces">{ps.map((t) => t!.data.photo && <button type="button" class="le2__face" data-member={t!.id} aria-haspopup="dialog" title={`Read ${t!.data.name}'s bio`}><Img src={t!.data.photo} alt={t!.data.name} sizes="40px" /></button>)}</span>
+                          <span><strong>{ps.map((t, i) => <>{i > 0 && ' & '}<button type="button" class="le2__name" data-member={t!.id} aria-haspopup="dialog">{t!.data.name}</button></>)}</strong><em>{c.partnersLabel ?? 'Managing Partners'}</em></span>
+                        </div>
+                      );
+                    })()}
+                  </div>
+                  {c.cta && <a class="link-arrow" href={c.cta.url} target={ext ? '_blank' : undefined} rel="noopener">{c.cta.label} {ext ? '↗' : '→'}</a>}
+                </div>
+              </div>
+            </article>
+          );
+        })}
+      </div>
+
+      <div class="le2__phases reveal">
+        <p class="le2__label">{L.phasesHeading}</p>
+        <ol>
+          {L.phases.map((ph, i) => {
+            const lead = ph.lch === 'lead' && ph.elevate === 'lead' ? 'both' : ph.lch === 'lead' ? 'lch' : 'elevate';
+            // A shared phase turns its green half toward the neighbouring Elevate-led (construction) phase
+            const leadOf = (q: any) => q && (q.lch === 'lead' && q.elevate === 'lead' ? 'both' : q.lch === 'lead' ? 'lch' : 'elevate');
+            const greenLeft = lead === 'both' && leadOf(L.phases[i - 1]) === 'elevate';
+            return (
+              <li class:list={[`is-${lead}`, { 'is-both--green-left': greenLeft }]}>
+                <span class="le2__num">{String(i + 1).padStart(2, '0')}</span>
+                <strong>{ph.title}</strong>
+                <span class="le2__who">{lead === 'both' ? 'LCH + Elevate' : lead === 'lch' ? 'LCH leads' : 'Elevate leads'}</span>
+                <span class="le2__note">{ph.note}</span>
+              </li>
+            );
+          })}
+        </ol>
+        <p class="le2__key"><span class="k k--lch"></span>LCH <span class="k k--el"></span>Elevate <span class="k k--both"></span>Together</p>
+      </div>
+
     </div>
   </section>
 
@@ -242,6 +280,108 @@ const e = home.elevate;
 </script>
 
 <style>
+  .le2__head { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 6fr); gap: clamp(24px, 5vw, 80px); align-items: end; margin-bottom: clamp(32px, 4vw, 52px); }
+  .le2__head h2 { margin: 0; }
+  .le2__intro { margin: 0; font-size: 18px; color: rgba(246, 244, 239, 0.75); }
+  .le2__cos { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(16px, 2vw, 28px); }
+  .le2__co { background: #1f1f1c; border: 1px solid rgba(246, 244, 239, 0.12); border-radius: var(--radius); overflow: hidden; display: flex; flex-direction: column; }
+  .le2__co--elevate { background: #16332a; border-color: rgba(160, 210, 180, 0.18); }
+  .le2__img { position: relative; }
+  .le2__img > :global(img) { width: 100%; aspect-ratio: 16 / 8; object-fit: cover; display: block; }
+  .le2__badge { position: absolute; left: 20px; bottom: -26px; width: max-content; background: #fff; padding: 10px 16px; border-radius: 2px; box-shadow: 0 6px 20px rgba(0,0,0,.25); }
+  .le2__badge img { height: 34px; width: auto; max-width: none; display: block; }
+  .le2__cobody { padding: 44px 28px 26px; display: flex; flex-direction: column; gap: 12px; flex: 1; }
+  .le2__cobody h3 { font-size: 26px; margin: 0; color: #fff; }
+  .le2__tag { margin: 0; font-size: 12px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(246, 244, 239, 0.55); }
+  .le2__desc { margin: 0; color: rgba(246, 244, 239, 0.78); }
+  .le2__cobody ul { list-style: none; margin: 4px 0 0; padding: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 8px 18px; font-size: 15px; color: rgba(246, 244, 239, 0.9); }
+  .le2__cobody li { padding-left: 16px; position: relative; }
+  .le2__cobody li::before { content: ''; position: absolute; left: 0; top: 9px; width: 6px; height: 6px; background: currentColor; opacity: .55; }
+  .le2__values { display: flex; gap: 8px; flex-wrap: wrap; margin: -2px 0 4px; }
+  .le2__values span { font-size: 13px; font-weight: 600; padding: 4px 10px; background: rgba(246, 244, 239, 0.1); color: #f1ede4; border-radius: 2px; }
+  .le2__co--elevate .le2__values span { background: rgba(160, 210, 180, 0.16); color: #cfe6d7; }
+  .le2__foot { margin-top: auto; padding-top: 18px; border-top: 1px solid rgba(246, 244, 239, 0.14); display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+  .le2__leaders { display: flex; align-items: center; gap: 12px; }
+  .le2__faces { display: flex; }
+  .le2__faces :global(img) { display: block; width: 44px; height: 44px; border-radius: 50%; object-fit: cover; border: 2px solid rgba(246, 244, 239, 0.9); }
+  .le2__face { all: unset; cursor: pointer; display: block; border-radius: 50%; transition: transform .2s; }
+  .le2__face + .le2__face { margin-left: -10px; }
+  .le2__face:hover, .le2__face:focus-visible { transform: translateY(-2px); position: relative; z-index: 1; }
+  .le2__name { all: unset; cursor: pointer; text-decoration: underline; text-decoration-color: rgba(246,244,239,.35); text-underline-offset: 3px; }
+  .le2__name:hover, .le2__name:focus-visible { text-decoration-color: #fff; }
+  .le2__leaders strong { display: block; font-size: 14.5px; color: #fff; }
+  .le2__leaders em { font-style: normal; font-size: 13px; color: rgba(246, 244, 239, 0.6); }
+  .le2 .link-arrow { color: #fff; }
+  .le2__label { font-size: 12px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(246, 244, 239, 0.55); margin: 0 0 14px; }
+  .le2__phases { margin-top: clamp(36px, 4.5vw, 56px); }
+  .le2__phases ol { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(5, 1fr); gap: 4px; }
+  .le2__phases li { padding: 18px 16px 20px; display: grid; gap: 4px; align-content: start; min-height: 150px; }
+  .le2__phases li.is-lch { background: #3a3a35; color: #fff; }
+  .le2__phases li.is-elevate { background: #3f8a63; color: #fff; }
+  .le2__phases li.is-both { background: linear-gradient(135deg, #3a3a35 0 50%, #3f8a63 50% 100%); color: #fff; }
+  .le2__phases li.is-both--green-left { background: linear-gradient(135deg, #3f8a63 0 50%, #3a3a35 50% 100%); }
+  .le2__num { font-size: 12px; opacity: .6; font-variant-numeric: tabular-nums; }
+  .le2__phases strong { font-size: 17px; }
+  .le2__who { font-size: 12px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; opacity: .85; }
+  .le2__note { font-size: 14px; opacity: .85; margin-top: 6px; }
+  .le2__key { display: flex; align-items: center; gap: 8px 14px; flex-wrap: wrap; margin: 12px 0 0; font-size: 13px; color: rgba(246, 244, 239, 0.65); }
+  .le2__key .k { width: 14px; height: 14px; display: inline-block; margin-right: -6px; }
+  .k--lch { background: #3a3a35; box-shadow: 0 0 0 1px rgba(246,244,239,.3); } .k--el { background: #3f8a63; } .k--both { background: linear-gradient(135deg, #3a3a35 0 50%, #3f8a63 50% 100%); }
+  @media (max-width: 900px) { .le2__phases ol { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 560px) { .le2__phases ol { grid-template-columns: 1fr; } .le2__phases li { min-height: 0; } }
+  .le2__matrix { margin-top: clamp(36px, 4.5vw, 56px); }
+  .le2__grid { display: grid; gap: 4px; }
+  .le2__row { display: grid; grid-template-columns: 110px repeat(5, 1fr); gap: 4px; align-items: stretch; }
+  .le2__row--head span { font-size: 15px; font-weight: 700; color: #fff; padding: 0 4px 6px; }
+  .le2__row--head em { display: block; font-style: normal; font-size: 12px; font-weight: 500; color: rgba(246, 244, 239, 0.45); }
+  .le2__rowname { display: flex; align-items: center; font-weight: 700; font-size: 14px; color: #fff; }
+  .le2__cell { padding: 12px 14px; font-size: 13px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; border-radius: 2px; }
+  .le2__row--lch .is-lead { background: #f6f4ef; color: var(--ink); }
+  .le2__row--elevate .is-lead { background: #3f8a63; color: #fff; }
+  .le2__cell.is-support { background: transparent; color: rgba(246, 244, 239, 0.6); border: 1px dashed rgba(246, 244, 239, 0.3); }
+  .le2__row--notes span { font-size: 13.5px; color: rgba(246, 244, 239, 0.65); padding: 8px 4px 0; }
+  .le2__together { margin-top: clamp(36px, 4.5vw, 56px); }
+  .le2__projects { display: grid; grid-template-columns: repeat(5, 1fr); gap: clamp(10px, 1.4vw, 16px); }
+  .le2__proj { color: #fff; text-decoration: none; display: grid; gap: 10px; }
+  .le2__proj :global(img) { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; display: block; border-radius: 2px; transition: transform .4s ease, opacity .3s; }
+  .le2__proj:hover :global(img) { opacity: .85; }
+  .le2__proj span { font-weight: 700; font-size: 15px; display: flex; flex-direction: column; border-left: 3px solid var(--dot); padding-left: 10px; }
+  .le2__proj em { font-style: normal; font-weight: 500; font-size: 13px; color: rgba(246, 244, 239, 0.6); }
+
+  /* compact: whole section fits one screen */
+  .le2.section { padding-block: clamp(36px, 4vw, 56px); scroll-margin-top: var(--header-h, 72px); }
+  .le2__head { margin-bottom: clamp(18px, 2vw, 28px); }
+  .le2__head h2 { font-size: clamp(28px, 3vw, 42px); }
+  .le2__intro { font-size: 16px; }
+  .le2__co { flex-direction: row; }
+  .le2__img { flex: 0 0 34%; }
+  .le2__img > :global(img) { height: 100%; aspect-ratio: auto; min-height: 220px; }
+  .le2__badge { left: 14px; bottom: 14px; padding: 7px 10px; }
+  .le2__badge img { height: 24px; }
+  .le2__cobody { padding: 20px 22px; gap: 8px; }
+  .le2__cobody h3 { font-size: 20px; }
+  .le2__tag { font-size: 11px !important; }
+  .le2__desc { font-size: 14px; line-height: 1.45; }
+  .le2__foot { padding-top: 12px; }
+  .le2__faces :global(img) { width: 36px; height: 36px; }
+  .le2__phases { margin-top: clamp(20px, 2.4vw, 32px); }
+  .le2__phases li { min-height: 0; padding: 10px 14px 12px; }
+  .le2__phases strong { font-size: 15.5px; }
+  .le2__note { font-size: 13px; margin-top: 2px; }
+  .le2__label { margin-bottom: 10px; }
+  @media (max-width: 900px) { .le2__co { flex-direction: column; } .le2__img > :global(img) { aspect-ratio: 16 / 8; min-height: 0; } }
+  @media (max-width: 900px) { .le2__head, .le2__cos { grid-template-columns: 1fr; } .le2__projects { grid-template-columns: repeat(3, 1fr); } }
+  @media (max-width: 700px) {
+    .le2__row { grid-template-columns: 1fr 1fr; }
+    .le2__row--head, .le2__row--notes { display: none; }
+    .le2__grid { grid-template-columns: 1fr; }
+    .le2__row--lch .le2__cell::before, .le2__row--elevate .le2__cell::before { content: attr(data-stage) ' · '; }
+    .le2__rowname { grid-column: 1 / -1; margin-top: 8px; }
+    .le2__projects { grid-template-columns: 1fr 1fr; }
+    .le2__cobody ul { grid-template-columns: 1fr; }
+  }
+
+  .case__points { margin: 4px 0 8px; padding-left: 18px; display: grid; gap: 6px; font-size: 15px; color: var(--ink-2); }
   .ahead { padding-block: clamp(56px, 8vw, 112px) clamp(48px, 6vw, 80px); }
   .ahead__grid { display: grid; grid-template-columns: minmax(0, 6fr) minmax(0, 5fr); gap: clamp(32px, 6vw, 96px); align-items: center; }
   .ahead h1 { font-size: clamp(40px, 5.4vw, 76px); margin-bottom: 24px; max-width: 14ch; }
@@ -253,7 +393,7 @@ const e = home.elevate;
   .values h3 { font-size: 19px; margin-bottom: 6px; }
   .values p { margin: 0; color: var(--muted); font-size: 15.5px; }
 
-  .sec-h { margin-bottom: clamp(32px, 4vw, 56px); max-width: 22ch; }
+  .sec-h { margin-bottom: clamp(24px, 3vw, 40px); max-width: 22ch; }
   .history { border-top: 1px solid var(--line); }
   .history { border-top: 1px solid var(--line); }
   .tl { position: relative; }
@@ -294,14 +434,14 @@ const e = home.elevate;
   .le__top .btn { margin-top: 12px; }
   .le__photo { margin: 0; }
   .le__photo :global(img) { width: 100%; height: auto; border-radius: var(--radius); }
-  .le__roles { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(20px, 3vw, 40px); margin-top: clamp(40px, 5vw, 64px); }
+  .le__roles { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(20px, 3vw, 40px); margin-top: clamp(28px, 3.5vw, 44px); }
   .le__roles > div { border-top: 1px solid rgba(246, 244, 239, 0.2); padding-top: 20px; }
   .le__who { font-size: 12px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(246, 244, 239, 0.6); margin-bottom: 12px; }
   .le__roles ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
   .le__roles li { font-size: 17px; padding-left: 18px; position: relative; }
   .le__roles li::before { content: ''; position: absolute; left: 0; top: 10px; width: 6px; height: 6px; background: rgba(246, 244, 239, 0.6); }
 
-  .cases { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(20px, 2.5vw, 32px); }
+  .cases { display: grid; grid-template-columns: repeat(2, 1fr); gap: clamp(20px, 2.5vw, 32px); }
   .case { background: var(--white); border: 1px solid var(--line); border-radius: var(--radius); padding: 28px 26px; display: flex; flex-direction: column; gap: 10px; }
   .case__img { margin: -28px -26px 8px; overflow: hidden; border-radius: var(--radius) var(--radius) 0 0; }
   .case__img :global(img) { width: 100%; aspect-ratio: 16 / 10; object-fit: cover; display: block; }
@@ -328,15 +468,16 @@ const e = home.elevate;
   .member__cos { display: flex; gap: 6px; margin: 0 0 10px; }
   .member__co { font-size: 10.5px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; padding: 3px 7px; border-radius: 2px; border: 1px solid var(--line); color: var(--muted); }
   .member__co--elevate { color: #1f5c3c; border-color: rgba(31, 92, 60, 0.35); }
-  .team { display: grid; grid-template-columns: repeat(3, 1fr); gap: 56px clamp(24px, 3vw, 40px); }
+  .team { display: grid; grid-template-columns: repeat(6, 1fr); gap: 36px 20px; }
   .member__btn { all: unset; cursor: pointer; display: block; width: 100%; }
   .member__btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 6px; }
   .member__photo { aspect-ratio: 4 / 5; overflow: hidden; border-radius: var(--radius); background: var(--paper-2); margin-bottom: 18px; }
-  .member__photo :global(img) { width: 100%; height: 100%; object-fit: cover; object-position: center 20%; filter: grayscale(1); transition: filter 0.5s, transform 1s var(--ease); }
-  .member__btn:hover .member__photo :global(img) { filter: grayscale(0); transform: scale(1.03); }
-  .member h3 { font-size: 21px; }
+  .member__photo :global(img) { width: 100%; height: 100%; object-fit: cover; object-position: center 20%; transition: transform 1s var(--ease); }
+  .member__btn:hover .member__photo :global(img) { transform: scale(1.03); }
+  .member h3 { font-size: 15.5px; line-height: 1.3; }
+  .member__cred { display: block; margin-top: 2px; }
   .member__cred { color: var(--muted); font-weight: 400; font-size: 0.85em; }
-  .member__role { font-size: 15px; color: var(--muted); margin: 4px 0 10px; }
+  .member__role { font-size: 13px; line-height: 1.35; color: var(--muted); margin: 4px 0 8px; }
   .member__more { font-size: 13px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--accent); }
   .bio { width: min(960px, calc(100vw - 32px)); max-height: calc(100dvh - 48px); border: 0; border-radius: 8px; padding: clamp(24px, 4vw, 56px); background: var(--paper); color: var(--ink); }
   .bio::backdrop { background: rgba(10, 10, 9, 0.6); backdrop-filter: blur(4px); }
@@ -347,7 +488,9 @@ const e = home.elevate;
   .bio .prose { margin-top: 20px; font-size: 16px; }
   .bio__close { position: absolute; top: 12px; right: 16px; border: 0; background: none; font-size: 36px; cursor: pointer; color: var(--ink); line-height: 1; }
 
-  @media (max-width: 1000px) { .team { grid-template-columns: repeat(2, 1fr); } .cases { grid-template-columns: 1fr 1fr; } .expertise { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 1100px) { .team { grid-template-columns: repeat(4, 1fr); } }
+  @media (max-width: 820px) { .team { grid-template-columns: repeat(3, 1fr); } }
+  @media (max-width: 1000px) { .cases { grid-template-columns: 1fr 1fr; } .expertise { grid-template-columns: 1fr 1fr; } }
   @media (max-width: 900px) {
     .ahead__grid, .le__top { grid-template-columns: 1fr; }
     .tl__controls { position: static; justify-content: flex-end; margin-bottom: 12px; }
@@ -358,4 +501,41 @@ const e = home.elevate;
     .bio__grid { grid-template-columns: 1fr; }
     .bio__grid :global(.bio__photo) { max-width: 200px; }
   }
+</style>
+<style>
+  /* Intro and values fit in one desktop screen */
+  @media (min-width: 901px) {
+    section.ahead { padding-block: clamp(28px, 3.4vw, 48px) clamp(28px, 3.4vw, 44px); min-height: calc(100svh - 120px); display: flex; flex-direction: column; justify-content: center; }
+    section.ahead h1 { font-size: clamp(38px, 4vw, 58px); max-width: 20ch; margin-bottom: 16px; }
+    section.ahead .ahead__body :global(p) { font-size: 16.5px; margin-bottom: 10px; }
+    section.ahead .ahead__grid { align-items: stretch; gap: clamp(32px, 5vw, 72px); }
+    section.ahead .ahead__photo :global(img) { height: 100%; max-height: 440px; object-fit: cover; }
+    section.ahead .values { margin-top: clamp(24px, 2.8vw, 36px); }
+    section.ahead .values li { padding-top: 12px; }
+    section.ahead .values h3 { font-size: 17px; margin-bottom: 4px; }
+    section.ahead .values p { font-size: 14.5px; }
+  }
+
+  /* Phones */
+  @media (max-width: 700px) {
+    .ahead__body :global(p:nth-child(n + 2)) { display: none; }
+    .ahead__body :global(p) { font-size: 16px; }
+    .values { gap: 14px; margin-top: 24px; }
+    .values p { font-size: 14px; }
+    .expertise { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; gap: 16px; margin-inline: calc(var(--gutter) * -1); padding-inline: var(--gutter); scrollbar-width: none; }
+    .expertise::-webkit-scrollbar { display: none; }
+    .xp { flex: 0 0 80%; scroll-snap-align: start; padding-bottom: 8px; }
+    .team { grid-template-columns: repeat(3, 1fr) !important; gap: 18px 10px !important; }
+    .member h3 { font-size: 13.5px; line-height: 1.25; }
+    .member__role { font-size: 11.5px; line-height: 1.3; }
+    .member__cos, .member__more, .member__btn .member__cred { display: none !important; }
+    .le2__img > :global(img) { aspect-ratio: 16 / 7 !important; }
+    .le2__desc { font-size: 14.5px; }
+    .le2__phases ol { grid-template-columns: 1fr 1fr !important; }
+  }
+  .le2__people { display: grid; gap: 10px; }
+  .le2__leaders--sub { gap: 10px; }
+  .le2__leaders--sub .le2__faces :global(img) { width: 34px; height: 34px; }
+  .le2__leaders--sub strong { font-size: 13.5px; font-weight: 600; }
+  .le2__leaders--sub em { font-size: 12px; }
 </style>

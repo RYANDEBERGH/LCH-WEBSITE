@@ -9,7 +9,7 @@ const optNum = z.preprocess((v) => (v === '' ? null : v), z.number().nullish());
 
 // Construction stage and leasing are tracked separately: a building can be under construction and pre-leasing at once.
 const STAGES = ['In Development', 'Under Construction', 'Complete'] as const;
-const LEASING = ['', 'Now Pre-Leasing', 'Now Leasing', 'Join the Waitlist', 'Fully Leased'] as const;
+const LEASING = ['', 'Now Pre-Leasing', 'Now Leasing', 'Join the Waitlist', 'Fully Leased', 'Memberships Available'] as const;
 // Milestone dates can be a full date (2026-10-30), a month (2026-08) or a year (2023) — whatever was actually reported.
 const milestoneDate = z.union([z.string().regex(/^\d{4}(-\d{2}(-\d{2})?)?$/), z.date().transform((d) => d.toISOString().slice(0, 10))]);
 
@@ -24,6 +24,16 @@ const projects = defineCollection({
     assignment: z.enum(['development', 'client']).default('development'),
     roleLabel: z.string().nullish(),
     client: z.string().nullish(),
+    years: z.string().nullish(),
+    // optional framing for the home page tile, e.g. "--tile-h: 135%; --tile-top: -40%; --tile-x: 38%"
+    tileCrop: z.string().nullish(),
+    delivery: z.string().nullish(),
+    // public construction-updates site (schedule, photos, sign-up), usually run by Elevate
+    construction: z.object({ url: z.string(), label: z.string().nullish() }).nullish(),
+    // target construction phases (from the construction schedule), shown under "Under Construction"
+    schedule: z.array(z.object({ name: z.string(), start: z.string(), end: z.string() })).default([]),
+    // true for places LCH owns and runs after completion (e.g. Merge Spaces)
+    operating: z.boolean().default(false),
     approach: z.string().nullish(),
     stage: z.enum(STAGES).nullish(),
     type: z.string(),
@@ -86,6 +96,7 @@ const news = defineCollection({
     date: z.coerce.date(),
     topic: z.string().default('Company News'),
     project: z.string().nullish(),
+    projects: z.array(z.string()).default([]),
     image: z.string().nullish(),
     excerpt: z.string().nullish(),
     sourceUrl: z.string().nullish(),
@@ -115,6 +126,7 @@ const social = defineCollection({
     text: z.string().nullish(),
     image: z.string().nullish(),
     hidden: z.boolean().default(false),
+    embed: z.boolean().default(true),
   }),
 });
 

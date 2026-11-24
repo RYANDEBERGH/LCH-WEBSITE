@@ -11,10 +11,10 @@ intersection: ""
 units: 50
 partners:
   - "deCartier Developments"
-architect: ""
+architect: "RAW Design"
 summary: "Heritage restoration of St. John’s Presbyterian Church paired with a mass-timber rental addition overlooking the Don Valley."
 brandColor: "#704078"
-logo: "/uploads/415-broadview.png"
+logo: "/uploads/logos/415-broadview.svg"
 heroImage: "/uploads/415-broadview-rendering.jpg"
 gallery: []
 website:

@@ -1,10 +1,10 @@
 ---
 name: "Jure Selak"
 credentials: "B.A.Sc., PMP"
-role: "President, Elevate Construction Management"
+role: "President"
 photo: "/uploads/jure.jpg"
 linkedin: "https://ca.linkedin.com/in/jure-selak-9a720b4a"
-companies: ["lch", "elevate"]
+companies: ["elevate"]
 order: 3
 ---
 

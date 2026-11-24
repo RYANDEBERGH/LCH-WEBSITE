@@ -4,8 +4,12 @@ credentials: ""
 role: "Senior Development Manager"
 photo: "/uploads/ryan.jpg"
 linkedin: "https://ca.linkedin.com/in/ryandebergh"
-companies: ["lch", "elevate"]
-order: 6
+companies: ["lch"]
+order: 5
 ---
 
-Ryan is a design-focused development manager with a passion for building great buildings. Ryan currently manages LCH's pipeline of nearly 1,200 residential and retail units as they progress through the municipal approvals and sales process. Ryan works with an extensive team of architects, engineers, marketing agencies and other technical specialists to design true live-work-play communities that can be constructed efficiently, without sacrificing quality for the end users. With a background in the film industry and a Bachelor's in Real Estate from Ryerson University, Ryan approaches each project from a unique angle that is both practical and creative.
+Ryan is Senior Development Manager at LCH Developments, where he leads residential and mixed-use projects from early feasibility and municipal approvals through design, construction and occupancy. His experience includes advancing complex approvals, adapting condominium projects for purpose-built rental, and coordinating design and construction teams to bring buildings to market.
+
+With a strong interest in architecture, Ryan balances thoughtful design with project economics and the practical demands of construction. He works closely with consultants, investment partners and LCH’s construction team to create lasting buildings that serve their residents and contribute to their neighbourhoods.
+
+Ryan holds a Bachelor’s in Real Estate from Ryerson University. His earlier work in film brings a creative perspective to development, storytelling and how people experience a place.

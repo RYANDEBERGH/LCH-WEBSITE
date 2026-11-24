@@ -11,8 +11,9 @@ interface Props {
   class?: string;
   loading?: 'lazy' | 'eager';
   fetchpriority?: 'high' | 'low' | 'auto';
+  style?: string;
 }
-const { src, alt, sizes = '100vw', class: cls, loading = 'lazy', fetchpriority } = Astro.props;
+const { src, alt, sizes = '100vw', class: cls, loading = 'lazy', fetchpriority, style } = Astro.props;
 const WIDTHS = [480, 960, 1600, 2400];
 
 let width: number | undefined;
@@ -35,6 +36,7 @@ if (src?.startsWith('/uploads/')) {
 ---
 
 <img
+  style={style}
   src={src}
   srcset={srcset}
   sizes={srcset ? sizes : undefined}

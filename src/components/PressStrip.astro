@@ -1,9 +1,13 @@
 ---
 // Publications that have covered LCH, built from News & Media articles marked "In the Press".
-import { getNews, formatDate } from '../lib/site';
-interface Props { eyebrow?: string; heading?: string; count?: number }
-const { eyebrow = 'In the press', heading = 'Latest coverage', count = 4 } = Astro.props;
-const press = (await getNews()).filter((n) => n.data.topic === 'In the Press' && n.data.publisher).slice(0, count);
+import { getNews, formatDate, settings } from '../lib/site';
+const logoFor = (name?: string | null) => (settings.publisherLogos ?? []).find((l: { name: string; logo?: string }) => l.name === name && l.logo)?.logo;
+interface Props { eyebrow?: string; heading?: string; count?: number; picks?: string[] }
+const { eyebrow = 'In the press', heading = 'Latest coverage', count = 4, picks = [] } = Astro.props;
+const allPress = (await getNews()).filter((n) => n.data.topic === 'In the Press' && n.data.publisher);
+// Hand-picked articles first (in the order chosen), then the most recent to fill any gaps
+const picked = picks.map((id) => allPress.find((n) => n.id === id)).filter(Boolean) as typeof allPress;
+const press = [...picked, ...allPress.filter((n) => !picked.includes(n))].slice(0, count);
 ---
 
 {press.length > 0 && (
@@ -18,7 +22,7 @@ const press = (await getNews()).filter((n) => n.data.topic === 'In the Press' &&
         {press.map((n) => (
           <li>
             <a href={`/news/${n.id}/`} class="press__item">
-              <span class="press__name">{n.data.publisher}</span>
+              {logoFor(n.data.publisher) ? <span class="press__logo"><img src={logoFor(n.data.publisher)} alt={n.data.publisher} loading="lazy" /></span> : <span class="press__name">{n.data.publisher}</span>}
               <time class="press__meta" datetime={n.data.date.toISOString()}>{formatDate(n.data.date)}</time>
               <span class="press__headline">{n.data.title.replace(/^[^:–]+[:–]\s*/, '')}</span>
             </a>
@@ -41,6 +45,8 @@ const press = (await getNews()).filter((n) => n.data.topic === 'In the Press' &&
   .press__list li:first-child .press__item { padding-left: 0; }
   .press__name { font-family: var(--font-display); font-weight: 700; letter-spacing: -0.02em; font-size: 22px; line-height: 1.1; transition: color 0.2s; }
   .press__item:hover .press__name { color: var(--accent); }
+  .press__logo { display: flex; align-items: center; height: 34px; }
+  .press__logo img { max-height: 34px; max-width: 130px; width: auto; filter: brightness(0); opacity: .82; }
   .press__meta { font-size: 12px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
   .press__headline { font-size: 14px; color: var(--ink-2); line-height: 1.45; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
   @media (max-width: 700px) {

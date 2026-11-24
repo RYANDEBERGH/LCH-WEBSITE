@@ -5,7 +5,7 @@ import Img from '../../components/Img.astro';
 import NewsCard from '../../components/NewsCard.astro';
 import ProjectCard from '../../components/ProjectCard.astro';
 import SocialFeed from '../../components/SocialFeed.astro';
-import { getProjects, getNews, stageTone, STAGE_ORDER, formatMilestoneDate, brandInk, isClientWork } from '../../lib/site';
+import { getProjects, getNews, stageTone, STAGE_ORDER, formatMilestoneDate, brandInk, brandFill, isClientWork } from '../../lib/site';
 
 export async function getStaticPaths() {
   const projects = await getCollection('projects', (p) => !p.data.hidden);
@@ -16,19 +16,34 @@ const p = project.data;
 const { Content } = await render(project);
 const images = [...(p.heroImage ? [{ image: p.heroImage, caption: '' }] : []), ...p.gallery];
 const client = isClientWork(project);
-const related = (await getNews()).filter((n) => n.data.project === project.id).slice(0, 3);
+const related = (await getNews()).filter((n) => n.data.project === project.id || n.data.projects?.includes(project.id)).slice(0, 3);
 const all = await getProjects();
 const idx = all.findIndex((x) => x.id === project.id);
 const next = all[(idx + 1) % all.length];
 const stageIdx = p.stage ? STAGE_ORDER.indexOf(p.stage) : -1;
 const brand = brandInk(project);
+const mon = (d: string) => new Date(d + 'T12:00:00').toLocaleDateString('en-CA', { month: 'short', year: 'numeric' });
+const fmtRange = (a: string, b: string) => (a === b || mon(a) === mon(b) ? mon(a) : `${mon(a)} – ${mon(b)}`);
+const fill = brandFill(project);
+// Headline stats shown in the banner's brand-coloured band
+const stats = [
+  p.units ? { v: p.units.toLocaleString(), k: client ? 'Homes' : p.type?.toLowerCase().includes('rental') ? 'Rental homes' : 'Homes' } : null,
+  p.storeys ? { v: String(p.storeys), k: 'Storeys' } : null,
+  { v: p.type, k: 'Product' },
+  client ? (p.years ? { v: p.years, k: 'Years' } : null) : p.operating ? { v: 'Owned and operated by LCH', k: 'Status' } : (p.stage ? { v: p.stage, k: 'Status' } : null),
+  client ? (p.client ? { v: p.client, k: 'Client' } : null) : (p.partners.length ? { v: p.partners.join(', '), k: p.partners.length > 1 ? 'Partners' : 'Partner' } : null),
+  !p.storeys && p.neighbourhood ? { v: p.neighbourhood, k: 'Neighbourhood' } : null,
+].filter(Boolean).slice(0, 5) as { v: string; k: string }[];
 const isExternal = (u?: string | null) => !!u && /^https?:/.test(u);
 
 const facts = [
   ['Assignment', client ? 'Selected client work' : ''],
   ['Role', p.roleLabel ?? ''],
   ['Client', p.client ?? ''],
+  ['Years', p.years ?? ''],
   ['Construction', p.stage ?? ''],
+  ['Estimated delivery', p.delivery ?? ''],
+  ['Operation', p.operating ? 'Owned and operated by LCH' : ''],
   ['Leasing', p.leasing?.status ?? ''],
   ['Product', p.type],
   ['Address', p.address],
@@ -42,20 +57,30 @@ const facts = [
 
 <Base overlay={!!p.heroImage} title={p.title} description={p.summary} image={p.heroImage ?? undefined}>
 <div class="brand-scope" style={`--accent: ${brand}`}>
-  <section class:list={['phead on-image', { 'phead--plain': !p.heroImage }]}>
-    {p.heroImage && <Img src={p.heroImage} alt={`${p.title}`} loading="eager" fetchpriority="high" class="phead__bg" />}
+  <section class:list={['phead on-image', { 'phead--plain': !p.heroImage }]} style={`--brand: ${fill}; --brand-ink: ${brand}`}>
+    {p.heroImage && <Img src={p.heroImage} alt="" loading="eager" fetchpriority="high" class="phead__bg" />}
     <div class="container phead__content">
       <a class="back" href="/projects/">← All projects</a>
       <span class="phead__pills">{client && <span class="pill pill--client-light">Selected client work{p.roleLabel ? ` · ${p.roleLabel}` : ''}</span>}{p.stage && <span class="pill" data-tone={stageTone(p.stage)}>{p.stage}</span>}{p.leasing?.status && <span class="pill pill--leasing">{p.leasing.status}</span>}</span>
-      <h1>{p.title}</h1>
+      {p.logo?.endsWith('.svg')
+        ? <h1 class="phead__brand"><img src={p.logo} alt={p.title} /></h1>
+        : <h1>{p.title}</h1>}
       <p class="phead__loc">{[p.address, p.neighbourhood].filter(Boolean).join(' · ')}</p>
     </div>
   </section>
+  {stats.length > 0 && (
+    <section class="pstats" style={`--brand-ink: ${brand}`} aria-label={`${p.title} at a glance`}>
+      <dl class="container pstats__row">
+        {stats.map((st) => <div class="pstats__item"><dt>{st.k}</dt><dd class:list={{ 'pstats__num': /^[\d,]+$/.test(st.v) }}>{st.v}</dd></div>)}
+        {p.leasing?.url && <a class="pstats__cta" href={p.leasing.url} target="_blank" rel="noopener">{p.leasing.status || 'Leasing'} ↗</a>}
+        {p.construction?.url && <a class="pstats__cta" href={p.construction.url} target="_blank" rel="noopener">{p.construction.label || 'Construction updates'} ↗</a>}
+      </dl>
+    </section>
+  )}
 
   <section class="section">
     <div class="container pbody">
       <div class="pbody__main">
-        {p.logo && <img class="pbody__logo" src={p.logo} alt={`${p.title} logo`} />}
         <p class="pbody__summary display">{p.summary}</p>
         <div class="prose"><Content /></div>
         {p.approach && (
@@ -96,11 +121,25 @@ const facts = [
             {STAGE_ORDER.map((st, i) => (
               <li class:list={['stages__item', { 'is-done': i < stageIdx, 'is-current': i === stageIdx }]} aria-current={i === stageIdx ? 'step' : undefined}>
                 <span class="stages__dot" aria-hidden="true"></span>
-                <span>{st}</span>
+                {st === 'Under Construction' && p.schedule.length > 0 ? (
+                  <details class="sched" open={i === stageIdx}>
+                    <summary>{st} <span class="sched__hint">Construction milestones</span></summary>
+                    <ol class="sched__list">
+                      {p.schedule.map((m) => (
+                        <li data-start={m.start} data-end={m.end}>
+                          <span class="sched__name">{m.name}</span>
+                          <span class="sched__date">{fmtRange(m.start, m.end)}</span>
+                        </li>
+                      ))}
+                    </ol>
+                    <p class="sched__note">Target dates from the construction schedule; they may change.{p.construction?.url && <> <a href={p.construction.url} target="_blank" rel="noopener">Latest updates ↗</a></>}</p>
+                  </details>
+                ) : <span>{st}</span>}
               </li>
             ))}
           </ol>
           {p.leasing?.status && <p class="progress__note">Leasing is tracked separately: <strong>{p.leasing.status}</strong>.</p>}
+          {p.construction?.url && <a class="btn btn--ghost progress__cta" href={p.construction.url} target="_blank" rel="noopener">Schedule, site photos and email updates <span class="arrow" aria-hidden="true">↗</span></a>}
         </div>
         <div>
           {p.milestones.length > 0 ? (
@@ -182,6 +221,15 @@ const facts = [
 </Base>
 
 <script>
+  // Mark each scheduled phase as done / in progress / upcoming against today's date
+  const today = new Date().toISOString().slice(0, 10);
+  document.querySelectorAll<HTMLElement>('.sched__list li').forEach((li) => {
+    const { start = '', end = '' } = li.dataset;
+    li.classList.add(end < today ? 'is-done' : start <= today ? 'is-now' : 'is-next');
+  });
+</script>
+
+<script>
   const dlg = document.querySelector<HTMLDialogElement>('[data-lightbox]');
   if (dlg) {
     const data: { src: string; caption: string }[] = JSON.parse(document.querySelector('[data-images]')!.textContent!);
@@ -210,7 +258,28 @@ const facts = [
 
 <style>
   .phead { position: relative; overflow: hidden; height: calc(82svh - var(--announce-h)); min-height: 480px; display: flex; align-items: flex-end; color: var(--paper); isolation: isolate; padding-block: calc(var(--header-h) + 64px) clamp(48px, 7vw, 88px); }
-  .phead::after { content: ''; position: absolute; inset: 0; z-index: -1; background: linear-gradient(180deg, rgba(10, 10, 9, 0.45), rgba(10, 10, 9, 0.05) 35%, rgba(10, 10, 9, 0.75)); }
+  .phead::after { content: ''; position: absolute; inset: 0; z-index: -1; background:
+    linear-gradient(180deg, rgba(10, 10, 9, 0.45), rgba(10, 10, 9, 0) 30%),
+    linear-gradient(0deg, color-mix(in srgb, var(--brand-ink) 92%, transparent) 0%, color-mix(in srgb, var(--brand-ink) 45%, transparent) 38%, transparent 70%),
+    linear-gradient(90deg, color-mix(in srgb, var(--brand-ink) 35%, transparent), transparent 60%); }
+  .phead__brand { margin: 4px 0 0; line-height: 0; }
+  .phead__brand img { display: block; height: clamp(56px, 8vw, 104px); width: auto; max-width: min(440px, 80vw); object-fit: contain; object-position: left center; filter: brightness(0) invert(1); }
+  .pstats { background: var(--brand-ink); color: #fff; }
+  .pstats__row { display: flex; flex-wrap: wrap; align-items: stretch; margin-block: 0; padding-block: 0; }
+  .pstats__item { flex: 1 1 0; min-width: 150px; padding: 22px 24px 24px 0; margin-right: 24px; border-right: 1px solid rgba(255, 255, 255, 0.18); }
+  .pstats__item:last-of-type { border-right: 0; }
+  .pstats dt { font-size: 11.5px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(255, 255, 255, 0.7); margin-bottom: 6px; }
+  .pstats dd { margin: 0; font-size: 17px; font-weight: 600; line-height: 1.3; }
+  .pstats dd.pstats__num { font-size: clamp(28px, 3vw, 40px); font-weight: 700; letter-spacing: -0.02em; line-height: 1; }
+  .pstats__cta + .pstats__cta { margin-left: 10px; }
+  .progress__cta { margin-top: 20px; }
+  .pstats__cta { align-self: center; margin-left: auto; padding: 12px 18px; border: 1px solid rgba(255, 255, 255, 0.6); border-radius: 3px; color: #fff; text-decoration: none; font-weight: 600; font-size: 14px; white-space: nowrap; }
+  .pstats__cta:hover { background: #fff; color: var(--brand-ink); }
+  @media (max-width: 760px) {
+    .pstats__row { display: grid; grid-template-columns: 1fr 1fr; }
+    .pstats__item { margin-right: 0; padding: 18px 12px 18px 0; border-right: 0; border-bottom: 1px solid rgba(255, 255, 255, 0.18); }
+    .pstats__cta { grid-column: 1 / -1; margin: 16px 0; text-align: center; }
+  }
   :global(.phead__bg) { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: -2; }
   .phead__content { display: flex; flex-direction: column; align-items: flex-start; gap: 18px; }
   .phead h1 { font-size: clamp(40px, 5.4vw, 76px); line-height: 1; }
@@ -281,6 +350,25 @@ const facts = [
   .stages__item.is-done .stages__dot { background: var(--ink); border-color: var(--ink); }
   .stages__item.is-done::after { background: var(--ink) !important; }
   .stages__item.is-current { color: var(--ink); font-weight: 700; }
+  .stages__item:has(.sched) { align-items: flex-start; }
+  .stages__item:has(.sched) .stages__dot { margin-top: 3px; }
+  .sched { flex: 1; }
+  .sched summary { cursor: pointer; list-style: none; display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; }
+  .sched summary::-webkit-details-marker { display: none; }
+  .sched summary::after { content: '▾'; font-size: 13px; color: var(--muted); transition: transform .2s; }
+  .sched[open] summary::after { transform: rotate(180deg); }
+  .sched__hint { font-size: 12px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
+  .sched__list { list-style: none; margin: 12px 0 0; padding: 0; display: grid; gap: 0; border-left: 2px solid var(--line); }
+  .sched__list li { display: grid; grid-template-columns: 1fr auto; gap: 12px; padding: 8px 0 8px 16px; font-size: 14.5px; font-weight: 500; color: var(--muted); position: relative; }
+  .sched__list li::before { content: ''; position: absolute; left: -6px; top: 14px; width: 10px; height: 10px; border-radius: 50%; background: var(--paper); border: 2px solid var(--line); }
+  .sched__list li.is-done { color: var(--ink-2); }
+  .sched__list li.is-done::before { background: var(--ink); border-color: var(--ink); }
+  .sched__list li.is-now { color: var(--ink); font-weight: 700; }
+  .sched__list li.is-now::before { background: var(--accent); border-color: var(--accent); box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 22%, transparent); }
+  .sched__list li.is-now .sched__name::after { content: 'Scheduled now'; margin-left: 8px; font-size: 11px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--accent); }
+  .sched__date { font-size: 13px; font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .sched__note { margin: 10px 0 0; font-size: 13px; font-weight: 400; color: var(--muted); }
+  .sched__note a { color: var(--ink); }
   .stages__item.is-current .stages__dot { background: var(--accent); border-color: var(--accent); box-shadow: 0 0 0 5px color-mix(in srgb, var(--accent) 22%, transparent); }
   .progress__note { margin-top: 20px; font-size: 15px; color: var(--muted); }
   .timeline { list-style: none; margin: 0; padding: 0; }
@@ -296,7 +384,7 @@ const facts = [
   @media (max-width: 900px) { .progress__grid { grid-template-columns: 1fr; } }
   @media (max-width: 520px) { .timeline__item { grid-template-columns: 1fr; gap: 4px; } }
 
-  .phead--plain { height: auto; min-height: 0; padding-block: clamp(56px, 8vw, 112px) clamp(40px, 5vw, 72px); background: linear-gradient(160deg, #2b3a44, #161614); }
+  .phead--plain { height: auto; min-height: 0; padding-block: clamp(56px, 8vw, 112px) clamp(40px, 5vw, 72px); background: linear-gradient(160deg, var(--brand-ink), color-mix(in srgb, var(--brand-ink) 55%, #111)); }
   .phead--plain::after { display: none; }
   .pill--client-light { background: rgba(255, 255, 255, 0.95); color: var(--ink); }
   .pill--client-light::before { display: none; }

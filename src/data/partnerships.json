@@ -1,53 +1,54 @@
 {
-  "eyebrow": "Partner with LCH",
-  "heading": "Bring us the opportunity. We’ll help make it happen.",
-  "intro": "We work with partners, owners, lenders and receivers in several ways: developing together, managing development on an owner’s behalf, or recovering a project that has stalled. Affiliated Elevate brings preconstruction and construction management.",
+  "eyebrow": "Work with us",
+  "heading": "Development and construction management for owners, lenders and receivers.",
+  "intro": "Whether you own a site, hold a partially completed project or need an experienced team to take over, we can manage development, construction or both. Every mandate gets the discipline we apply to our own projects, scaled to what you need.",
   "proof": [
     {
-      "value": "Since 2007",
-      "label": "Investing and building in the GTA"
+      "value": "1,145",
+      "label": "Homes in development across our own rental communities"
     },
     {
-      "value": "1,095",
-      "label": "Rental homes under construction or planned at Everston, Cliffside and Retreat"
+      "value": "567",
+      "label": "Homes under construction now at Everston (Phase 1) and Cliffside, with Elevate as construction manager"
     },
     {
-      "value": "190",
-      "label": "Homes at Merge Condos, completed in 2023"
+      "value": "{years}",
+      "label": "Years in operation, from custom homes in 2012 to purpose-built rental today"
     },
     {
       "value": "Elevate",
-      "label": "Affiliated preconstruction and construction management"
+      "logo": "/uploads/brand/elevate-logo.png",
+      "label": "Affiliated construction manager, from preconstruction to warranty"
     }
   ],
   "audiences": {
-    "heading": "Ways to work with us",
+    "heading": "How we can help",
     "groups": [
       {
         "label": "",
         "items": [
           {
-            "title": "Joint development",
-            "body": "We work with partners to combine development expertise, construction planning and the resources needed to advance residential projects.",
-            "cta": "Discuss a joint venture",
-            "type": "Co-developer or capital partner"
-          },
-          {
             "title": "Development management",
-            "body": "We act as an extension of ownership, coordinating the day-to-day work of feasibility, approvals, design, budgets and delivery. The scope is tailored to the project and the owner’s requirements.",
+            "body": "We act as the owner’s team, from feasibility and approvals through design, budgets and closeout.",
             "cta": "Discuss development management",
             "type": "Owner seeking development management"
           },
           {
-            "title": "Project recovery",
-            "body": "We work with owners, lenders and receivers to assess challenging projects, coordinate outstanding development and construction work, and establish a practical completion strategy.",
+            "title": "Construction management",
+            "body": "Through Elevate: preconstruction, tendering, site management and delivery through warranty.",
+            "cta": "Discuss construction management",
+            "type": "Owner seeking construction management"
+          },
+          {
+            "title": "Project recovery and receiverships",
+            "body": "For lenders, receivers and owners: stabilize the site, re-price the remaining work and finish it.",
             "cta": "Discuss a project recovery",
             "type": "Lender, receiver or owner (project recovery)"
           },
           {
-            "title": "Landowners and community institutions",
-            "body": "We welcome conversations about development opportunities and existing properties where a coordinated approach can help establish the right next steps.",
-            "cta": "Discuss a land partnership",
+            "title": "Feasibility and repositioning",
+            "body": "For landowners and institutions: test what a site can support, or rethink an existing scheme.",
+            "cta": "Discuss a site",
             "type": "Landowner or community institution"
           }
         ]
@@ -55,75 +56,51 @@
     ]
   },
   "reasons": {
-    "heading": "Why partner with LCH",
+    "heading": "Why owners hire us",
     "items": [
       {
-        "title": "Development and construction, working together",
-        "body": "LCH leads feasibility, approvals, design coordination and owner oversight. Elevate leads preconstruction and construction management. Working together early lets cost, trade input and sequencing inform the design."
+        "title": "We think like owners",
+        "body": "We invest in and develop our own projects, so we know what it takes for one to be financed, built and operated. Every recommendation is tested against cost, leasing and buildability."
       },
       {
-        "title": "Full-cycle experience",
-        "body": "We have carried a development through approvals, design, construction, occupancy and closeout."
+        "title": "Development and construction in one team",
+        "body": "LCH and Elevate work together from the start, so construction cost, trade input and sequencing shape the design before decisions become expensive to change."
       },
       {
-        "title": "We take on complex sites",
-        "body": "Heritage buildings and constrained infill sites are where coordinated development and construction thinking matter most."
+        "title": "Workstreams run in parallel",
+        "body": "Where possible, approvals, site plan, permits and tendering advance together instead of one after another, shortening the path to construction."
       },
       {
-        "title": "We rethink the plan when the market moves",
-        "body": "We would rather redesign a project than force it, testing unit mix and building systems against cost and long-term operation."
+        "title": "Principals stay involved",
+        "body": "Our founders and senior team stay hands-on in each mandate, not just reviewing it from a distance."
       },
       {
-        "title": "Project recovery",
-        "body": "We help owners, lenders and receivers restore budget and schedule visibility and find a practical route to completion."
+        "title": "Institutional-quality reporting",
+        "body": "Budgets, cost to complete, schedules, risk registers and decision logs give owners and lenders a clear view of the project at every stage."
       },
       {
-        "title": "Transparent by default",
-        "body": "Clear reporting, open conversations and visible responsibilities support informed decisions throughout a project."
+        "title": "Experience with difficult projects",
+        "body": "Heritage conversions, constrained infill sites, condominium projects repositioned as rental, and stalled projects taken over for receivers."
       }
     ]
   },
   "criteria": {
-    "heading": "Opportunities we welcome",
+    "heading": "Projects we take on",
     "items": [
-      "Residential and mixed-use development opportunities across the GTA",
-      "Infill sites and existing properties with redevelopment potential",
-      "Purpose-built rental and mixed-tenure housing",
-      "Heritage buildings and adaptive reuse",
-      "Partially completed projects that need a path to completion",
-      "Owners beyond the GTA: we welcome a project-specific conversation"
-    ]
-  },
-  "process": {
-    "heading": "How a partnership works",
-    "steps": [
-      {
-        "title": "Introduce",
-        "body": "Tell us about the site, the project or the challenge."
-      },
-      {
-        "title": "Evaluate",
-        "body": "We review planning context, design, cost and schedule, with input from Elevate on constructability."
-      },
-      {
-        "title": "Agree the scope",
-        "body": "We agree on the right role: joint development, development management or project recovery."
-      },
-      {
-        "title": "Coordinate and build",
-        "body": "We coordinate approvals, design and delivery with Elevate, with regular owner reporting throughout."
-      },
-      {
-        "title": "Carry it through",
-        "body": "We support occupancy, turnover and closeout, and stay involved through lease-up where relevant."
-      }
+      "Residential and mixed-use buildings, from townhomes to high-rise",
+      "Purpose-built rental, condominium and townhome projects",
+      "Infill, heritage and adaptive reuse",
+      "Partially completed or stalled projects, including receiverships",
+      "Feasibility studies and repositioning of existing schemes",
+      "Projects across the GTA and beyond, discussed case by case"
     ]
   },
   "form": {
-    "heading": "Start a conversation",
+    "heading": "Discuss a project",
     "intro": "Share a few details and the right person on our team will get back to you. Everything you send is kept confidential.",
     "types": [
       "Owner seeking development management",
+      "Owner seeking construction management",
       "Co-developer or capital partner",
       "Lender, receiver or owner (project recovery)",
       "Landowner or community institution",
@@ -134,9 +111,9 @@
     ]
   },
   "worked": {
-    "eyebrow": "Partners",
-    "heading": "Partners we’ve worked with.",
-    "intro": "Our projects bring together capital partners, clients, design teams, trades and community organizations.",
+    "eyebrow": "Who we’ve worked with",
+    "heading": "Our clients and community partners.",
+    "intro": "Capital partners, clients, lenders and receivers, together with the consultants and trades who design and build our projects.",
     "groups": [
       {
         "label": "Capital and development partners",
@@ -146,7 +123,8 @@
             "note": "Capital partner",
             "projects": [
               "retreat"
-            ]
+            ],
+            "logo": "/uploads/partners/fiera-real-estate.svg"
           },
           {
             "name": "Cogir Real Estate",
@@ -154,7 +132,8 @@
             "projects": [
               "everston",
               "cliffside"
-            ]
+            ],
+            "logo": "/uploads/partners/cogir.svg"
           },
           {
             "name": "deCartier Developments",
@@ -174,60 +153,32 @@
             "note": "Receiver",
             "projects": [
               "jefferson-heights"
-            ]
+            ],
+            "logo": "/uploads/partners/albert-gelman.svg"
           },
           {
             "name": "Cameron Stephens",
             "note": "Lender",
             "projects": [
               "jefferson-heights"
-            ]
+            ],
+            "logo": "/uploads/partners/cameron-stephens.png"
           },
           {
             "name": "KPMG",
             "note": "Receiver",
             "projects": [
               "eaglebay-towns"
-            ]
-          },
-          {
-            "name": "RBC",
-            "note": "Lender",
-            "projects": [
-              "eaglebay-towns"
-            ]
+            ],
+            "logo": "/uploads/partners/kpmg.svg"
           },
           {
             "name": "Akelius",
-            "note": "Feasibility study, 150 The Donway West",
-            "projects": []
-          }
-        ]
-      },
-      {
-        "label": "Design and planning",
-        "items": [
-          {
-            "name": "Turner Fleischer Architects",
-            "note": "Architect",
+            "note": "Comprehensive development report",
             "projects": [
-              "everston"
-            ]
-          },
-          {
-            "name": "RAW Design",
-            "note": "Architect",
-            "projects": [
-              "cliffside",
-              "merge-condos"
-            ]
-          },
-          {
-            "name": "MHBC Planning",
-            "note": "Planning",
-            "projects": [
-              "everston"
-            ]
+              "150-the-donway-west"
+            ],
+            "logo": "/uploads/partners/akelius.svg"
           }
         ]
       },
@@ -241,21 +192,8 @@
               "everston",
               "cliffside",
               "merge-spaces"
-            ]
-          },
-          {
-            "name": "Pro Caissons",
-            "note": "Shoring",
-            "projects": [
-              "everston"
-            ]
-          },
-          {
-            "name": "Delsan",
-            "note": "Demolition",
-            "projects": [
-              "everston"
-            ]
+            ],
+            "logo": "/uploads/brand/elevate-logo.png"
           }
         ]
       },
@@ -275,6 +213,1035 @@
             "projects": []
           }
         ]
+      },
+      {
+        "label": "Consultants we’ve worked with",
+        "items": [
+          {
+            "name": "7 Oaks",
+            "note": "Arborist",
+            "projects": [
+              "cliffside",
+              "415-broadview"
+            ]
+          },
+          {
+            "name": "Adesso Design",
+            "note": "Landscape",
+            "projects": [
+              "retreat",
+              "cliffside"
+            ]
+          },
+          {
+            "name": "Archaeological Services Inc.",
+            "note": "Archaeology",
+            "projects": [
+              "everston"
+            ]
+          },
+          {
+            "name": "B+H Architects",
+            "note": "Landscape",
+            "projects": [
+              "415-broadview"
+            ]
+          },
+          {
+            "name": "BA Consulting",
+            "note": "Traffic",
+            "projects": [
+              "cliffside"
+            ]
+          },
+          {
+            "name": "Bousfields",
+            "note": "Planning",
+            "projects": [
+              "415-broadview"
+            ]
+          },
+          {
+            "name": "Disano",
+            "note": "Sprinkler design",
+            "projects": [
+              "everston",
+              "cliffside"
+            ]
+          },
+          {
+            "name": "Elema",
+            "note": "Structural",
+            "projects": [
+              "cliffside"
+            ]
+          },
+          {
+            "name": "Finnegan Marshall",
+            "note": "Cost consultant",
+            "projects": [
+              "retreat",
+              "everston",
+              "415-broadview"
+            ]
+          },
+          {
+            "name": "Fisher Environmental",
+            "note": "Geotechnical and environmental",
+            "projects": [
+              "retreat",
+              "cliffside",
+              "everston",
+              "415-broadview"
+            ]
+          },
+          {
+            "name": "Grounded Engineering",
+            "note": "Shoring design",
+            "projects": [
+              "retreat"
+            ]
+          },
+          {
+            "name": "HGC Engineering",
+            "note": "Acoustic",
+            "projects": [
+              "cliffside",
+              "everston"
+            ]
+          },
+          {
+            "name": "Isherwood",
+            "note": "Shoring design",
+            "projects": [
+              "cliffside",
+              "everston"
+            ]
+          },
+          {
+            "name": "J.D. Barnes",
+            "note": "Surveyor",
+            "projects": [
+              "retreat",
+              "cliffside",
+              "everston",
+              "415-broadview"
+            ]
+          },
+          {
+            "name": "Jablonsky",
+            "note": "Structural",
+            "projects": [
+              "415-broadview"
+            ]
+          },
+          {
+            "name": "KLM Planning",
+            "note": "Planning",
+            "projects": [
+              "retreat",
+              "cliffside"
+            ]
+          },
+          {
+            "name": "Lithos Group",
+            "note": "Civil",
+            "projects": [
+              "retreat",
+              "cliffside",
+              "everston",
+              "415-broadview"
+            ]
+          },
+          {
+            "name": "MHBC",
+            "note": "Landscape",
+            "projects": [
+              "everston"
+            ]
+          },
+          {
+            "name": "National Elevator",
+            "note": "Elevator consultant",
+            "projects": [
+              "everston",
+              "cliffside"
+            ]
+          },
+          {
+            "name": "Nemetz",
+            "note": "Electrical",
+            "projects": [
+              "everston"
+            ]
+          },
+          {
+            "name": "Paradigm Transportation",
+            "note": "Traffic",
+            "projects": [
+              "retreat",
+              "cliffside",
+              "everston",
+              "415-broadview"
+            ]
+          },
+          {
+            "name": "Pelican",
+            "note": "Cost consultant",
+            "projects": [
+              "cliffside"
+            ]
+          },
+          {
+            "name": "Petra Consultants",
+            "note": "Inspection and testing",
+            "projects": [
+              "cliffside"
+            ]
+          },
+          {
+            "name": "Pratus Group",
+            "note": "Energy modelling",
+            "projects": [
+              "cliffside"
+            ]
+          },
+          {
+            "name": "Quasar Consulting",
+            "note": "Mechanical and electrical",
+            "projects": [
+              "retreat",
+              "cliffside",
+              "415-broadview"
+            ]
+          },
+          {
+            "name": "R.E. Millward + Associates",
+            "note": "Planning",
+            "projects": [
+              "everston"
+            ]
+          },
+          {
+            "name": "RAW Design",
+            "note": "Architect",
+            "projects": [
+              "retreat",
+              "cliffside",
+              "415-broadview"
+            ]
+          },
+          {
+            "name": "Reinbold Engineering",
+            "note": "Mechanical",
+            "projects": [
+              "everston"
+            ]
+          },
+          {
+            "name": "Revolve Engineering",
+            "note": "Geothermal",
+            "projects": [
+              "cliffside"
+            ]
+          },
+          {
+            "name": "SenezCo",
+            "note": "Code",
+            "projects": [
+              "retreat",
+              "cliffside",
+              "everston",
+              "415-broadview"
+            ]
+          },
+          {
+            "name": "SLR Consulting",
+            "note": "Wind",
+            "projects": [
+              "retreat",
+              "cliffside",
+              "everston",
+              "415-broadview"
+            ]
+          },
+          {
+            "name": "Smart Watering Systems",
+            "note": "Irrigation",
+            "projects": [
+              "everston"
+            ]
+          },
+          {
+            "name": "SmartOne",
+            "note": "Smart building systems",
+            "projects": [
+              "everston"
+            ]
+          },
+          {
+            "name": "Stephensons Engineering",
+            "note": "Structural",
+            "projects": [
+              "retreat",
+              "cliffside",
+              "everston"
+            ]
+          },
+          {
+            "name": "Subterra",
+            "note": "Geothermal",
+            "projects": [
+              "everston"
+            ]
+          },
+          {
+            "name": "Toronto Inspection",
+            "note": "Inspection and testing",
+            "projects": [
+              "cliffside"
+            ]
+          },
+          {
+            "name": "Turner Fleischer",
+            "note": "Architect",
+            "projects": [
+              "everston"
+            ]
+          }
+        ]
+      },
+      {
+        "label": "Trades we’ve worked with",
+        "items": [
+          {
+            "name": "4Star Drywall",
+            "note": "Drywall",
+            "projects": [
+              "merge-condos"
+            ]
+          },
+          {
+            "name": "ACME",
+            "note": "Sprinklers",
+            "projects": [
+              "everston",
+              "cliffside"
+            ]
+          },
+          {
+            "name": "Active Excavating",
+            "note": "Excavation",
+            "projects": [
+              "everston",
+              "cliffside"
+            ]
+          },
+          {
+            "name": "Adlers",
+            "note": "Tile",
+            "projects": [
+              "merge-condos"
+            ]
+          },
+          {
+            "name": "Advance",
+            "note": "Concrete forming",
+            "projects": [
+              "cliffside"
+            ]
+          },
+          {
+            "name": "Alert Labs",
+            "note": "Leak detection",
+            "projects": [
+              "cliffside"
+            ]
+          },
+          {
+            "name": "Alumidek",
+            "note": "Balcony railings",
+            "projects": [
+              "everston",
+              "cliffside"
+            ]
+          },
+          {
+            "name": "American Hardware",
+            "note": "Hardware and hollow metal",
+            "projects": [
+              "merge-condos"
+            ]
+          },
+          {
+            "name": "Arax",
+            "note": "HVAC",
+            "projects": [
+              "everston"
+            ]
+          },
+          {
+            "name": "Artur Concrete Cutting",
+            "note": "Cutting and coring",
+            "projects": [
+              "everston",
+              "cliffside"
+            ]
+          },
+          {
+            "name": "Bain Depot",
+            "note": "Plumbing fixtures",
+            "projects": [
+              "everston",
+              "cliffside"
+            ]
+          },
+          {
+            "name": "Barmac",
+            "note": "Overhead doors",
+            "projects": [
+              "cliffside"
+            ]
+          },
+          {
+            "name": "Basic Caulking",
+            "note": "Caulking and firestopping",
+            "projects": [
+              "everston",
+              "cliffside"
+            ]
+          },
+          {
+            "name": "Begley",
+            "note": "Overhead doors",
+            "projects": [
+              "everston"
+            ]
+          },
+          {
+            "name": "Belco",
+            "note": "Excavation",
+            "projects": [
+              "merge-condos"
+            ]
+          },
+          {
+            "name": "Bolton Railings",
+            "note": "Interior railings",
+            "projects": [
+              "merge-condos"
+            ]
+          },
+          {
+            "name": "Brunco Insulation",
+            "note": "Mechanical insulation",
+            "projects": [
+              "everston",
+              "merge-condos"
+            ]
+          },
+          {
+            "name": "Burrell Overhead",
+            "note": "Overhead doors",
+            "projects": [
+              "merge-condos"
+            ]
+          },
+          {
+            "name": "Cadetta Drain Company",
+            "note": "Site services",
+            "projects": [
+              "everston"
+            ]
+          },
+          {
+            "name": "Campoli Electric",
+            "note": "Electrical",
+            "projects": [
+              "cliffside",
+              "merge-condos"
+            ]
+          },
+          {
+            "name": "Capital Fire",
+            "note": "Security systems",
+            "projects": [
+              "everston",
+              "merge-condos"
+            ]
+          },
+          {
+            "name": "CPE Painting",
+            "note": "Painting",
+            "projects": [
+              "everston",
+              "cliffside"
+            ]
+          },
+          {
+            "name": "Cuisines Ambiance",
+            "note": "Kitchens and vanities",
+            "projects": [
+              "everston",
+              "cliffside"
+            ]
+          },
+          {
+            "name": "Decorum",
+            "note": "Tile",
+            "projects": [
+              "everston",
+              "cliffside"
+            ]
+          },
+          {
+            "name": "Delsan",
+            "note": "Demolition",
+            "projects": [
+              "everston"
+            ]
+          },
+          {
+            "name": "Distinct Design Trim",
+            "note": "Trim carpentry",
+            "projects": [
+              "merge-condos"
+            ]
+          },
+          {
+            "name": "Dolente",
+            "note": "Underslab drainage",
+            "projects": [
+              "merge-condos"
+            ]
+          },
+          {
+            "name": "Downsview",
+            "note": "Landscaping",
+            "projects": [
+              "cliffside",
+              "merge-condos"
+            ]
+          },
+          {
+            "name": "Dufferin Concrete",
+            "note": "Concrete supply",
+            "projects": [
+              "everston",
+              "cliffside"
+            ]
+          },
+          {
+            "name": "Durabond",
+            "note": "EIFS and stucco",
+            "projects": [
+              "everston",
+              "cliffside"
+            ]
+          },
+          {
+            "name": "Ent4mur",
+            "note": "Suite and closet doors",
+            "projects": [
+              "everston"
+            ]
+          },
+          {
+            "name": "Forage Metropolitan",
+            "note": "Geothermal drilling",
+            "projects": [
+              "everston"
+            ]
+          },
+          {
+            "name": "Insitu",
+            "note": "Dewatering",
+            "projects": [
+              "everston",
+              "cliffside"
+            ]
+          },
+          {
+            "name": "JJ Home Products",
+            "note": "Closets and mirrors",
+            "projects": [
+              "merge-condos"
+            ]
+          },
+          {
+            "name": "JJAC",
+            "note": "Plumbing",
+            "projects": [
+              "cliffside"
+            ]
+          },
+          {
+            "name": "JMP",
+            "note": "Structural steel",
+            "projects": [
+              "everston"
+            ]
+          },
+          {
+            "name": "KC Structural",
+            "note": "Roofing and waterproofing",
+            "projects": [
+              "everston",
+              "cliffside",
+              "merge-condos"
+            ]
+          },
+          {
+            "name": "King Granite",
+            "note": "Countertops",
+            "projects": [
+              "everston",
+              "cliffside"
+            ]
+          },
+          {
+            "name": "KONE",
+            "note": "Elevators",
+            "projects": [
+              "everston",
+              "cliffside"
+            ]
+          },
+          {
+            "name": "Lido",
+            "note": "Carpentry",
+            "projects": [
+              "everston"
+            ]
+          },
+          {
+            "name": "LIDO Wall Systems",
+            "note": "EIFS",
+            "projects": [
+              "merge-condos"
+            ]
+          },
+          {
+            "name": "Limen Forming",
+            "note": "Concrete forming",
+            "projects": [
+              "everston"
+            ]
+          },
+          {
+            "name": "Loop Drilling",
+            "note": "Geothermal drilling",
+            "projects": [
+              "cliffside"
+            ]
+          },
+          {
+            "name": "Lucvaa Kitchens",
+            "note": "Kitchens and vanities",
+            "projects": [
+              "merge-condos"
+            ]
+          },
+          {
+            "name": "Major Partitions",
+            "note": "Lockers",
+            "projects": [
+              "merge-condos"
+            ]
+          },
+          {
+            "name": "Mansteel Rebar",
+            "note": "Rebar",
+            "projects": [
+              "everston",
+              "cliffside"
+            ]
+          },
+          {
+            "name": "McGill",
+            "note": "Pedimats",
+            "projects": [
+              "everston",
+              "cliffside"
+            ]
+          },
+          {
+            "name": "Medi Group",
+            "note": "Masonry",
+            "projects": [
+              "merge-condos"
+            ]
+          },
+          {
+            "name": "Metro Compactor",
+            "note": "Waste handling",
+            "projects": [
+              "everston",
+              "cliffside"
+            ]
+          },
+          {
+            "name": "Metro Pump",
+            "note": "Dewatering",
+            "projects": [
+              "cliffside"
+            ]
+          },
+          {
+            "name": "Mr. Marble",
+            "note": "Cultured marble",
+            "projects": [
+              "merge-condos"
+            ]
+          },
+          {
+            "name": "Newmar",
+            "note": "Window wall",
+            "projects": [
+              "everston",
+              "cliffside"
+            ]
+          },
+          {
+            "name": "Norstar",
+            "note": "Windows and balcony railings",
+            "projects": [
+              "merge-condos"
+            ]
+          },
+          {
+            "name": "Northland",
+            "note": "Geothermal trenching and landscaping",
+            "projects": [
+              "everston"
+            ]
+          },
+          {
+            "name": "Northleaf",
+            "note": "Appliances",
+            "projects": [
+              "everston",
+              "cliffside",
+              "merge-condos"
+            ]
+          },
+          {
+            "name": "O'Neil",
+            "note": "Light fixtures",
+            "projects": [
+              "everston",
+              "cliffside"
+            ]
+          },
+          {
+            "name": "Ozz Electric",
+            "note": "Electrical",
+            "projects": [
+              "everston"
+            ]
+          },
+          {
+            "name": "PC Caulking",
+            "note": "Caulking and firestopping",
+            "projects": [
+              "merge-condos"
+            ]
+          },
+          {
+            "name": "Pops Painting",
+            "note": "Painting",
+            "projects": [
+              "merge-condos"
+            ]
+          },
+          {
+            "name": "Portes Global",
+            "note": "Doors and hardware",
+            "projects": [
+              "everston",
+              "cliffside"
+            ]
+          },
+          {
+            "name": "Pro Caissons",
+            "note": "Shoring",
+            "projects": [
+              "everston",
+              "cliffside"
+            ]
+          },
+          {
+            "name": "Pro-Bel",
+            "note": "Window washing equipment",
+            "projects": [
+              "everston",
+              "cliffside",
+              "merge-condos"
+            ]
+          },
+          {
+            "name": "Pro-Drain",
+            "note": "Site services",
+            "projects": [
+              "cliffside"
+            ]
+          },
+          {
+            "name": "RBM",
+            "note": "Stone supply",
+            "projects": [
+              "cliffside"
+            ]
+          },
+          {
+            "name": "Rebar Enterprises",
+            "note": "Rebar detailing",
+            "projects": [
+              "everston",
+              "cliffside"
+            ]
+          },
+          {
+            "name": "Rite-Air",
+            "note": "HVAC",
+            "projects": [
+              "cliffside"
+            ]
+          },
+          {
+            "name": "Roman Metals",
+            "note": "Miscellaneous metals",
+            "projects": [
+              "merge-condos"
+            ]
+          },
+          {
+            "name": "Royal Oak",
+            "note": "Wood stairs",
+            "projects": [
+              "merge-condos"
+            ]
+          },
+          {
+            "name": "Savaria",
+            "note": "Lobby lift",
+            "projects": [
+              "everston"
+            ]
+          },
+          {
+            "name": "Select Drywall",
+            "note": "Drywall",
+            "projects": [
+              "everston"
+            ]
+          },
+          {
+            "name": "Senergy",
+            "note": "Plumbing",
+            "projects": [
+              "merge-condos"
+            ]
+          },
+          {
+            "name": "Stone Edge",
+            "note": "Countertops",
+            "projects": [
+              "merge-condos"
+            ]
+          },
+          {
+            "name": "Strada Aggregates",
+            "note": "Stone supply",
+            "projects": [
+              "everston"
+            ]
+          },
+          {
+            "name": "Thyssen",
+            "note": "Elevators",
+            "projects": [
+              "merge-condos"
+            ]
+          },
+          {
+            "name": "Tomar Ventilation",
+            "note": "HVAC",
+            "projects": [
+              "merge-condos"
+            ]
+          },
+          {
+            "name": "Toronto Shoring",
+            "note": "Shoring",
+            "projects": [
+              "merge-condos"
+            ]
+          },
+          {
+            "name": "Tremonte",
+            "note": "Metals",
+            "projects": [
+              "everston",
+              "cliffside"
+            ]
+          },
+          {
+            "name": "Triumph",
+            "note": "Metal siding",
+            "projects": [
+              "merge-condos"
+            ]
+          },
+          {
+            "name": "Trust Flooring",
+            "note": "Hardwood and carpet",
+            "projects": [
+              "merge-condos"
+            ]
+          },
+          {
+            "name": "Village Dallas",
+            "note": "Masonry",
+            "projects": [
+              "everston",
+              "cliffside"
+            ]
+          },
+          {
+            "name": "Wilkinsons",
+            "note": "Waste handling",
+            "projects": [
+              "cliffside",
+              "merge-condos"
+            ]
+          },
+          {
+            "name": "WJ Groundwater Treatment Systems",
+            "note": "Groundwater treatment",
+            "projects": [
+              "everston"
+            ]
+          },
+          {
+            "name": "XACT Mechanical",
+            "note": "Plumbing",
+            "projects": [
+              "everston"
+            ]
+          },
+          {
+            "name": "Yukon",
+            "note": "Concrete forming",
+            "projects": [
+              "merge-condos"
+            ]
+          },
+          {
+            "name": "Zelta",
+            "note": "Flooring",
+            "projects": [
+              "everston",
+              "cliffside"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "scope": {
+    "eyebrow": "Scope of services",
+    "heading": "What a mandate includes.",
+    "intro": "Mandates can cover a single workstream or the full development cycle.",
+    "dmLabel": "Development management",
+    "dm": [
+      {
+        "title": "Project initiation and feasibility",
+        "body": "Site and opportunity review, due diligence, financial, logistical and design feasibility, initial development strategy, program and unit-yield testing, business case and recommendation."
+      },
+      {
+        "title": "Financial management",
+        "body": "Development pro forma, project budget, cash-flow forecast and cost-to-complete, soft-cost, municipal-cost and financing assumptions, and owner reporting."
+      },
+      {
+        "title": "Schedule and risk",
+        "body": "Master development schedule, milestone and critical-path tracking, approvals and permit sequencing, risk register, and action and decision logs."
+      },
+      {
+        "title": "Consultant procurement",
+        "body": "Scopes and RFPs, bid levelling, fee negotiation and recommendations, and ongoing contract-scope management."
+      },
+      {
+        "title": "Planning and municipal approvals",
+        "body": "Planning strategy, applications and submissions, City meetings, comment responses and approval tracking."
+      },
+      {
+        "title": "Design management",
+        "body": "Programming, suite, amenity and building design direction, design to budget, architectural, structural and M&E coordination, sustainability and value engineering."
+      },
+      {
+        "title": "Permits and utilities",
+        "body": "Permit strategy and applications, conditional-permit sequencing, consultant permit packages, reviewer follow-up and utility connections."
+      },
+      {
+        "title": "Funding and financing support",
+        "body": "Materials for funding applications, lender, broker and CMHC coordination, quantity surveyor and monitor coordination, and draw reporting."
+      },
+      {
+        "title": "Pre-construction and procurement",
+        "body": "Construction review through Elevate, benchmark cost validation, procurement strategy, CM or GC procurement and tender recommendations."
+      },
+      {
+        "title": "Construction, occupancy and closeout",
+        "body": "Owner-side construction oversight, schedule, budget and change review, commissioning and occupancy, turnover, closeout and warranty."
+      },
+      {
+        "title": "Leasing and marketing coordination",
+        "body": "Input on unit mix, amenities, positioning and leasing schedule, working with operators and leasing teams."
+      }
+    ],
+    "cmLabel": "Construction management",
+    "cm": [
+      {
+        "title": "Pre-construction",
+        "items": [
+          "Constructability and value engineering",
+          "Budgets, schedules and trade pricing",
+          "Long-lead procurement"
+        ]
+      },
+      {
+        "title": "Construction",
+        "items": [
+          "Site staffing and safety",
+          "Schedule, budget and quality control",
+          "Changes, RFIs and inspections"
+        ]
+      },
+      {
+        "title": "Post-construction",
+        "items": [
+          "Turnover and deficiencies",
+          "Warranty support",
+          "Closeout"
+        ]
+      }
+    ],
+    "cmNote": "",
+    "dmIntro": "LCH represents the owner from feasibility through lease-up, running the budget, approvals, consultants and reporting.",
+    "cmIntro": "Elevate plans and builds, with its own project management and site teams.",
+    "dmGroups": [
+      {
+        "title": "Plan",
+        "count": 4
+      },
+      {
+        "title": "Approve and design",
+        "count": 4
+      },
+      {
+        "title": "Build and lease",
+        "count": 3
       }
     ]
   }

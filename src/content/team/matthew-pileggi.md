@@ -1,11 +1,11 @@
 ---
 name: "Matthew Pileggi"
 credentials: ""
-role: "Assistant Project Manager, Elevate"
+role: "Assistant Project Manager"
 photo: "/uploads/team-matthew-pileggi.jpg"
 linkedin: ""
 companies: ["elevate"]
-order: 33
+order: 12
 ---
 
 Assistant Project Manager at Elevate Construction Management.

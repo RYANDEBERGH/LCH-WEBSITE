@@ -1,11 +1,12 @@
 ---
 name: "Rafael Albulet"
 credentials: ""
-role: "Senior Site Superintendent, Elevate"
+hidden: true
+role: "Senior Site Superintendent"
 photo: "/uploads/team-rafael-albulet.jpg"
 linkedin: ""
 companies: ["elevate"]
-order: 32
+order: 11
 ---
 
 Rafael brings over 20 years of construction experience with Camrost-Felcorp, Cresford Developments, Toddglen, and Bluescape Construction Management. His background spans site supervision, shoring, excavation, quantity surveying, and finishing.

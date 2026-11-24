@@ -13,9 +13,10 @@ storeys: 13
 partners:
   - "Cogir Real Estate"
 architect: "Turner Fleischer"
-summary: "566 purpose-built rental apartments near the University of Toronto Scarborough and Highland Creek Valley."
+summary: "566 purpose-built rental apartments near the University of Toronto Scarborough, Centennial College and Highland Creek Valley."
 brandColor: "#0f3a2e"
-logo: "/uploads/ev-logo-forest.png"
+logo: "/uploads/logos/everston.svg"
+tileCrop: "--tile-h: 140%; --tile-top: -40%; --tile-x: 47%"
 heroImage: "/uploads/everston-evening-2.png"
 gallery:
   - image: "/uploads/sunrise-west-side.png"

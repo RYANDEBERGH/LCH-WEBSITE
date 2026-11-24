@@ -26,8 +26,8 @@ leasing:
   url: ""
   label: ""
 milestones:
-  - date: "2019"
-    label: "Completed; residents moved in from early 2019"
+  - date: "2017"
+    label: "Completed"
     source: "LCH Developments"
     sourceUrl: ""
 ---

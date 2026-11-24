@@ -1,0 +1,35 @@
+old_url,new_url,action,notes
+/,/,keep,Home page; same path.
+/projects/,/projects/,keep,Projects index; same path.
+/story/,/about/,301,Story is now About Us. Remove the meta-refresh page src/pages/story.astro so Netlify serves a real 301 (a file at the old path otherwise blocks the redirect).
+/media/,/news/,301,Media is now News & Media.
+/contact/,/contact/,keep,Contact page; same path.
+/corporate,/about/,301,"Old page listed LCH corporate entities; that page was removed at your request. About Us is the closest match. Old site already sends /corporate to /corporate/, so both are mapped."
+/privacy-policy/,/legal/privacy-policy/,301,Rewritten as Privacy Policy & Terms of Use. Alternative: move the page back to /privacy-policy/ and keep the old path.
+/2021/03/25/lch-collaborates-with-the-scarborough-food-security-initiative/,/news/lch-collaborates-with-the-scarborough-food-security-initiative/,301,Migrated. Slug unchanged; only the /YYYY/MM/DD/ prefix becomes /news/.
+/2023/05/22/remi-network-art-infused-creative-hub-comes-to-scarborough/,/news/remi-network-art-infused-creative-hub-comes-to-scarborough/,301,Migrated. Slug unchanged; only the /YYYY/MM/DD/ prefix becomes /news/.
+/2022/01/21/urbantoronto-textured-mid-rise-condo-proposed-on-kingston-road-in-west-hill/,/news/urbantoronto-textured-mid-rise-condo-proposed-on-kingston-road-in-west-hill/,301,Article exists but body is EMPTY. Migrate the summary text and UrbanToronto source link from the live post. Date on the new site is 2022-01-13 (original article date). Slug unchanged; only the /YYYY/MM/DD/ prefix becomes /news/.
+/2023/05/22/urban-toronto-lch-proposes-development-on-kingston-road-in-scarborough-village/,/news/urban-toronto-lch-proposes-development-on-kingston-road-in-scarborough-village/,301,Migrated. Date on the new site is 2022-02-11 (original article date). Slug unchanged; only the /YYYY/MM/DD/ prefix becomes /news/.
+/2020/10/10/merge-condos-breaks-ground/,/news/merge-condos-breaks-ground/,301,Article exists but body is EMPTY. Migrate the text and Livabl source link from the live post. Slug unchanged; only the /YYYY/MM/DD/ prefix becomes /news/.
+/2026/11/06/urban-toronto-everston-sheds-crane-as-angled-balconies-define-kingston-road-frontage/,/news/urban-toronto-everston-sheds-crane-as-angled-balconies-define-kingston-road-frontage/,301,Migrated. Date on the new site is 2026-10-30 (original article date). Slug unchanged; only the /YYYY/MM/DD/ prefix becomes /news/.
+/2026/11/05/urban-toronto-crane-rises-high-at-cliffside-site-in-scarborough/,/news/urban-toronto-crane-rises-high-at-cliffside-site-in-scarborough/,301,Migrated. Slug unchanged; only the /YYYY/MM/DD/ prefix becomes /news/.
+/2026/05/29/urban-toronto-everston-nears-topping-off-in-scarboroughs-west-hill/,/news/urban-toronto-everston-nears-topping-off-in-scarboroughs-west-hill/,301,Migrated. Slug unchanged; only the /YYYY/MM/DD/ prefix becomes /news/.
+/2025/10/21/october-17-2025-everston-cranes-are-up-and-online/,/news/october-17-2025-everston-cranes-are-up-and-online/,301,Migrated. Slug unchanged; only the /YYYY/MM/DD/ prefix becomes /news/.
+/2022/08/18/young-ambitious-lch-developments-corners-t-o-s-kingston-rd/,/news/young-ambitious-lch-developments-corners-t-o-s-kingston-rd/,301,Migrated. Slug unchanged; only the /YYYY/MM/DD/ prefix becomes /news/.
+/2025/03/06/4630-kingston-road-demolition-has-begun/,/news/4630-kingston-road-demolition-has-begun/,301,Migrated. Slug unchanged; only the /YYYY/MM/DD/ prefix becomes /news/.
+/2025/07/21/july-21-2025-4630-kingston-road-shoring-begins/,/news/july-21-2025-4630-kingston-road-shoring-begins/,301,Migrated. Slug unchanged; only the /YYYY/MM/DD/ prefix becomes /news/.
+/2026/06/29/lch-developments-and-fiera-real-estate-announce-strategic-partnership/,/news/lch-developments-and-fiera-real-estate-announce-strategic-partnership/,301,Migrated. Slug unchanged; only the /YYYY/MM/DD/ prefix becomes /news/.
+/2023/05/22/blogto-a-jewel-like-condo-building-will-rise-from-a-more-than-100-year-old-toronto-church/,/news/blogto-a-jewel-like-condo-building-will-rise-from-a-more-than-100-year-old-toronto-church/,301,Migrated. Slug unchanged; only the /YYYY/MM/DD/ prefix becomes /news/.
+/2023/05/22/urbantoronto-merge-condos-boasts-multi-tonal-cladding-to-articulate-exterior/,/news/urbantoronto-merge-condos-boasts-multi-tonal-cladding-to-articulate-exterior/,301,Migrated. Date on the new site is 2022-06-01 (original article date). Slug unchanged; only the /YYYY/MM/DD/ prefix becomes /news/.
+/2021/03/25/urbantoronto-merge-condos-construction-progressing-on-kingston-road/,/news/urbantoronto-merge-condos-construction-progressing-on-kingston-road/,301,Article exists but body is EMPTY. Migrate the UrbanToronto excerpt and source link from the live post. Date on the new site is 2021-01-19. Slug unchanged; only the /YYYY/MM/DD/ prefix becomes /news/.
+/2020/09/08/modern-living-in-east-toronto/,/news/modern-living-in-east-toronto/,301,"Article exists but body is EMPTY. Migrate the text, the Merge exterior image and the Livabl source link from the live post. Slug unchanged; only the /YYYY/MM/DD/ prefix becomes /news/."
+/2020/09/02/top-5-townhouses-toronto/,/news/top-5-townhouses-toronto/,301,Article exists but body is EMPTY. Migrate the text from the live post (blogTO source link is already set). Slug unchanged; only the /YYYY/MM/DD/ prefix becomes /news/.
+/2020/09/02/one6nine-jones-leslieville/,/news/one6nine-jones-leslieville/,301,Article exists but body is EMPTY. Migrate the text and Livabl source link from the live post. Slug unchanged; only the /YYYY/MM/DD/ prefix becomes /news/.
+/category/broadview/,/projects/415-broadview/,301,"Project page, which lists its news coverage."
+/category/cliffside/,/projects/cliffside/,301,"Project page, which lists its news coverage."
+/category/community/,/news/,301,No community filter page on the new site; topic filter is client-side only.
+/category/everston/,/projects/everston/,301,"Project page, which lists its news coverage."
+/category/merge-condos/,/projects/merge-condos/,301,"Project page, which lists its news coverage."
+/category/merge-spaces/,/projects/merge-spaces/,301,"Project page, which lists its news coverage."
+/category/other/,/news/,301,Old catch-all category (mostly One6Nine Jones posts). No equivalent filter.
+/category/retreat/,/projects/retreat/,301,"Project page, which lists its news coverage."

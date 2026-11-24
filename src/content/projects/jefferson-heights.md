@@ -4,9 +4,11 @@ order: 20
 featured: false
 assignment: "client"
 roleLabel: "Development and construction management"
+years: "2024–25"
+units: 96
 client: "Receiver: Albert Gelman, with Cameron Stephens"
 type: "Residential townhomes"
-address: ""
+address: "67 Jefferson Side Road"
 neighbourhood: "Richmond Hill"
 intersection: ""
 partners: []

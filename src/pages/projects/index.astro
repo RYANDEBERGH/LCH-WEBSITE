@@ -58,4 +58,15 @@ const group = (p: (typeof projects)[number]) => (isClientWork(p) ? 'client' : is
   .pgrid__item[hidden] { display: none; }
   @media (max-width: 1100px) { .pgrid { grid-template-columns: repeat(2, 1fr); } }
   @media (max-width: 680px) { .pgrid { grid-template-columns: 1fr; } }
+
+  @media (max-width: 700px) {
+    .pgrid { grid-template-columns: 1fr; gap: 14px; }
+    .pgrid :global(.pcard) { flex-direction: row; gap: 14px; align-items: center; }
+    .pgrid :global(.pcard__media) { flex: 0 0 38%; aspect-ratio: 1 / 1; }
+    .pgrid :global(.pcard__pills), .pgrid :global(.pcard__summary), .pgrid :global(.pcard__facts) { display: none; }
+    .pgrid :global(.pcard__body) { padding-top: 0; }
+    .pgrid :global(.pcard__title) { font-size: 19px; margin-bottom: 4px; }
+    .pgrid :global(.pcard__meta) { font-size: 11px; margin-bottom: 4px; }
+    .pgrid :global(.pcard__addr) { font-size: 13px; margin: 0; }
+  }
 </style>

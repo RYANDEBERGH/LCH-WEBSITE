@@ -1,11 +1,12 @@
 ---
 name: "Uday Gauswami"
 credentials: ""
-role: "Assistant Site Superintendent, Elevate"
+hidden: true
+role: "Assistant Site Superintendent"
 photo: "/uploads/team-uday-gauswami.jpg"
 linkedin: ""
 companies: ["elevate"]
-order: 36
+order: 15
 ---
 
 Uday supports site operations, working with the Site Superintendent to coordinate subcontractors, organize on-site staff, and monitor progress. His responsibilities include supporting scheduling and reporting, enforcing safety protocols, and maintaining quality standards.

@@ -26,6 +26,7 @@ const client = isClientWork(project);
   <div class="pcard__body">
     <p class="pcard__meta">{p.neighbourhood}</p>
     <h3 class="pcard__title display">{p.title}</h3>
+    {p.address && <p class="pcard__addr">{p.address}</p>}
     <p class="pcard__summary">{p.summary}</p>
     <p class="pcard__facts">
       {client && p.roleLabel ? <span>{p.roleLabel}</span> : <span>{p.type}</span>}
@@ -47,6 +48,7 @@ const client = isClientWork(project);
   .pcard__ph-loc { font-size: 14px; color: rgba(246, 244, 239, 0.75); }
   .pcard__pills { position: absolute; top: 16px; left: 16px; right: 16px; display: flex; flex-wrap: wrap; gap: 6px; }
   .pcard__body { padding-top: 20px; }
+  .pcard__addr { font-size: 14px; color: var(--muted); margin: -2px 0 10px; }
   .pcard__meta { font-size: 13px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); margin-bottom: 6px; }
   .pcard__title { font-size: clamp(24px, 2.2vw, 30px); line-height: 1.05; margin-bottom: 10px; transition: color 0.25s; }
   .pcard:hover .pcard__title { color: var(--accent); }

@@ -14,7 +14,7 @@ partners: []
 architect: ""
 summary: "An 11-storey gateway into Cliffside Village with ground-floor retail and a rooftop overlooking the waterfront."
 brandColor: "#ff5551"
-logo: "/uploads/merge-logo.png"
+logo: "/uploads/logos/merge-condos.svg"
 heroImage: "/uploads/merge-1-fall.png"
 gallery:
   - image: "/uploads/merge-2-fall.png"

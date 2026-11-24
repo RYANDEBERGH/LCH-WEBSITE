@@ -4,11 +4,15 @@
     "heading": "Built through hands-on experience."
   },
   "overview": {
-    "body": "Founded by brothers Michal and Lukasz Wywrot, LCH has grown from a property investment business into a development and construction management platform. Experience in rental properties, custom homes, townhomes and heritage conversions laid the foundation for larger residential communities and client development mandates.\n\nToday, our work brings together the perspective of an owner, the coordination of a development manager and construction expertise through Elevate. We use that combination to test ideas, resolve constraints and keep projects moving toward delivery.",
+    "body": "Founded by brothers Michal and Lukasz Wywrot, LCH grew from investing in and building homes into a developer and development manager. Every role on our team today is one the founders once did themselves, and that still shapes how we work: lean, hands-on and accountable for results.\n\nWe develop our own purpose-built rental communities and manage development and construction for owners, institutions, lenders and receivers, with construction management through our affiliate, Elevate.\n\nWe also own and operate Merge Spaces, the coworking and community hub on Kingston Road where our own office is based, which gives us day-to-day experience as an operator, not only as a builder.",
     "image": "/uploads/mike-and-luke-sales-center.png",
     "imageAlt": "LCH founders Michal and Lukasz Wywrot with a model of Everston"
   },
   "values": [
+    {
+      "title": "Purpose",
+      "body": "We aim to create lasting value through homes and places that work for residents, partners and their surroundings."
+    },
     {
       "title": "Transparency",
       "body": "Clear reporting, open conversations and visible responsibilities support informed decisions throughout a project."
@@ -16,10 +20,6 @@
     {
       "title": "Efficiency",
       "body": "Early planning and coordinated decisions help the team manage cost, schedule and the work required for delivery."
-    },
-    {
-      "title": "Purpose",
-      "body": "We aim to create lasting value through homes and places that work for residents, partners and their surroundings."
     }
   ],
   "timelineHeading": {
@@ -28,28 +28,14 @@
   },
   "timeline": [
     {
-      "label": "2007",
-      "title": "Starting with property investment",
-      "text": "The brothers began building a property investment business, gaining experience in student rentals, rent-to-own housing and residential properties.",
-      "images": [],
-      "projects": []
-    },
-    {
-      "label": "2013",
-      "title": "Custom homes and townhomes",
-      "text": "The business expanded into residential construction, building hands-on experience in design decisions, procurement and site delivery.",
+      "label": "2012–2017",
+      "title": "Lifestyle Custom Homes",
+      "text": "LCH began as Lifestyle Custom Homes, building precision custom homes. That hands-on experience in design, procurement and site delivery shaped the kind of development we wanted to do next: well-built communities at higher density.",
       "images": [],
       "projects": []
     },
     {
       "label": "2017",
-      "title": "Moving into mid-rise development",
-      "text": "The company turned its focus to higher-density projects, taking on a broader range of development, design and construction responsibilities.",
-      "images": [],
-      "projects": []
-    },
-    {
-      "label": "2019",
       "title": "One6Nine Jones and St. Leslieville completed",
       "text": "Twelve new townhomes and 14 lofts in a restored 1913 church, side by side on Jones Avenue, showed the growing range of the business.",
       "images": [
@@ -70,9 +56,25 @@
       ]
     },
     {
+      "label": "2019",
+      "title": "Into mid-rise with Merge Condos",
+      "text": "LCH moved into mid-rise development with Merge Condos, where Kingston Road meets Danforth Avenue. With final planning approvals in place, condominium sales launched in 2019 and construction followed in 2020.",
+      "images": [
+        {
+          "image": "/uploads/mrg-c10-townhome-190808-final-lr.jpg",
+          "alt": "Merge Condos rendering from the 2019 launch",
+          "caption": "Rendering"
+        }
+      ],
+      "projects": [
+        "merge-condos"
+      ],
+      "sourceUrl": "https://urbantoronto.ca/news/2019/09/approved-merge-condos-mid-rise-coming-kingston-and-danforth.38752"
+    },
+    {
       "label": "2022",
       "title": "Merge Spaces",
-      "text": "The coworking and event-space project brought a different type of place-making to the portfolio, with Elevate managing preconstruction and construction.",
+      "text": "LCH opened Merge Spaces, a coworking and community hub on Kingston Road that we own and operate and that also houses our own office. Elevate managed preconstruction and construction.",
       "images": [
         {
           "image": "/uploads/am2-1941.jpg",
@@ -100,30 +102,24 @@
       ]
     },
     {
-      "label": "Expanding client work",
-      "title": "Jefferson Heights and Eaglebay Towns",
-      "text": "The team’s experience also supports owners, lenders and receivers. Jefferson Heights and Eaglebay Towns demonstrate coordinated development and construction work on partially completed residential projects.",
+      "label": "2024–25",
+      "title": "Jefferson Heights",
+      "text": "For receiver Albert Gelman, with Cameron Stephens, LCH and Elevate took on a partially completed townhome development in Richmond Hill, re-establishing budget and schedule control and advancing it toward occupancy and closings.",
       "images": [
         {
           "image": "/uploads/jefferson-heights.jpg",
           "alt": "Townhomes at Jefferson Heights in Richmond Hill",
           "caption": ""
-        },
-        {
-          "image": "/uploads/eaglebay-towns.jpg",
-          "alt": "Townhomes at Eaglebay in Newcastle",
-          "caption": ""
         }
       ],
       "projects": [
-        "jefferson-heights",
-        "eaglebay-towns"
+        "jefferson-heights"
       ]
     },
     {
       "label": "2025",
       "title": "Everston breaks ground",
-      "text": "Construction began on Everston, 566 purpose-built rental homes in West Hill, with Elevate managing construction. Both tower cranes were up by October.",
+      "text": "Construction began on Phase 1 of Everston, 358 of its 566 purpose-built rental homes in West Hill, with Elevate managing construction. Both tower cranes were up by October.",
       "images": [
         {
           "image": "/uploads/adobe-express-file-3-1.jpg",
@@ -149,6 +145,21 @@
       "projects": [
         "cliffside",
         "everston"
+      ]
+    },
+    {
+      "label": "2026",
+      "title": "Eaglebay Towns",
+      "text": "For KPMG and RBC, LCH and Elevate stepped in on a 29-home townhouse receivership in Newcastle, combining construction completion with purchaser, warranty and closeout coordination.",
+      "images": [
+        {
+          "image": "/uploads/eaglebay-towns.jpg",
+          "alt": "Townhomes at Eaglebay in Newcastle",
+          "caption": ""
+        }
+      ],
+      "projects": [
+        "eaglebay-towns"
       ]
     },
     {
@@ -178,28 +189,28 @@
     "heading": "What we bring to a project.",
     "items": [
       {
-        "title": "Development strategy and feasibility",
-        "body": "We test development options against planning constraints, market requirements, construction cost and the project’s financial objectives. The work can range from reviewing an initial concept to rethinking an existing scheme."
+        "title": "Feasibility and development strategy",
+        "body": "Site and market review, massing and unit-mix testing, development budgets, pro formas, cash flow and schedules that show what a project can achieve, whether it is a new site or an existing scheme that needs rethinking."
       },
       {
-        "title": "Planning and approvals",
-        "body": "We coordinate consultants, applications and municipal responses, tracking the technical studies, agreements and clearances needed to advance a project."
+        "title": "Planning, approvals and permits",
+        "body": "Municipal strategy and the full approvals path: rezonings, official plan amendments, site plan approval, minor variances, building permits, municipal agreements and clearances, with consultants and agencies coordinated throughout."
       },
       {
-        "title": "Design and development optimization",
-        "body": "We connect architecture, structure, building systems and interior direction with project economics. Floorplates, unit mix, parking and materials are considered together for functionality, buildability and long-term performance."
+        "title": "Design management and optimization",
+        "body": "Floorplates, unit mix, parking, building systems and suite and amenity design are tested together against rentable area, construction cost and long-term operation, then turned into clear direction for the design team."
       },
       {
-        "title": "Financial management and owner oversight",
-        "body": "Development budgets, cash-flow forecasts, project accounting and cost reporting support informed decisions. We coordinate with ownership, lenders and financing advisers to keep project requirements aligned."
+        "title": "Budgets, financing support and reporting",
+        "body": "Development budgets, cost-to-complete tracking, risk registers, decision logs and owner reporting, plus support with lenders, CMHC and affordable-housing programs."
       },
       {
-        "title": "Construction coordination through Elevate",
-        "body": "Elevate leads preconstruction and construction management, including estimating, trade coordination, tendering, procurement and site delivery. LCH maintains oversight of the development business plan, approvals and material changes."
+        "title": "Construction management through Elevate",
+        "body": "Preconstruction, estimating and virtual builds, tendering and procurement, then site management, safety, quality, schedule control, turnover and warranty."
       },
       {
-        "title": "Project recovery and repositioning",
-        "body": "We help owners, lenders and receivers assess incomplete projects, restore budget and schedule visibility, coordinate outstanding work and establish a practical route toward occupancy, sale or operation."
+        "title": "Project recovery and receiverships",
+        "body": "Stabilizing partially completed projects, reviewing deficiencies and documentation, re-pricing the remaining work, and managing occupancy, registration, purchaser and closing requirements."
       }
     ]
   },
@@ -226,11 +237,22 @@
         "imageAlt": "Townhomes at Eaglebay in Newcastle"
       },
       {
-        "project": "",
+        "project": "150-the-donway-west",
         "title": "150 The Donway West",
-        "role": "Development feasibility study",
-        "heading": "Testing a more efficient development approach.",
-        "body": "For Akelius, LCH and Elevate studied an infill opportunity between occupied residential buildings. The work combined design review, construction costing and financial analysis, testing ways to simplify the building, make use of existing underground space and increase rentable area."
+        "role": "Comprehensive development report",
+        "heading": "An in-depth development report.",
+        "body": "For Akelius, LCH and Elevate prepared an in-depth development report on new rental housing beside occupied buildings, covering the market, design and construction refinements, costing, financial modelling and an approvals strategy.",
+        "image": "/uploads/150-the-donway-west.jpg",
+        "imageAlt": "Aerial rendering of new rental buildings beside existing apartments at 150 The Donway West"
+      },
+      {
+        "project": "timberlea",
+        "title": "5122 Timberlea",
+        "role": "Planning approvals",
+        "heading": "Taking an industrial expansion through approvals.",
+        "body": "For the owner of an operating industrial facility in Mississauga, LCH managed the planning approvals for an expansion, securing the Minor Variance and taking the project through Site Plan Approval.",
+        "image": "/uploads/timberlea-addition-render.jpg",
+        "imageAlt": "3D massing view of the proposed warehouse addition at 5122 Timberlea Boulevard"
       }
     ]
   },
@@ -242,10 +264,133 @@
   },
   "cta": {
     "heading": "Have a project in mind?",
-    "body": "Talk to us about development, development management or a project that needs a path to completion.",
+    "body": "Talk to us about development management, construction management or a project that needs a path to completion.",
     "ctaLabel": "Discuss a project",
     "ctaUrl": "/partnerships/#partner-form",
-    "secondaryLabel": "Ways to work with us",
-    "secondaryUrl": "/partnerships/"
+    "secondaryLabel": "Our services",
+    "secondaryUrl": "/partnerships/#services"
+  },
+  "lchElevate": {
+    "eyebrow": "LCH and Elevate",
+    "heading": "Two companies, one team.",
+    "intro": "Affiliated companies with their own teams and clients. On our projects they work as one: LCH carries the development and the owner’s interests, while Elevate plans and builds, so cost, schedule and buildability are settled early.",
+    "companies": [
+      {
+        "key": "lch",
+        "name": "LCH Developments",
+        "tagline": "Developer and development manager",
+        "image": "/uploads/merge-1-fall.png",
+        "imageAlt": "Merge Condos, completed by LCH on Kingston Road",
+        "body": "LCH develops its own purpose-built rental communities and manages development for owners, institutions, lenders and receivers, from feasibility through approvals, design and owner oversight to closeout.",
+        "list": [
+          "Feasibility, budgets and cash flow",
+          "Planning approvals and permits",
+          "Design management and optimization",
+          "Financing support and owner reporting"
+        ],
+        "lead": "Led by Managing Partners Michal and Lukasz Wywrot",
+        "leaders": [
+          "lukasz-wywrot",
+          "michal-wywrot"
+        ],
+        "cta": {
+          "label": "Work with LCH",
+          "url": "/partnerships/"
+        },
+        "values": [
+          "Purpose",
+          "Transparency",
+          "Efficiency"
+        ]
+      },
+      {
+        "key": "elevate",
+        "name": "Elevate Construction Management",
+        "tagline": "Construction manager",
+        "image": "/uploads/everston-construction-aerial.jpg",
+        "imageAlt": "Everston under construction with Elevate as construction manager",
+        "body": "Elevate builds low-rise, mid-rise and high-rise residential and mixed-use projects for LCH, for outside owners and institutional partners, and for lenders and court-appointed receivers, with its own project management and site teams.",
+        "list": [
+          "Preconstruction, estimating and virtual builds",
+          "Tendering and procurement",
+          "Site management, safety and quality",
+          "Turnover, deficiencies and warranty"
+        ],
+        "lead": "Led by President Jure Selak",
+        "values": [
+          "Curiosity",
+          "Care",
+          "Collaboration"
+        ],
+        "url": "https://elevatecm.com",
+        "leaders": [
+          "jure-selak"
+        ],
+        "cta": {
+          "label": "Visit elevatecm.com",
+          "url": "https://elevatecm.com"
+        },
+        "partners": [
+          "lukasz-wywrot",
+          "michal-wywrot"
+        ],
+        "partnersLabel": "Managing Partners"
+      }
+    ],
+    "phasesHeading": "Who does what, stage by stage",
+    "phases": [
+      {
+        "title": "Feasibility",
+        "lch": "lead",
+        "elevate": "support",
+        "note": "Elevate prices options early"
+      },
+      {
+        "title": "Approvals",
+        "lch": "lead",
+        "elevate": "support",
+        "note": "Elevate reviews constructability"
+      },
+      {
+        "title": "Preconstruction",
+        "lch": "lead",
+        "elevate": "lead",
+        "note": "Design, cost and schedule set together"
+      },
+      {
+        "title": "Construction",
+        "lch": "support",
+        "elevate": "lead",
+        "note": "LCH provides owner oversight"
+      },
+      {
+        "title": "Closeout and warranty",
+        "lch": "lead",
+        "elevate": "lead",
+        "note": "Through occupancy and beyond"
+      }
+    ],
+    "gallery": [
+      {
+        "image": "/uploads/crane-down-web.jpg",
+        "caption": "Everston, Kingston Road"
+      },
+      {
+        "image": "/uploads/merge-construction.jpg",
+        "caption": "Merge Condos under construction"
+      },
+      {
+        "image": "/uploads/crane-1-web.jpg",
+        "caption": "Cliffside, Kingston Road"
+      }
+    ],
+    "togetherHeading": "Delivered together",
+    "together": [
+      "everston",
+      "cliffside",
+      "merge-spaces",
+      "jefferson-heights",
+      "eaglebay-towns"
+    ]
   }
 }

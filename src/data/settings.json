@@ -64,30 +64,6 @@
       "network": "instagram",
       "url": "https://www.instagram.com/everstoncondos/",
       "kind": "company"
-    },
-    {
-      "name": "Michal Wywrot",
-      "network": "linkedin",
-      "url": "https://ca.linkedin.com/in/michal-wywrot-77011435",
-      "kind": "person"
-    },
-    {
-      "name": "Lukasz Wywrot",
-      "network": "linkedin",
-      "url": "https://ca.linkedin.com/in/lukewywrot",
-      "kind": "person"
-    },
-    {
-      "name": "Ryan Debergh",
-      "network": "linkedin",
-      "url": "https://ca.linkedin.com/in/ryandebergh",
-      "kind": "person"
-    },
-    {
-      "name": "Jure Selak",
-      "network": "linkedin",
-      "url": "https://ca.linkedin.com/in/jure-selak-9a720b4a",
-      "kind": "person"
     }
   ],
   "socialFeed": {
@@ -101,5 +77,23 @@
     "url": "https://elevatecm.com",
     "logo": "/uploads/brand/elevate-logo.png",
     "logoLight": "/uploads/brand/elevate-logo-white.png"
-  }
+  },
+  "publisherLogos": [
+    {
+      "name": "RENX",
+      "logo": "/uploads/press/renx.png"
+    },
+    {
+      "name": "blogTO",
+      "logo": "/uploads/press/blogto.svg"
+    },
+    {
+      "name": "UrbanToronto",
+      "logo": "/uploads/press/urbantoronto.png"
+    },
+    {
+      "name": "Groundbreak",
+      "logo": "/uploads/press/groundbreak.png"
+    }
+  ]
 }

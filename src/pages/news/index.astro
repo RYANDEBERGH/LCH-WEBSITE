@@ -79,4 +79,13 @@ const topics = [...new Set(news.map((n) => n.data.topic))];
   .ngrid > [hidden] { display: none; }
   @media (max-width: 900px) { .lead { grid-template-columns: 1fr; } .ngrid { grid-template-columns: 1fr 1fr; } }
   @media (max-width: 600px) { .ngrid { grid-template-columns: 1fr; } }
+
+  @media (max-width: 700px) {
+    .ngrid { grid-template-columns: 1fr; gap: 16px; }
+    .ngrid :global(.ncard) { flex-direction: row; gap: 14px; align-items: flex-start; }
+    .ngrid :global(.ncard__media) { flex: 0 0 34%; aspect-ratio: 1 / 1; margin: 0; }
+    .ngrid :global(.ncard__title) { font-size: 15.5px; }
+    .ngrid :global(.ncard__meta) { font-size: 12px; gap: 8px; margin-bottom: 4px; flex-wrap: wrap; }
+    .ngrid :global(.ncard__excerpt) { display: none; }
+  }
 </style>

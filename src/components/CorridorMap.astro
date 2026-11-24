@@ -23,6 +23,39 @@ const kmPx = Y(43.72) - Y(43.72 + 1 / 111.2);
 const uniq = <T extends { name: string }>(a: T[]) => [...new Map(a.map((x) => [x.name, x])).values()];
 const LINE2 = ['Castle Frank', 'Broadview', 'Chester', 'Pape', 'Donlands', 'Greenwood', 'Coxwell', 'Woodbine', 'Main Street', 'Victoria Park', 'Warden', 'Kennedy'];
 const subway = uniq(geo.stations.filter((st) => st.subclass === 'subway' && LINE2.includes(st.name))).sort((a, b) => a.x - b.x);
+// Line 5 Eglinton stops (interchange at Kennedy is drawn with Line 2)
+const LINE5 = ['Laird', 'Sunnybrook Park', 'Don Valley', 'Aga Khan Park & Museum', 'Wynford', 'Sloane', "O'Connor", 'Pharmacy', 'Hakimi Lebovic', 'Golden Mile', 'Birchmount', 'Ionview'];
+const line5 = uniq(geo.stations.filter((st) => st.subclass === 'station' && LINE5.includes(st.name)));
+// Ontario Line (future) stations, snapped to the drawn alignment; interchanges share the existing marker
+const olPts = geo.ontarioLine.flatMap((d: string) => [...d.matchAll(/(-?[\d.]+) (-?[\d.]+)/g)].map((m) => [+m[1], +m[2]]));
+const snap = (x: number, y: number) => olPts.reduce((b, p) => (Math.hypot(p[0] - x, p[1] - y) < Math.hypot(b[0] - x, b[1] - y) ? p : b), olPts[0]);
+const OL = [
+  { name: 'Riverside–Leslieville', lat: 43.6587, lng: -79.3507 },
+  { name: 'Gerrard', lat: 43.6667, lng: -79.3414 },
+  { name: 'Pape', lat: 43.6797, lng: -79.3449, interchange: 'Line 2' },
+  { name: 'Cosburn', lat: 43.6893, lng: -79.3489 },
+  { name: 'Thorncliffe Park', lat: 43.7047, lng: -79.3489 },
+  { name: 'Flemingdon Park', lat: 43.7149, lng: -79.3333 },
+  { name: 'Don Valley', lat: 43.7254, lng: -79.3382, interchange: 'Line 5' },
+];
+const olStations = OL.map((o) => { const [x, y] = snap(X(o.lng), Y(o.lat)); return { ...o, x, y }; })
+  .filter((o) => o.x > -20 && o.x < 1020 && o.y > -20 && o.y < 840 && !o.interchange);
+// Line 2 Scarborough Subway Extension (under construction, Kennedy to Sheppard and McCowan). Station sites from
+// OpenStreetMap construction areas; the route between them is drawn schematically.
+const SSE = [
+  { name: 'Kennedy', lat: 43.7325, lng: -79.2637, existing: true },
+  { lat: 43.7425, lng: -79.2555 },
+  { name: 'Lawrence–McCowan', lat: 43.7549, lng: -79.2447 },
+  { name: 'Scarborough Centre', lat: 43.7745, lng: -79.252 },
+  { name: 'Sheppard–McCowan', lat: 43.7908, lng: -79.258 },
+].map((p) => ({ ...p, x: X(p.lng), y: Y(p.lat) }));
+const kennedy = geo.stations.find((st) => st.name === 'Kennedy' && st.subclass === 'subway');
+if (kennedy) Object.assign(SSE[0], { x: kennedy.x, y: kennedy.y });
+const ssePath = (() => {
+  const [a, v, b, ...rest] = SSE;
+  return `M${a.x} ${a.y}Q${v.x} ${v.y} ${b.x} ${b.y}` + rest.map((p) => `L${p.x} ${p.y}`).join('');
+})();
+const sseStations = SSE.filter((p) => p.name && !p.existing);
 const GO = ['Danforth', 'Scarborough', 'Eglinton', 'Guildwood', 'Rouge Hill'];
 const goStations = uniq(geo.stations.filter((st) => st.subclass === 'station' && GO.includes(st.name)));
 // Line badges: Line 2 at Main Street station, Line 5 at Golden Mile stop, Line 3 near Gerrard & Carlaw
@@ -72,18 +105,18 @@ const L = geo.layers as Record<string, string>;
 
 <section class="cmap section" id={id}>
   <div class="container">
-    {(eyebrow || heading) && (
-      <div class="cmap__head reveal">
-        {eyebrow && <p class="eyebrow">{eyebrow}</p>}
-        {heading && <h2>{heading}</h2>}
-        {body && <p class="lede">{body}</p>}
-      </div>
-    )}
-
     <div class="cmap__grid">
+      <div class="cmap__main">
+      {(eyebrow || heading) && (
+        <div class="cmap__head reveal">
+          {eyebrow && <p class="eyebrow">{eyebrow}</p>}
+          {heading && <h2>{heading}</h2>}
+          {body && <p class="lede">{body}</p>}
+        </div>
+      )}
       <figure class="cmap__figure">
         <div class="cmap__frame" data-frame>
-          <svg viewBox={`0 0 ${W} ${H}`} data-w={W} data-h={H} data-km={kmPx.toFixed(2)} role="img" aria-labelledby={`${id}-title`} class="cmap__svg" data-svg style="--k: 1">
+          <svg viewBox={`0 0 ${W} ${H}`} data-w={W} data-h={H} data-km={kmPx.toFixed(2)} role="img" aria-labelledby={`${id}-title`} class="cmap__svg" preserveAspectRatio="xMidYMid slice" data-svg style="--k: 1">
             <title id={`${id}-title`}>Map of LCH Developments projects in east Toronto</title>
             <defs>
               {roadLabels.map((l, i) => <path id={`${id}-rl-${i}`} d={l.d} />)}
@@ -104,6 +137,7 @@ const L = geo.layers as Record<string, string>;
             {L.lrt && <path d={L.lrt} class="m-line5" />}
             {L.lrtTunnel && <path d={L.lrtTunnel} class="m-line5" />}
             {geo.subwayLines.map((d) => <path d={d} class="m-line2" />)}
+            <path d={ssePath} class="m-line2x" />
             {geo.kingston.map((k) => <path d={k} class="m-kingston-casing" />)}
             {geo.kingston.map((k) => <path d={k} class="m-kingston" />)}
 
@@ -132,9 +166,30 @@ const L = geo.layers as Record<string, string>;
 
             {subway.map((st) => (
               <g class="m-fixed m-station m-station--subway" style={`transform: translate(${st.x}px, ${st.y}px) scale(calc(var(--k) * var(--ps, 1)))`}>
-                <title>{st.name} station (Line 2)</title>
+                <title>{st.name} station (Line 2{st.name === 'Pape' ? ', future Ontario Line interchange' : st.name === 'Kennedy' ? ' and Line 5' : ''})</title>
                 <circle r="4.5" />
                 <text y="-9" text-anchor="middle" class="m-zoom-only">{st.name}</text>
+              </g>
+            ))}
+            {line5.map((st) => (
+              <g class="m-fixed m-station m-station--l5" style={`transform: translate(${st.x}px, ${st.y}px) scale(calc(var(--k) * var(--ps, 1)))`}>
+                <title>{st.name} stop (Line 5{st.name === 'Don Valley' ? ', future Ontario Line interchange' : ''})</title>
+                <circle r="3.8" />
+                <text y="-8" text-anchor="middle" class="m-zoom-only">{st.name}</text>
+              </g>
+            ))}
+            {sseStations.map((st) => (
+              <g class="m-fixed m-station m-station--l2x" style={`transform: translate(${st.x}px, ${st.y}px) scale(calc(var(--k) * var(--ps, 1)))`}>
+                <title>{st.name} station (Line 2 extension, under construction)</title>
+                <circle r="3.8" />
+                <text x="8" y="4" class="m-zoom-only">{st.name}</text>
+              </g>
+            ))}
+            {olStations.map((st) => (
+              <g class="m-fixed m-station m-station--l3" style={`transform: translate(${st.x}px, ${st.y}px) scale(calc(var(--k) * var(--ps, 1)))`}>
+                <title>{st.name} station (Ontario Line, under construction)</title>
+                <circle r="3.8" />
+                <text x="8" y="4" class="m-zoom-only">{st.name}</text>
               </g>
             ))}
             {lineBadges.map((b) => (
@@ -181,14 +236,16 @@ const L = geo.layers as Record<string, string>;
         <figcaption class="cmap__legend">
           <span><i class="lg lg--pin"></i>LCH project, in its brand colour</span>
           <span><i class="lg lg--road"></i>Kingston Road</span>
-          <span><i class="lg lg--l2"></i>Line 2 Bloor-Danforth</span>
-          <span><i class="lg lg--l5"></i>Line 5 Eglinton</span>
-          <span><i class="lg lg--l3"></i>Line 3 Ontario Line (future)</span>
+          <span><i class="lg lg--l2"></i>Line 2 Bloor-Danforth and stations</span>
+          <span><i class="lg lg--l2x"></i>Line 2 extension (under construction)</span>
+          <span><i class="lg lg--l5"></i>Line 5 Eglinton and stops</span>
+          <span><i class="lg lg--l3"></i>Line 3 Ontario Line and stations (future)</span>
           <span><i class="lg lg--rail"></i>GO rail and station</span>
           <span><i class="lg lg--park"></i>Park, ravine or woodland</span>
           <span class="cmap__attr">Map data © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> contributors · © OpenMapTiles · OpenFreeMap</span>
         </figcaption>
       </figure>
+      </div>
 
       <div class="cmap__list">
         <ol class="cmap__items">
@@ -205,7 +262,6 @@ const L = geo.layers as Record<string, string>;
                   {p.data.heroImage && <Img src={p.data.heroImage} alt="" sizes="320px" />}
                   <p class="cmap__addr">{p.data.address}<br />{p.data.neighbourhood}</p>
                   {p.data.leasing?.status && <p class="cmap__leasing" style={`color: ${color}`}>Leasing: {p.data.leasing.status}</p>}
-                  {m && <p class="cmap__latest"><strong>{formatMilestoneDate(m.date)}</strong> {m.label}</p>}
                   <a class="link-arrow" href={`/projects/${p.id}/`}>View {p.data.title} →</a>
                 </div>
               </li>
@@ -391,6 +447,10 @@ const L = geo.layers as Record<string, string>;
   /* TTC lines: 2 and 5 bold solid; 3 (Ontario Line, under construction) dashed */
   .m-line2 { fill: none; stroke: #00923f; stroke-width: 4; stroke-linecap: round; stroke-linejoin: round; }
   .m-line5 { fill: none; stroke: #f8991d; stroke-width: 4; stroke-linecap: round; stroke-linejoin: round; }
+  .m-line2x { fill: none; stroke: #00923f; stroke-width: 3.5; stroke-linecap: butt; stroke-dasharray: 9 6; }
+  .is-zoomed .m-line2x { stroke-width: 4.5; }
+  .m-station--l2x circle { fill: #fff; stroke: #00923f; stroke-width: 2.4; stroke-dasharray: 3 2; }
+  .lg--l2x { width: 24px; height: 0; border-top: 3.5px dashed #00923f; }
   .m-line3 { fill: none; stroke: #3fa9dd; stroke-width: 3.5; stroke-linecap: butt; stroke-dasharray: 9 6; }
   .is-zoomed .m-line2, .is-zoomed .m-line5 { stroke-width: 5.5; }
   .is-zoomed .m-line3 { stroke-width: 4.5; }
@@ -419,6 +479,8 @@ const L = geo.layers as Record<string, string>;
   .m-poi--landmark rect { fill: #3b3934; }
   .m-station--subway circle { fill: #fff; stroke: #00923f; stroke-width: 2.4; }
   .m-station--go rect { fill: #2f7d5a; }
+  .m-station--l5 circle { fill: #fff; stroke: #f8991d; stroke-width: 2.4; }
+  .m-station--l3 circle { fill: #fff; stroke: #3fa9dd; stroke-width: 2.4; stroke-dasharray: 3 2; }
   .m-station--go text { font-weight: 600; fill: #2f5e47; }
   .m-zoom-only { display: none; }
   .is-zoomed .m-zoom-only { display: block; }
@@ -495,5 +557,26 @@ const L = geo.layers as Record<string, string>;
     .m-poi text, .m-hood, .m-station--go text, .m-roadlabel, .m-linebadge__name { display: none; }
     .is-zoomed .m-poi text, .is-zoomed .m-hood, .is-zoomed .m-station--go text, .is-zoomed .m-roadlabel, .is-zoomed .m-linebadge__name { display: block; }
     .cmap__hint { display: none; }
+  }
+
+  /* Desktop: the whole map section fits one screen */
+  @media (min-width: 961px) {
+    .cmap__head { margin-bottom: 16px; max-width: none; }
+    .cmap__head h2 { margin-bottom: 6px; }
+    .cmap__head .lede { margin: 0; max-width: none; font-size: 15.5px; }
+    .cmap { padding-bottom: 28px !important; }
+    /* Heading and a 4:3 map on the left; the project list runs the full height on the right */
+    .cmap { --mh: clamp(380px, calc(100vh - 412px), 640px); }
+    .cmap__grid { grid-template-columns: min(calc(var(--mh) * 4 / 3), 60%) minmax(0, 440px); justify-content: space-between; }
+    .cmap__svg { height: auto; width: 100%; aspect-ratio: 4 / 3; }
+    .cmap__btn { padding: 5px 4px; }
+    .cmap__list { padding-top: 36px; } /* lines the list up with the "Explore our projects" heading */
+    .cmap__detail { gap: 6px; padding-bottom: 12px; }
+    .cmap__legend { margin-top: 8px; gap: 4px 16px; }
+  }
+
+  @media (max-width: 700px) {
+    .cmap__legend { display: none; }
+    .cmap__detail :global(img) { aspect-ratio: 16 / 8; }
   }
 </style>

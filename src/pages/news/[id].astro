@@ -12,7 +12,7 @@ export async function getStaticPaths() {
 const { post } = Astro.props;
 const d = post.data;
 const { Content } = await render(post);
-const project = d.project ? await getEntry('projects', d.project) : undefined;
+const linked = (await Promise.all([...new Set([d.project, ...(d.projects ?? [])].filter(Boolean))].map((id) => getEntry('projects', id as string)))).filter(Boolean);
 const more = (await getNews()).filter((n) => n.id !== post.id).slice(0, 3);
 // Hide the body's own trailing "Read More" link when we show a proper source button
 const hasBody = post.body && post.body.replace(/\[Read More\]\([^)]*\)/gi, '').trim().length > 0;
@@ -24,7 +24,7 @@ const hasBody = post.body && post.body.replace(/\[Read More\]\([^)]*\)/gi, '').t
       <a class="back" href="/news/">← All news</a>
       <p class="post__meta"><span>{d.topic}</span> · <time datetime={d.date.toISOString()}>{formatDate(d.date)}</time></p>
       <h1>{d.title}</h1>
-      {project && <p class="post__project">Project: <a href={`/projects/${project.id}/`}>{project.data.title}</a></p>}
+      {linked.length > 0 && <p class="post__project">{linked.length > 1 ? 'Projects' : 'Project'}: {linked.map((pr, i) => <>{i > 0 && ', '}<a href={`/projects/${pr!.id}/`}>{pr!.data.title}</a></>)}</p>}
     </div></header>
     {d.image && (
       <div class="container post__image">
@@ -34,7 +34,7 @@ const hasBody = post.body && post.body.replace(/\[Read More\]\([^)]*\)/gi, '').t
     <div class="container"><div class:list={["post__body", { "has-source": d.sourceUrl }]}>
       {hasBody ? <div class="prose"><Content /></div> : d.excerpt && <p class="lede">{d.excerpt}</p>}
       {d.sourceUrl && (
-        <a class="btn" href={d.sourceUrl} target="_blank" rel="noopener">Read the full article <span class="arrow" aria-hidden="true">↗</span></a>
+        <a class="btn post__source" href={d.sourceUrl} target="_blank" rel="noopener">Read the full article{d.publisher ? ` on ${d.publisher}` : ""} <span class="arrow" aria-hidden="true">↗</span></a>
       )}
     </div></div>
   </article>
