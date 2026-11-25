@@ -31,7 +31,13 @@
       "label": "2012–2017",
       "title": "Lifestyle Custom Homes",
       "text": "LCH began as Lifestyle Custom Homes, building precision custom homes. That hands-on experience in design, procurement and site delivery shaped the kind of development we wanted to do next: well-built communities at higher density.",
-      "images": [],
+      "images": [
+        {
+          "image": "/uploads/wywrot-brothers.jpg",
+          "alt": "Lukasz and Michal Wywrot, founders of Lifestyle Custom Homes",
+          "caption": ""
+        }
+      ],
       "projects": []
     },
     {
