@@ -25,37 +25,156 @@
     X-Content-Type-Options = "nosniff"
     Referrer-Policy = "strict-origin-when-cross-origin"
 
-[[redirects]]
-  from = "/story/*"
-  to = "/about/"
-  status = 301
+# ── Old WordPress URLs → new pages (permanent 301). Generated from docs/redirect-map.csv.
+# Netlify matches each rule with or without a trailing slash, so one rule covers both.
+# Old pages with no new equivalent (e.g. /corporate) are left out on purpose and return a real 404.
 [[redirects]]
   from = "/story"
   to = "/about/"
   status = 301
-
-# ── Redirects from the old WordPress site, so existing links & Google results keep working ──
+  force = true
 [[redirects]]
-  from = "/media/*"
+  from = "/media"
   to = "/news/"
   status = 301
+  force = true
 [[redirects]]
-  from = "/category/*"
+  from = "/2021/03/25/lch-collaborates-with-the-scarborough-food-security-initiative"
+  to = "/news/lch-collaborates-with-the-scarborough-food-security-initiative/"
+  status = 301
+  force = true
+[[redirects]]
+  from = "/2023/05/22/remi-network-art-infused-creative-hub-comes-to-scarborough"
+  to = "/news/remi-network-art-infused-creative-hub-comes-to-scarborough/"
+  status = 301
+  force = true
+[[redirects]]
+  from = "/2022/01/21/urbantoronto-textured-mid-rise-condo-proposed-on-kingston-road-in-west-hill"
+  to = "/news/urbantoronto-textured-mid-rise-condo-proposed-on-kingston-road-in-west-hill/"
+  status = 301
+  force = true
+[[redirects]]
+  from = "/2023/05/22/urban-toronto-lch-proposes-development-on-kingston-road-in-scarborough-village"
+  to = "/news/urban-toronto-lch-proposes-development-on-kingston-road-in-scarborough-village/"
+  status = 301
+  force = true
+[[redirects]]
+  from = "/2020/10/10/merge-condos-breaks-ground"
+  to = "/news/merge-condos-breaks-ground/"
+  status = 301
+  force = true
+[[redirects]]
+  from = "/2026/11/06/urban-toronto-everston-sheds-crane-as-angled-balconies-define-kingston-road-frontage"
+  to = "/news/urban-toronto-everston-sheds-crane-as-angled-balconies-define-kingston-road-frontage/"
+  status = 301
+  force = true
+[[redirects]]
+  from = "/2026/11/05/urban-toronto-crane-rises-high-at-cliffside-site-in-scarborough"
+  to = "/news/urban-toronto-crane-rises-high-at-cliffside-site-in-scarborough/"
+  status = 301
+  force = true
+[[redirects]]
+  from = "/2026/05/29/urban-toronto-everston-nears-topping-off-in-scarboroughs-west-hill"
+  to = "/news/urban-toronto-everston-nears-topping-off-in-scarboroughs-west-hill/"
+  status = 301
+  force = true
+[[redirects]]
+  from = "/2025/10/21/october-17-2025-everston-cranes-are-up-and-online"
+  to = "/news/october-17-2025-everston-cranes-are-up-and-online/"
+  status = 301
+  force = true
+[[redirects]]
+  from = "/2022/08/18/young-ambitious-lch-developments-corners-t-o-s-kingston-rd"
+  to = "/news/young-ambitious-lch-developments-corners-t-o-s-kingston-rd/"
+  status = 301
+  force = true
+[[redirects]]
+  from = "/2025/03/06/4630-kingston-road-demolition-has-begun"
+  to = "/news/4630-kingston-road-demolition-has-begun/"
+  status = 301
+  force = true
+[[redirects]]
+  from = "/2025/07/21/july-21-2025-4630-kingston-road-shoring-begins"
+  to = "/news/july-21-2025-4630-kingston-road-shoring-begins/"
+  status = 301
+  force = true
+[[redirects]]
+  from = "/2026/06/29/lch-developments-and-fiera-real-estate-announce-strategic-partnership"
+  to = "/news/lch-developments-and-fiera-real-estate-announce-strategic-partnership/"
+  status = 301
+  force = true
+[[redirects]]
+  from = "/2023/05/22/blogto-a-jewel-like-condo-building-will-rise-from-a-more-than-100-year-old-toronto-church"
+  to = "/news/blogto-a-jewel-like-condo-building-will-rise-from-a-more-than-100-year-old-toronto-church/"
+  status = 301
+  force = true
+[[redirects]]
+  from = "/2023/05/22/urbantoronto-merge-condos-boasts-multi-tonal-cladding-to-articulate-exterior"
+  to = "/news/urbantoronto-merge-condos-boasts-multi-tonal-cladding-to-articulate-exterior/"
+  status = 301
+  force = true
+[[redirects]]
+  from = "/2021/03/25/urbantoronto-merge-condos-construction-progressing-on-kingston-road"
+  to = "/news/urbantoronto-merge-condos-construction-progressing-on-kingston-road/"
+  status = 301
+  force = true
+[[redirects]]
+  from = "/2020/09/08/modern-living-in-east-toronto"
+  to = "/news/modern-living-in-east-toronto/"
+  status = 301
+  force = true
+[[redirects]]
+  from = "/2020/09/02/top-5-townhouses-toronto"
+  to = "/news/top-5-townhouses-toronto/"
+  status = 301
+  force = true
+[[redirects]]
+  from = "/2020/09/02/one6nine-jones-leslieville"
+  to = "/news/one6nine-jones-leslieville/"
+  status = 301
+  force = true
+[[redirects]]
+  from = "/category/broadview"
+  to = "/projects/415-broadview/"
+  status = 301
+  force = true
+[[redirects]]
+  from = "/category/cliffside"
+  to = "/projects/cliffside/"
+  status = 301
+  force = true
+[[redirects]]
+  from = "/category/community"
   to = "/news/"
   status = 301
+  force = true
+[[redirects]]
+  from = "/category/everston"
+  to = "/projects/everston/"
+  status = 301
+  force = true
+[[redirects]]
+  from = "/category/merge-condos"
+  to = "/projects/merge-condos/"
+  status = 301
+  force = true
+[[redirects]]
+  from = "/category/merge-spaces"
+  to = "/projects/merge-spaces/"
+  status = 301
+  force = true
+[[redirects]]
+  from = "/category/other"
+  to = "/news/"
+  status = 301
+  force = true
+[[redirects]]
+  from = "/category/retreat"
+  to = "/projects/retreat/"
+  status = 301
+  force = true
 [[redirects]]
   from = "/legal/*"
   to = "/:splat"
   status = 301
-[[redirects]]
-  from = "/:year/:month/:day/:slug/"
-  to = "/news/:slug/"
-  status = 301
-[[redirects]]
-  from = "/:year/:month/:day/:slug"
-  to = "/news/:slug/"
-  status = 301
-[[redirects]]
-  from = "/wp-admin/*"
-  to = "/admin/"
-  status = 301
+  force = true

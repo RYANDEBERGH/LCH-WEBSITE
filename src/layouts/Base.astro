@@ -9,8 +9,10 @@ interface Props {
   image?: string;
   /** Header sits transparent on top of a full-bleed hero image */
   overlay?: boolean;
+  /** Keep this page out of search results (thank-you, 404) */
+  noindex?: boolean;
 }
-const { title, description = settings.metaDescription, image = '/uploads/everston-evening-2.png', overlay = false } = Astro.props;
+const { title, description = settings.metaDescription, image = '/uploads/everston-evening-2.png', overlay = false, noindex = false } = Astro.props;
 const fullTitle = title ? `${title} | ${settings.siteName}` : `${settings.siteName} | Toronto Real Estate Developer`;
 const canonical = new URL(Astro.url.pathname, Astro.site);
 const ogImage = new URL(image.replace(/^\/uploads\//, '/_img/').replace(/\.[^.]+$/, '-1600.webp'), Astro.site);
@@ -46,6 +48,7 @@ const orgLd = {
     <title>{fullTitle}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
+    {noindex && <meta name="robots" content="noindex" />}
     <link rel="icon" href="/favicon.ico" sizes="32x32" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="icon" href="/favicon.png" type="image/png" sizes="48x48" />

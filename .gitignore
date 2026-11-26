@@ -7,3 +7,6 @@ public/_img/
 scripts/.tilecache/
 scripts/.geocache.json
 scripts/.ontario-line-cache.json
+
+# Local Netlify folder
+.netlify

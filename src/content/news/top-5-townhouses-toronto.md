@@ -9,4 +9,4 @@ publisher: "blogTO"
 excerpt: "blogTO named One6Nine Jones, LCH's 12 townhomes at 169–175 Jones Avenue in Leslieville, among the top five new townhouse projects in Toronto."
 ---
 
-
+Our townhouses at 169–175 Jones Avenue were featured in blogTO’s list of the top five new townhouse projects in Toronto. We are honoured by the shout-out!

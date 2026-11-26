@@ -4,7 +4,7 @@ import PageHero from '../components/PageHero.astro';
 import { contact } from '../lib/site';
 ---
 
-<Base title="Thank you">
+<Base title="Thank you" description="Thanks for contacting LCH Developments. We will be in touch shortly." noindex>
   <PageHero eyebrow="Message received" heading="Thank you." lede={contact.formSuccess}>
     <p style="margin-top:32px"><a class="btn" href="/">Back to home <span class="arrow" aria-hidden="true">→</span></a></p>
   </PageHero>

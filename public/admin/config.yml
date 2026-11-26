@@ -6,7 +6,7 @@
 
 backend:
   name: github
-  repo: YOUR-GITHUB-USERNAME/lch-website   # ← change to your repository
+  repo: RYANDEBERGH/LCH-WEBSITE
   branch: main
   commit_messages:
     create: 'Create {{collection}} “{{slug}}”'
