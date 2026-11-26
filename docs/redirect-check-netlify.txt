@@ -1,0 +1,71 @@
+(node:439) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+(Use `node --trace-warnings ...` to show where the warning was created)
+PASS  /                                                                       200              /
+PASS  /projects                                                               301 → 200        /projects/
+PASS  /projects/                                                              200              /projects/
+PASS  /story                                                                  301 → 200        /about/
+PASS  /story/                                                                 301 → 200        /about/
+PASS  /media                                                                  301 → 200        /news/
+PASS  /media/                                                                 301 → 200        /news/
+PASS  /contact                                                                301 → 200        /contact/
+PASS  /contact/                                                               200              /contact/
+PASS  /corporate                                                              404              /corporate
+PASS  /corporate/                                                             404              /corporate/
+PASS  /privacy-policy                                                         301 → 200        /privacy-policy/
+PASS  /privacy-policy/                                                        200              /privacy-policy/
+PASS  /2021/03/25/lch-collaborates-with-the-scarborough-food-security-initiative  301 → 200        /news/lch-collaborates-with-the-scarborough-food-security-initiative/
+PASS  /2021/03/25/lch-collaborates-with-the-scarborough-food-security-initiative/  301 → 200        /news/lch-collaborates-with-the-scarborough-food-security-initiative/
+PASS  /2023/05/22/remi-network-art-infused-creative-hub-comes-to-scarborough  301 → 200        /news/remi-network-art-infused-creative-hub-comes-to-scarborough/
+PASS  /2023/05/22/remi-network-art-infused-creative-hub-comes-to-scarborough/  301 → 200        /news/remi-network-art-infused-creative-hub-comes-to-scarborough/
+PASS  /2022/01/21/urbantoronto-textured-mid-rise-condo-proposed-on-kingston-road-in-west-hill  301 → 200        /news/urbantoronto-textured-mid-rise-condo-proposed-on-kingston-road-in-west-hill/
+PASS  /2022/01/21/urbantoronto-textured-mid-rise-condo-proposed-on-kingston-road-in-west-hill/  301 → 200        /news/urbantoronto-textured-mid-rise-condo-proposed-on-kingston-road-in-west-hill/
+PASS  /2023/05/22/urban-toronto-lch-proposes-development-on-kingston-road-in-scarborough-village  301 → 200        /news/urban-toronto-lch-proposes-development-on-kingston-road-in-scarborough-village/
+PASS  /2023/05/22/urban-toronto-lch-proposes-development-on-kingston-road-in-scarborough-village/  301 → 200        /news/urban-toronto-lch-proposes-development-on-kingston-road-in-scarborough-village/
+PASS  /2020/10/10/merge-condos-breaks-ground                                  301 → 200        /news/merge-condos-breaks-ground/
+PASS  /2020/10/10/merge-condos-breaks-ground/                                 301 → 200        /news/merge-condos-breaks-ground/
+PASS  /2026/11/06/urban-toronto-everston-sheds-crane-as-angled-balconies-define-kingston-road-frontage  301 → 200        /news/urban-toronto-everston-sheds-crane-as-angled-balconies-define-kingston-road-frontage/
+PASS  /2026/11/06/urban-toronto-everston-sheds-crane-as-angled-balconies-define-kingston-road-frontage/  301 → 200        /news/urban-toronto-everston-sheds-crane-as-angled-balconies-define-kingston-road-frontage/
+PASS  /2026/11/05/urban-toronto-crane-rises-high-at-cliffside-site-in-scarborough  301 → 200        /news/urban-toronto-crane-rises-high-at-cliffside-site-in-scarborough/
+PASS  /2026/11/05/urban-toronto-crane-rises-high-at-cliffside-site-in-scarborough/  301 → 200        /news/urban-toronto-crane-rises-high-at-cliffside-site-in-scarborough/
+PASS  /2026/05/29/urban-toronto-everston-nears-topping-off-in-scarboroughs-west-hill  301 → 200        /news/urban-toronto-everston-nears-topping-off-in-scarboroughs-west-hill/
+PASS  /2026/05/29/urban-toronto-everston-nears-topping-off-in-scarboroughs-west-hill/  301 → 200        /news/urban-toronto-everston-nears-topping-off-in-scarboroughs-west-hill/
+PASS  /2025/10/21/october-17-2025-everston-cranes-are-up-and-online           301 → 200        /news/october-17-2025-everston-cranes-are-up-and-online/
+PASS  /2025/10/21/october-17-2025-everston-cranes-are-up-and-online/          301 → 200        /news/october-17-2025-everston-cranes-are-up-and-online/
+PASS  /2022/08/18/young-ambitious-lch-developments-corners-t-o-s-kingston-rd  301 → 200        /news/young-ambitious-lch-developments-corners-t-o-s-kingston-rd/
+PASS  /2022/08/18/young-ambitious-lch-developments-corners-t-o-s-kingston-rd/  301 → 200        /news/young-ambitious-lch-developments-corners-t-o-s-kingston-rd/
+PASS  /2025/03/06/4630-kingston-road-demolition-has-begun                     301 → 200        /news/4630-kingston-road-demolition-has-begun/
+PASS  /2025/03/06/4630-kingston-road-demolition-has-begun/                    301 → 200        /news/4630-kingston-road-demolition-has-begun/
+PASS  /2025/07/21/july-21-2025-4630-kingston-road-shoring-begins              301 → 200        /news/july-21-2025-4630-kingston-road-shoring-begins/
+PASS  /2025/07/21/july-21-2025-4630-kingston-road-shoring-begins/             301 → 200        /news/july-21-2025-4630-kingston-road-shoring-begins/
+PASS  /2026/06/29/lch-developments-and-fiera-real-estate-announce-strategic-partnership  301 → 200        /news/lch-developments-and-fiera-real-estate-announce-strategic-partnership/
+PASS  /2026/06/29/lch-developments-and-fiera-real-estate-announce-strategic-partnership/  301 → 200        /news/lch-developments-and-fiera-real-estate-announce-strategic-partnership/
+PASS  /2023/05/22/blogto-a-jewel-like-condo-building-will-rise-from-a-more-than-100-year-old-toronto-church  301 → 200        /news/blogto-a-jewel-like-condo-building-will-rise-from-a-more-than-100-year-old-toronto-church/
+PASS  /2023/05/22/blogto-a-jewel-like-condo-building-will-rise-from-a-more-than-100-year-old-toronto-church/  301 → 200        /news/blogto-a-jewel-like-condo-building-will-rise-from-a-more-than-100-year-old-toronto-church/
+PASS  /2023/05/22/urbantoronto-merge-condos-boasts-multi-tonal-cladding-to-articulate-exterior  301 → 200        /news/urbantoronto-merge-condos-boasts-multi-tonal-cladding-to-articulate-exterior/
+PASS  /2023/05/22/urbantoronto-merge-condos-boasts-multi-tonal-cladding-to-articulate-exterior/  301 → 200        /news/urbantoronto-merge-condos-boasts-multi-tonal-cladding-to-articulate-exterior/
+PASS  /2021/03/25/urbantoronto-merge-condos-construction-progressing-on-kingston-road  301 → 200        /news/urbantoronto-merge-condos-construction-progressing-on-kingston-road/
+PASS  /2021/03/25/urbantoronto-merge-condos-construction-progressing-on-kingston-road/  301 → 200        /news/urbantoronto-merge-condos-construction-progressing-on-kingston-road/
+PASS  /2020/09/08/modern-living-in-east-toronto                               301 → 200        /news/modern-living-in-east-toronto/
+PASS  /2020/09/08/modern-living-in-east-toronto/                              301 → 200        /news/modern-living-in-east-toronto/
+PASS  /2020/09/02/top-5-townhouses-toronto                                    301 → 200        /news/top-5-townhouses-toronto/
+PASS  /2020/09/02/top-5-townhouses-toronto/                                   301 → 200        /news/top-5-townhouses-toronto/
+PASS  /2020/09/02/one6nine-jones-leslieville                                  301 → 200        /news/one6nine-jones-leslieville/
+PASS  /2020/09/02/one6nine-jones-leslieville/                                 301 → 200        /news/one6nine-jones-leslieville/
+PASS  /category/broadview                                                     301 → 200        /projects/415-broadview/
+PASS  /category/broadview/                                                    301 → 200        /projects/415-broadview/
+PASS  /category/cliffside                                                     301 → 200        /projects/cliffside/
+PASS  /category/cliffside/                                                    301 → 200        /projects/cliffside/
+PASS  /category/community                                                     301 → 200        /news/
+PASS  /category/community/                                                    301 → 200        /news/
+PASS  /category/everston                                                      301 → 200        /projects/everston/
+PASS  /category/everston/                                                     301 → 200        /projects/everston/
+PASS  /category/merge-condos                                                  301 → 200        /projects/merge-condos/
+PASS  /category/merge-condos/                                                 301 → 200        /projects/merge-condos/
+PASS  /category/merge-spaces                                                  301 → 200        /projects/merge-spaces/
+PASS  /category/merge-spaces/                                                 301 → 200        /projects/merge-spaces/
+PASS  /category/other                                                         301 → 200        /news/
+PASS  /category/other/                                                        301 → 200        /news/
+PASS  /category/retreat                                                       301 → 200        /projects/retreat/
+PASS  /category/retreat/                                                      301 → 200        /projects/retreat/
+
+67/67 passed against https://lch-website.netlify.app
