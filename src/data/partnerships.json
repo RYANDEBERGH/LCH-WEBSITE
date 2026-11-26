@@ -208,8 +208,8 @@
             ]
           },
           {
-            "name": "Scarborough Food Security Initiative",
-            "note": "Community partner",
+            "name": "UBC Built (United Brotherhood of Carpenters, Local 1030)",
+            "note": "Labour partner",
             "projects": []
           }
         ]
@@ -473,25 +473,11 @@
             ]
           },
           {
-            "name": "SmartOne",
-            "note": "Smart building systems",
-            "projects": [
-              "everston"
-            ]
-          },
-          {
             "name": "Stephensons Engineering",
             "note": "Structural",
             "projects": [
               "retreat",
               "cliffside",
-              "everston"
-            ]
-          },
-          {
-            "name": "Subterra",
-            "note": "Geothermal",
-            "projects": [
               "everston"
             ]
           },
@@ -900,13 +886,6 @@
             "projects": [
               "everston",
               "cliffside"
-            ]
-          },
-          {
-            "name": "Norstar",
-            "note": "Windows and balcony railings",
-            "projects": [
-              "merge-condos"
             ]
           },
           {

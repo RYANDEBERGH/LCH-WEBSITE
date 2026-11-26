@@ -69,8 +69,27 @@ milestones:
     label: "Reported topped off, tower crane removed and exterior mostly clad"
     source: "UrbanToronto"
     sourceUrl: "https://urbantoronto.ca/news/2026/10/everston-sheds-crane-angled-balconies-define-kingston-road-frontage.62077"
+schedule:
+  - name: "Demolition"
+    start: "2025-03-06"
+    end: "2025-07-20"
+  - name: "Shoring and excavation"
+    start: "2025-07-21"
+    end: "2025-11-27"
+  - name: "Foundations and below-grade construction"
+    start: "2025-09-17"
+    end: "2026-02-17"
+  - name: "Superstructure"
+    start: "2026-02-18"
+    end: "2026-05-29"
+  - name: "Interior finishing and exterior works"
+    start: "2026-04-20"
+    end: "2027-01-26"
+  - name: "Commissioning and occupancy inspections"
+    start: "2026-11-24"
+    end: "2027-02-25"
+  - name: "Phase 1 move-ins begin"
+    start: "2027-03-01"
+    end: "2027-03-01"
 ---
-
-Now pre-leasing, Everston is bringing 566 purpose-built rental apartments to Scarborough’s West Hill neighbourhood, close to the University of Toronto Scarborough and Highland Creek Valley. Discover a home to find balance, with the energy of the city and the tranquillity of nearby parks and trails. Welcome to Everston, Apartments by the Campus Valley. Created with purpose and intention to build an A+ Community.
-
-Everston is designed with functionality, convenience, comfort and style in every corner, from thoughtfully planned suites to amenities that make room for fitness, relaxation and connection. Everston is a launchpad for personal and professional growth. Welcome home.
+Now pre-leasing, Everston brings 566 purpose-built rental apartments to Scarborough’s West Hill, close to the University of Toronto Scarborough, Centennial College and Highland Creek Valley. Thoughtfully planned suites and amenities for fitness, relaxation and connection, with the energy of the city and the calm of nearby parks and trails.
