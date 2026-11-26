@@ -256,6 +256,24 @@ const facts = [
   }
 </script>
 
+<script>
+  // Header photo parallax: drifts at about a third of the scroll speed. Off for reduced-motion visitors.
+  const bg = document.querySelector<HTMLElement>('.phead__bg');
+  const head = document.querySelector<HTMLElement>('.phead');
+  if (bg && head && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    bg.classList.add('is-parallax');
+    let ticking = false;
+    const update = () => {
+      ticking = false;
+      const h = head.offsetHeight;
+      const y = Math.min(window.scrollY, h);
+      bg.style.transform = `translate3d(0, ${(y * 0.32).toFixed(1)}px, 0)`;
+    };
+    addEventListener('scroll', () => { if (!ticking) { ticking = true; requestAnimationFrame(update); } }, { passive: true });
+    update();
+  }
+</script>
+
 <style>
   .phead { position: relative; overflow: hidden; height: calc(82svh - var(--announce-h)); min-height: 480px; display: flex; align-items: flex-end; color: var(--paper); isolation: isolate; padding-block: calc(var(--header-h) + 64px) clamp(48px, 7vw, 88px); }
   .phead::after { content: ''; position: absolute; inset: 0; z-index: -1; background:
@@ -281,6 +299,8 @@ const facts = [
     .pstats__cta { grid-column: 1 / -1; margin: 16px 0; text-align: center; }
   }
   :global(.phead__bg) { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: -2; }
+  /* Parallax: the photo is taller than the header and drifts slower than the page as you scroll */
+  :global(.phead__bg.is-parallax) { top: -12%; height: 124%; will-change: transform; }
   .phead__content { display: flex; flex-direction: column; align-items: flex-start; gap: 18px; }
   .phead h1 { font-size: clamp(40px, 5.4vw, 76px); line-height: 1; }
   .phead__loc { font-size: 18px; color: rgba(246, 244, 239, 0.85); margin: 0; }

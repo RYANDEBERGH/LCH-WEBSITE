@@ -128,9 +128,8 @@ const partnerDir = new Map<string, { note?: string; logo?: string; logoKeep?: bo
                 <p class="feature__facts">{facts.join('\n')}</p>
                 {p.data.schedule?.length > 0 && (
                   <div class="fprog" data-schedule={JSON.stringify(p.data.schedule)} hidden>
-                    <div class="fprog__top"><span class="fprog__label">Construction schedule</span><span class="fprog__pct"></span></div>
+                    <div class="fprog__top"><span class="fprog__label">Construction progress</span><span class="fprog__pct"></span></div>
                     <div class="fprog__bar"><span></span></div>
-                    <p class="fprog__now"></p>
                   </div>
                 )}
                 <div class="feature__links">
@@ -275,7 +274,6 @@ const partnerDir = new Map<string, { note?: string; logo?: string; logoKeep?: bo
   }
 
   // Live construction progress on the project tiles, worked out from each project's schedule on every visit
-  const monthYear = (d: Date) => d.toLocaleDateString('en-CA', { month: 'long', year: 'numeric' });
   document.querySelectorAll<HTMLElement>('.fprog[data-schedule]').forEach((el) => {
     const phases = (JSON.parse(el.dataset.schedule || '[]') as { name: string; start: string; end: string }[])
       .map((ph) => ({ ...ph, s: new Date(ph.start + 'T00:00:00'), e: new Date(ph.end + 'T23:59:59') }))
@@ -284,13 +282,8 @@ const partnerDir = new Map<string, { note?: string; logo?: string; logoKeep?: bo
     const now = new Date(), first = phases[0].s, last = phases.reduce((m, ph) => (ph.e > m ? ph.e : m), phases[0].e);
     if (now > last) return;
     const pct = Math.max(0, Math.min(100, ((+now - +first) / (+last - +first)) * 100));
-    const current = phases.filter((ph) => ph.s <= now && now <= ph.e).pop();
-    const next = phases.find((ph) => ph.s > now);
-    el.querySelector<HTMLElement>('.fprog__pct')!.textContent = now < first ? 'Starting soon' : `${Math.round(pct)}% through`;
+    el.querySelector<HTMLElement>('.fprog__pct')!.textContent = now < first ? 'Starting soon' : `${Math.round(pct)}%`;
     el.querySelector<HTMLElement>('.fprog__bar span')!.style.setProperty('--p', `${pct}%`);
-    el.querySelector<HTMLElement>('.fprog__now')!.textContent = current
-      ? `Now: ${current.name}${next ? ` · Next: ${next.name}, ${monthYear(next.s)}` : ''}`
-      : next ? `Next: ${next.name}, ${monthYear(next.s)}` : '';
     el.hidden = false;
   });
 
@@ -375,14 +368,15 @@ const partnerDir = new Map<string, { note?: string; logo?: string; logoKeep?: bo
   .section-head--row { display: flex; justify-content: space-between; align-items: flex-end; gap: 24px; flex-wrap: wrap; }
 
   .features { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(12px, 1.6vw, 20px); }
-  .feature { position: relative; overflow: hidden; border-radius: var(--radius); aspect-ratio: 3 / 4.2; min-height: 520px; display: flex; align-items: flex-end; color: #fff; isolation: isolate; }
+  .feature { position: relative; overflow: hidden; border-radius: var(--radius); aspect-ratio: 3 / 4.2; min-height: 520px; display: flex; flex-direction: column; justify-content: space-between; color: #fff; isolation: isolate; }
   .feature__media { position: absolute; inset: 0; z-index: -2; }
   .feature__media { overflow: hidden; }
   .feature__media :global(img) { position: absolute; left: 0; top: var(--tile-top, 0); width: 100%; height: var(--tile-h, 100%); object-fit: cover; object-position: var(--tile-x, 50%) 50%; transition: transform 1.4s var(--ease); }
   .feature:hover .feature__media :global(img) { transform: scale(1.04); }
   .feature::after { content: ''; position: absolute; inset: 0; z-index: -1; pointer-events: none; background: linear-gradient(0deg, color-mix(in srgb, var(--fb) 96%, transparent) 0%, color-mix(in srgb, var(--fb) 80%, transparent) 38%, color-mix(in srgb, var(--fb) 20%, transparent) 66%, transparent 82%); }
   .feature__panel { position: relative; width: 100%; padding: clamp(20px, 2.2vw, 30px); display: grid; gap: 10px; }
-  .feature__pills { position: absolute; top: clamp(16px, 1.8vw, 24px); left: clamp(16px, 1.8vw, 24px); right: 16px; display: flex; flex-wrap: wrap; gap: 6px; }
+  /* Pills sit in the normal flow at the top, so when they wrap they push the panel down instead of overlapping the logo */
+  .feature__pills { position: relative; padding: clamp(16px, 1.8vw, 24px) clamp(16px, 1.8vw, 24px) 0; display: flex; flex-wrap: wrap; align-content: flex-start; gap: 6px; }
   .feature__brand { margin: 0; line-height: 0; }
   .feature__brand img { height: clamp(30px, 2.8vw, 42px); width: auto; max-width: 240px; filter: brightness(0) invert(1); }
   .feature__title { font-size: clamp(28px, 2.6vw, 38px); margin: 0; color: #fff; }
@@ -618,11 +612,10 @@ const partnerDir = new Map<string, { note?: string; logo?: string; logoKeep?: bo
   .process__ctas { display: flex; flex-wrap: wrap; align-items: center; gap: 14px 24px; }
   /* Live construction progress on tiles */
   .fprog { display: grid; gap: 6px; margin-top: 2px; }
-  .fprog__top { display: flex; justify-content: space-between; font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(255, 255, 255, 0.7); }
+  .fprog__top { display: flex; justify-content: space-between; gap: 8px; white-space: nowrap; font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(255, 255, 255, 0.7); }
   .fprog__bar { height: 4px; border-radius: 2px; background: rgba(255, 255, 255, 0.22); overflow: hidden; }
   .fprog__bar span { display: block; height: 100%; width: 0; background: #fff; border-radius: inherit; transition: width 1.6s var(--ease) 0.3s; }
   .feature.is-visible .fprog__bar span { width: var(--p, 0); }
-  .fprog__now { margin: 0; font-size: 12.5px; line-height: 1.45; color: rgba(255, 255, 255, 0.85); }
   /* Hero film sits over the still photo and fades in once it is playing */
   .hero__video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 50%; z-index: -2; opacity: 0; transition: opacity 1.2s var(--ease); pointer-events: none; }
   .hero__video.is-playing { opacity: 1; }

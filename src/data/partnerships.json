@@ -210,7 +210,9 @@
           {
             "name": "UBC Built (United Brotherhood of Carpenters, Local 1030)",
             "note": "Labour partner",
-            "projects": []
+            "projects": [],
+            "logo": "/uploads/partners/ubc-built.png",
+            "logoKeep": true
           }
         ]
       },
