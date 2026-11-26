@@ -1,7 +1,7 @@
 ---
 import { getCollection, render } from 'astro:content';
-import Base from '../../layouts/Base.astro';
-import PageHero from '../../components/PageHero.astro';
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
 
 export async function getStaticPaths() {
   return (await getCollection('pages')).map((page) => ({ params: { id: page.id }, props: { page } }));

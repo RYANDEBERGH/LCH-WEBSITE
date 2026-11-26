@@ -4,8 +4,8 @@ old_url,new_url,action,notes
 /story/,/about/,301,Story is now About Us. Remove the meta-refresh page src/pages/story.astro so Netlify serves a real 301 (a file at the old path otherwise blocks the redirect).
 /media/,/news/,301,Media is now News & Media.
 /contact/,/contact/,keep,Contact page; same path.
-/corporate,/about/,301,"Old page listed LCH corporate entities; that page was removed at your request. About Us is the closest match. Old site already sends /corporate to /corporate/, so both are mapped."
-/privacy-policy/,/legal/privacy-policy/,301,Rewritten as Privacy Policy & Terms of Use. Alternative: move the page back to /privacy-policy/ and keep the old path.
+/corporate,(none),404,Removed at your request. Returns a real 404 (not found) so Google drops it.
+/privacy-policy/,/privacy-policy/,keep,Rewritten as Privacy Policy & Terms of Use; same address as before.
 /2021/03/25/lch-collaborates-with-the-scarborough-food-security-initiative/,/news/lch-collaborates-with-the-scarborough-food-security-initiative/,301,Migrated. Slug unchanged; only the /YYYY/MM/DD/ prefix becomes /news/.
 /2023/05/22/remi-network-art-infused-creative-hub-comes-to-scarborough/,/news/remi-network-art-infused-creative-hub-comes-to-scarborough/,301,Migrated. Slug unchanged; only the /YYYY/MM/DD/ prefix becomes /news/.
 /2022/01/21/urbantoronto-textured-mid-rise-condo-proposed-on-kingston-road-in-west-hill/,/news/urbantoronto-textured-mid-rise-condo-proposed-on-kingston-road-in-west-hill/,301,Article exists but body is EMPTY. Migrate the summary text and UrbanToronto source link from the live post. Date on the new site is 2022-01-13 (original article date). Slug unchanged; only the /YYYY/MM/DD/ prefix becomes /news/.

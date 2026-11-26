@@ -182,7 +182,7 @@ collections:
   - name: pages
     label: Legal Pages
     label_singular: Page
-    description: Appear at /legal/page-name/
+    description: Appear at /page-name/ (e.g. /privacy-policy/)
     folder: src/content/pages
     create: true
     slug: '{{slug}}'
